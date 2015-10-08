@@ -107,11 +107,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="BackendManager.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/util/backend/BackendManager.java">
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5343422">
-              <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.6730539">
+              <caret line="38" column="46" selection-start-line="38" selection-start-column="46" selection-end-line="38" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -1633,7 +1633,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/util/TranslationManager.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/NStack.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/util/log/NLog.java" />
-        <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/util/backend/LoggingInterceptor.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/util/NStackBuilder.java" />
@@ -1643,6 +1642,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/util/translation/TranslationManager.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/util/backend/NStackInterceptor.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/util/backend/BackendManager.java" />
+        <option value="$PROJECT_DIR$/app/build.gradle" />
       </list>
     </option>
   </component>
@@ -2728,14 +2728,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8051421">
-          <caret line="33" column="1" selection-start-line="33" selection-start-column="1" selection-end-line="33" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/util/backend/LoggingInterceptor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7764843">
@@ -2799,8 +2791,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/util/backend/BackendManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5343422">
+        <state vertical-scroll-proportion="-1.3888242">
           <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding>
+            <marker date="1444307530000" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="/**...*/" />
+            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6730539">
+          <caret line="38" column="46" selection-start-line="38" selection-start-column="46" selection-end-line="38" selection-end-column="46" />
           <folding />
         </state>
       </provider>
