@@ -50,8 +50,6 @@ public class BackendManager {
         return instance;
     }
 
-
-
     private static String bodyToString(final Request request) {
 
         try {
@@ -63,8 +61,6 @@ public class BackendManager {
             return "did not work";
         }
     }
-
-
 
     public void initCache(Context context) {
         try {
@@ -83,8 +79,6 @@ public class BackendManager {
         Request request = new Request.Builder()
                 .url(url)
                 .header("Accept-Language", acceptHeader)
-                .header("X-Application-Id", NStack.getStack().getApplicationKey())
-                .header("X-Rest-Api-Key", NStack.getStack().getApiKey())
                 .build();
 
         Response response = client.newCall(request).execute();
@@ -95,8 +89,6 @@ public class BackendManager {
         Request request = new Request.Builder()
                 .url(url)
                 .header("Accept-Language", acceptHeader)
-                .header("X-Application-Id", NStack.getStack().getApplicationKey())
-                .header("X-Rest-Api-Key", NStack.getStack().getApiKey())
                 .build();
 
         client.newCall(request).enqueue(callback);
@@ -105,8 +97,6 @@ public class BackendManager {
     public void getLanguage( Callback callback ) throws Exception {
         Request request = new Request.Builder()
                 .url("https://baas.like.st/api/v1/translate/mobile/languages/best_fit")
-                .header("X-Application-Id", NStack.getStack().getApplicationKey())
-                .header("X-Rest-Api-Key", NStack.getStack().getApiKey())
                 .build();
 
         client.newCall(request).enqueue(callback);

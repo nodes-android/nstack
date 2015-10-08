@@ -31,7 +31,6 @@ public class TranslationManager {
 
     private static TranslationManager instance = null;
     private static Class<?> classType;
-
     private TranslationOptions translationOptions = new TranslationOptions();
 
     public TranslationManager() {

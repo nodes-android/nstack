@@ -26,7 +26,11 @@ public class NStackInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request originalRequest = chain.request();
 
-        Request newRequest = originalRequest.newBuilder().header("Accept-Language", NStack.getStack().getTranslationManager().options().getLanguageHeader()).build();
+        Request newRequest = originalRequest.newBuilder()
+                .header("Accept-Language", NStack.getStack().getTranslationManager().options().getLanguageHeader())
+                .header("X-Application-Id", NStack.getStack().getApplicationKey())
+                .header("X-Rest-Api-Key", NStack.getStack().getApiKey())
+                .build();
 
         return chain.proceed(newRequest);
     }
