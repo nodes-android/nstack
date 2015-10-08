@@ -3,6 +3,7 @@ package dk.nodes.nstack;
 import android.content.Context;
 
 import dk.nodes.nstack.util.backend.BackendManager;
+import dk.nodes.nstack.util.translation.TranslationManager;
 
 /**
  * Created by joso on 02/10/2015.
@@ -13,9 +14,17 @@ public final class NStack {
     protected static boolean debugMode = false;
     private static NStack instance = null;
 
-    private String applicationKey = "";
-    private String apiKey = "";
+    private String applicationKey;
+    private String apiKey;
 
+    private TranslationManager translationManager;
+
+    /**
+     * Initializes the singleton
+     * @param context Use the application context to avoid leaks
+     * @param applicationKey Get this from the NStack.io site in keys
+     * @param apiKey Get this from the NStack.io site in keys
+     */
     public static void init(Context context, String applicationKey, String apiKey) {
         instance = new NStack(context, applicationKey, apiKey);
     }
@@ -30,11 +39,11 @@ public final class NStack {
 
     public static NStack getStack() {
         if( instance == null ) {
-            throw new RuntimeException("init() was not called");
+            throw new IllegalStateException("init() was not called");
         }
 
         if( instance.getApiKey() == null || instance.getApplicationKey() == null ) {
-            throw new RuntimeException("applicationKey or apiKey was not set");
+            throw new IllegalStateException("applicationKey or apiKey was not set");
         }
 
         return instance;
@@ -60,6 +69,18 @@ public final class NStack {
 
     public boolean isDebugMode() {
         return debugMode;
+    }
+
+    public Context getApplicationContext() {
+        return applicationContext;
+    }
+
+    public TranslationManager getTranslationManager() {
+        if( translationManager == null ) {
+            translationManager = new TranslationManager();
+        }
+
+        return translationManager;
     }
 
 }

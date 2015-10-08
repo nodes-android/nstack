@@ -39,6 +39,7 @@ public class BackendManager {
         client.setReadTimeout(30, TimeUnit.SECONDS);
 
         client.interceptors().add(new LoggingInterceptor());
+        client.interceptors().add(new NStackInterceptor());
     }
 
     public static BackendManager getInstance() {
@@ -94,6 +95,16 @@ public class BackendManager {
         Request request = new Request.Builder()
                 .url(url)
                 .header("Accept-Language", acceptHeader)
+                .header("X-Application-Id", NStack.getStack().getApplicationKey())
+                .header("X-Rest-Api-Key", NStack.getStack().getApiKey())
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+    public void getLanguage( Callback callback ) throws Exception {
+        Request request = new Request.Builder()
+                .url("https://baas.like.st/api/v1/translate/mobile/languages/best_fit")
                 .header("X-Application-Id", NStack.getStack().getApplicationKey())
                 .header("X-Rest-Api-Key", NStack.getStack().getApiKey())
                 .build();
