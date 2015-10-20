@@ -18,6 +18,7 @@ import okio.Buffer;
 
 /**
  * Created by joso on 29/09/15.
+ * 
  */
 public class BackendManager {
 

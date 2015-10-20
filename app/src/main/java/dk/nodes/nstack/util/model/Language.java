@@ -4,6 +4,9 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
+/**
+ * Created by tommyjepsen on 20/10/15.
+ */
 public class Language implements Serializable {
 
     public int id;

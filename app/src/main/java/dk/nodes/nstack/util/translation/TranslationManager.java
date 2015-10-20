@@ -31,6 +31,7 @@ import dk.nodes.nstack.util.model.Language;
 
 /**
  * Created by joso on 25/02/15.
+ *
  */
 public class TranslationManager {
 
