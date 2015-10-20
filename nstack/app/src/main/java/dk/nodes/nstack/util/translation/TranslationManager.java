@@ -15,8 +15,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.HashMap;
 import java.util.Iterator;
 
 import dk.nodes.nstack.NStack;
