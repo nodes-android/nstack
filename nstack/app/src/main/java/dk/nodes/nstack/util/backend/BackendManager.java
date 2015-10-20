@@ -68,12 +68,12 @@ public class BackendManager {
             Cache cache = new Cache(cacheDirectory, cacheSize);
 
             client.setCache(cache);
-        } catch( Exception e ) {
+        } catch (Exception e) {
             NLog.e(e);
         }
     }
 
-    public Response getTranslation( String url, String acceptHeader ) throws Exception {
+    public Response getTranslation(String url, String acceptHeader) throws Exception {
         Request request = new Request.Builder()
                 .url(url)
                 .header("Accept-Language", acceptHeader)
@@ -83,7 +83,7 @@ public class BackendManager {
         return response;
     }
 
-    public void getTranslation( String url, String acceptHeader, Callback callback ) throws Exception {
+    public void getTranslation(String url, String acceptHeader, Callback callback) throws Exception {
         Request request = new Request.Builder()
                 .url(url)
                 .header("Accept-Language", acceptHeader)
@@ -92,7 +92,7 @@ public class BackendManager {
         client.newCall(request).enqueue(callback);
     }
 
-    public void getLanguage( Callback callback ) throws Exception {
+    public void getLanguage(Callback callback) throws Exception {
         Request request = new Request.Builder()
                 .url("https://baas.like.st/api/v1/translate/mobile/languages/best_fit")
                 .build();
@@ -100,7 +100,16 @@ public class BackendManager {
         client.newCall(request).enqueue(callback);
     }
 
-    public void getContentResponse( String url, Callback callback) throws Exception {
+
+    public void getAllLanguages(Callback callback) throws Exception {
+        Request request = new Request.Builder()
+                .url("https://baas.like.st/api/v1/translate/mobile/languages")
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+    public void getContentResponse(String url, Callback callback) throws Exception {
         //example url https://nstack.io/api/v1/content/responses/0
         Request request = new Request.Builder()
                 .url(url)
