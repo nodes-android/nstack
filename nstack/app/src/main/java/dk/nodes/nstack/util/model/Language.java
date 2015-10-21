@@ -6,11 +6,13 @@ import java.io.Serializable;
 
 /**
  * Created by tommyjepsen on 20/10/15.
+ * 
  */
 public class Language implements Serializable {
 
     public int id;
     public String name, locale, direction;
+    public boolean picked;
 
     public String getDirection() {
         return direction;
@@ -44,6 +46,14 @@ public class Language implements Serializable {
         this.name = name;
     }
 
+    public boolean isPicked() {
+        return picked;
+    }
+
+    public void setPicked(boolean picked) {
+        this.picked = picked;
+    }
+
     public static Language parseFrom(JSONObject object) {
         Language l = new Language();
 
@@ -51,6 +61,7 @@ public class Language implements Serializable {
         l.setName(object.optString("name"));
         l.setLocale(object.optString("locale"));
         l.setDirection(object.optString("direction"));
+        l.setPicked(false);
 
         return l;
     }
