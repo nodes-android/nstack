@@ -7,6 +7,7 @@ import java.io.File;
  */
 public class TranslationOptions {
     private String languageHeader = "da-DK";
+    private String fallbackLocale = "en-US";
     private boolean flattenKeys = false;
     private boolean allLanguages = true;
     private final String NSTACK_CONTENT_URL = "https://baas.like.st/api/v1/translate/mobile/keys";
@@ -36,12 +37,21 @@ public class TranslationOptions {
         return this;
     }
 
+    public TranslationOptions fallbackLocale( String fallbackLocale ) {
+        this.fallbackLocale = fallbackLocale;
+        return this;
+    }
+
     public String getFallbackFile() {
         return fallbackFile;
     }
 
     public String getLanguageHeader() {
         return languageHeader;
+    }
+
+    public String getFallbackLocale() {
+        return fallbackLocale;
     }
 
     protected boolean isFlattenKeys() {

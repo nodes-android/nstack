@@ -3,6 +3,7 @@ package dk.nodes.nstack;
 import android.content.Context;
 
 import dk.nodes.nstack.util.backend.BackendManager;
+import dk.nodes.nstack.util.content.ContentManager;
 import dk.nodes.nstack.util.translation.TranslationManager;
 
 /**
@@ -18,6 +19,7 @@ public final class NStack {
     private String apiKey;
 
     private TranslationManager translationManager;
+    private ContentManager contentManager;
 
     /**
      * Initializes the singleton
@@ -81,6 +83,14 @@ public final class NStack {
         }
 
         return translationManager;
+    }
+
+    public ContentManager getContentManager() {
+        if( contentManager == null ) {
+            contentManager = new ContentManager(applicationContext);
+        }
+
+        return contentManager;
     }
 
 }

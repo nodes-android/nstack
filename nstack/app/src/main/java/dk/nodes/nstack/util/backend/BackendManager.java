@@ -7,16 +7,13 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.log.NLog;
-import dk.nodes.nstack.util.translation.TranslationManager;
 import okio.Buffer;
 
 /**
@@ -30,6 +27,7 @@ public class BackendManager {
 
     private BackendManager() {
         client = new OkHttpClient();
+        //client = UnsafeSSLClient.getUnsafeOkHttpClient();
         initClient();
     }
 
@@ -70,12 +68,12 @@ public class BackendManager {
             Cache cache = new Cache(cacheDirectory, cacheSize);
 
             client.setCache(cache);
-        } catch( Exception e ) {
+        } catch (Exception e) {
             NLog.e(e);
         }
     }
 
-    public Response getTranslation( String url, String acceptHeader ) throws Exception {
+    public Response getTranslation(String url, String acceptHeader) throws Exception {
         Request request = new Request.Builder()
                 .url(url)
                 .header("Accept-Language", acceptHeader)
@@ -85,7 +83,7 @@ public class BackendManager {
         return response;
     }
 
-    public void getTranslation( String url, String acceptHeader, Callback callback ) throws Exception {
+    public void getTranslation(String url, String acceptHeader, Callback callback) throws Exception {
         Request request = new Request.Builder()
                 .url(url)
                 .header("Accept-Language", acceptHeader)
@@ -94,9 +92,27 @@ public class BackendManager {
         client.newCall(request).enqueue(callback);
     }
 
-    public void getLanguage( Callback callback ) throws Exception {
+    public void getLanguage(Callback callback) throws Exception {
         Request request = new Request.Builder()
                 .url("https://baas.like.st/api/v1/translate/mobile/languages/best_fit")
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+
+    public void getAllLanguages(Callback callback) throws Exception {
+        Request request = new Request.Builder()
+                .url("https://baas.like.st/api/v1/translate/mobile/languages")
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+    public void getContentResponse(String url, Callback callback) throws Exception {
+        //example url https://nstack.io/api/v1/content/responses/0
+        Request request = new Request.Builder()
+                .url(url)
                 .build();
 
         client.newCall(request).enqueue(callback);
