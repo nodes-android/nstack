@@ -107,11 +107,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <file leaf-file-name="TranslationManager.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/util/translation/TranslationManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6730539">
-              <caret line="38" column="46" selection-start-line="38" selection-start-column="46" selection-end-line="38" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.33440515">
+              <caret line="342" column="0" selection-start-line="342" selection-start-column="0" selection-end-line="342" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -1307,7 +1307,7 @@
       <map>
         <entry key="$PROJECT_DIR$/../../dk-borsen-play" value="4247659356000" />
         <entry key="$PROJECT_DIR$/../../dk-nodes-ncoreasv2" value="4247654028000" />
-        <entry key="$PROJECT_DIR$" value="4329619386000" />
+        <entry key="$PROJECT_DIR$" value="4330131611000" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -1657,9 +1657,10 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="42" />
     <option name="y" value="23" />
-    <option name="width" value="1920" />
-    <option name="height" value="1133" />
+    <option name="width" value="1638" />
+    <option name="height" value="1027" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -1685,6 +1686,111 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
+      <pane id="AndroidView">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NStack" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Gradle Scripts" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NStack" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NStack" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NStack" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nstack" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NStack" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nstack" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="util" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="translation" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NStack" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="nstack" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="util" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -1929,201 +2035,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-      <pane id="AndroidView">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NStack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Gradle Scripts" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NStack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NStack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="values" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NStack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NStack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NStack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NStack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nstack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NStack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nstack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="util" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="translation" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NStack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nstack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="util" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NStack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nstack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="util" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="backend" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NStack" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="manifests" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidManifestsGroupNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -2434,17 +2345,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1920" height="1133" extended-state="6" />
+    <frame x="42" y="23" width="1638" height="1027" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.8701923" sideWeight="0.48722044" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3278846" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="16" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40384614" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.8701923" sideWeight="0.51277953" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32938856" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -2453,19 +2362,21 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38513514" sideWeight="0.4978701" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32938856" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26752505" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14536741" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16666667" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15495208" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17307693" sideWeight="0.4914803" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17731829" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32938856" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17307693" sideWeight="0.4914803" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Memory Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32938856" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960597" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3278846" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40384614" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.32938856" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" x="1967" y="51" width="1683" height="813" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -2497,38 +2408,64 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="5" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
+          <folding>
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="5" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
+          <folding>
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="5" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
+          <folding>
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/util/translation/TranslationManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="279" column="76" selection-start-line="279" selection-start-column="76" selection-end-line="279" selection-end-column="76" />
-          <folding>
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="/**...*/" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder=" { " />
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder=" }" />
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder=" { " />
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder=" }" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2536,34 +2473,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="263" column="25" selection-start-line="263" selection-start-column="25" selection-end-line="263" selection-end-column="25" />
-          <folding>
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="/**...*/" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder=" { " />
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder=" }" />
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder=" { " />
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder=" }" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2571,7 +2480,25 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="25" column="29" selection-start-line="25" selection-start-column="29" selection-end-line="25" selection-end-column="29" />
-          <folding />
+          <folding>
+            <marker date="1444292966000" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="/**...*/" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="/**...*/" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444292966000" expanded="false" signature="-1:-1" placeholder=" { " />
+            <marker date="1444292966000" expanded="false" signature="-1:-1" placeholder=" }" />
+            <marker date="1444292966000" expanded="false" signature="-1:-1" placeholder=" { " />
+            <marker date="1444292966000" expanded="false" signature="-1:-1" placeholder=" }" />
+            <marker date="1444292966000" expanded="false" signature="-1:-1" placeholder=" { " />
+            <marker date="1444292966000" expanded="false" signature="-1:-1" placeholder=" }" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder=" { " />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder=" }" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2579,7 +2506,17 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="15" column="17" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
-          <folding />
+          <folding>
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2587,7 +2524,17 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
-          <folding />
+          <folding>
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2595,7 +2542,17 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
-          <folding />
+          <folding>
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2603,7 +2560,17 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="29" column="16" selection-start-line="29" selection-start-column="16" selection-end-line="29" selection-end-column="16" />
-          <folding />
+          <folding>
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2611,7 +2578,17 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="23" column="14" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
-          <folding />
+          <folding>
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2640,7 +2617,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.47252747">
           <caret line="28" column="5" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2669,7 +2645,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2677,7 +2652,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.24710424">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2700,7 +2674,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.189918">
           <caret line="128" column="22" selection-start-line="128" selection-start-column="22" selection-end-line="128" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2708,15 +2681,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.22733423">
           <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="19" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/NStack.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6088475">
-          <caret line="74" column="34" selection-start-line="74" selection-start-column="34" selection-end-line="74" selection-end-column="34" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2724,7 +2688,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.4298056">
           <caret line="36" column="5" selection-start-line="36" selection-start-column="5" selection-end-line="36" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2732,12 +2695,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7764843">
           <caret line="76" column="5" selection-start-line="24" selection-start-column="4" selection-end-line="76" selection-end-column="5" />
-          <folding>
-            <marker date="1443797451000" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1443797451000" expanded="true" signature="-1:-1" placeholder="/**...*/" />
-            <marker date="1443797451000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1443797451000" expanded="true" signature="-1:-1" placeholder="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2745,47 +2702,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.59720606">
           <caret line="30" column="82" selection-start-line="30" selection-start-column="82" selection-end-line="30" selection-end-column="82" />
-          <folding>
-            <marker date="1444307034000" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1444307034000" expanded="true" signature="-1:-1" placeholder="/**...*/" />
-            <marker date="1444307034000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444307034000" expanded="true" signature="-1:-1" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/util/translation/TranslationManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5029104">
-          <caret line="96" column="31" selection-start-line="96" selection-start-column="31" selection-end-line="96" selection-end-column="31" />
-          <folding>
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="/**...*/" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder=" { " />
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder=" }" />
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder=" { " />
-            <marker date="1444306990000" expanded="false" signature="-1:-1" placeholder=" }" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444306990000" expanded="true" signature="-1:-1" placeholder="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2793,25 +2709,57 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.3888242">
           <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-          <folding>
-            <marker date="1444307530000" expanded="false" signature="-1:-1" placeholder="..." />
-            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="/**...*/" />
-            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1444307530000" expanded="true" signature="-1:-1" placeholder="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6730539">
-          <caret line="38" column="46" selection-start-line="38" selection-start-column="46" selection-end-line="38" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.27652735">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding>
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444307562000" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/NStack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.0514469">
+          <caret line="57" column="13" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
+          <folding>
+            <marker date="1444292966000" expanded="false" signature="-1:-1" placeholder="..." />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="/**...*/" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="/**...*/" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1444292966000" expanded="false" signature="-1:-1" placeholder=" { " />
+            <marker date="1444292966000" expanded="false" signature="-1:-1" placeholder=" }" />
+            <marker date="1444292966000" expanded="false" signature="-1:-1" placeholder=" { " />
+            <marker date="1444292966000" expanded="false" signature="-1:-1" placeholder=" }" />
+            <marker date="1444292966000" expanded="false" signature="-1:-1" placeholder=" { " />
+            <marker date="1444292966000" expanded="false" signature="-1:-1" placeholder=" }" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder=" { " />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder=" }" />
+            <marker date="1444292966000" expanded="true" signature="-1:-1" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/dk/nodes/nstack/util/translation/TranslationManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33440515">
+          <caret line="342" column="0" selection-start-line="342" selection-start-column="0" selection-end-line="342" selection-end-column="0" />
           <folding />
         </state>
       </provider>
