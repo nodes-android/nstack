@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.annotation.AnnotationTypeMismatchException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -74,8 +75,10 @@ public class TranslationManager {
 
                         try {
                             fieldTextView.setText(findValue(annotation.value()));
+                            fieldTextView.setContentDescription(findValue(annotation.value()));
                         } catch (IllegalArgumentException e) {
                             fieldTextView.setText(annotation.value());
+                            fieldTextView.setContentDescription(annotation.value());
                         }
 
                     } catch (Exception e) {
@@ -93,14 +96,18 @@ public class TranslationManager {
                                 til.setHint(annotation.value());
                                 try {
                                     til.setHint(findValue(annotation.value()));
+                                    til.setContentDescription(findValue(annotation.value()));
                                 } catch (IllegalArgumentException e) {
                                     til.setHint(annotation.value());
+                                    til.setContentDescription(annotation.value());
                                 }
                             } else {
                                 try {
                                     fieldEditText.setHint(findValue(annotation.value()));
+                                    fieldEditText.setContentDescription(findValue(annotation.value()));
                                 } catch (IllegalArgumentException e) {
                                     fieldEditText.setHint(annotation.value());
+                                    fieldEditText.setContentDescription(annotation.value());
                                 }
                             }
                         } catch (Exception e) {
@@ -122,10 +129,12 @@ public class TranslationManager {
                         try {
                             String value = findValue(annotation.value());
                             fieldToggleButton.setText(value);
+                            fieldToggleButton.setContentDescription(value);
                             fieldToggleButton.setTextOn(value);
                             fieldToggleButton.setTextOff(value);
                         } catch (IllegalArgumentException e) {
                             fieldToggleButton.setText(annotation.value());
+                            fieldToggleButton.setContentDescription(annotation.value());
                         }
 
                         if (annotation.toggleOn().length() > 0) {
@@ -281,7 +290,13 @@ public class TranslationManager {
             stream.close();
             String fallbackContents = new String(buffer);
 
+            // Work around for something we should fix
+            String oldLanguageHeader = translationOptions.getLanguageHeader();
+            translationOptions.locale(languageHeader);
+
             updateTranslationClass(fallbackContents);
+
+            translationOptions.locale(oldLanguageHeader);
 
             if (listener != null) {
                 listener.onSuccess();
