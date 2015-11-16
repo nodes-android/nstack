@@ -104,11 +104,15 @@ public class TranslationManager {
                             } else {
                                 try {
                                     fieldEditText.setHint(findValue(annotation.value()));
-                                    fieldEditText.setContentDescription(findValue(annotation.value()));
                                 } catch (IllegalArgumentException e) {
                                     fieldEditText.setHint(annotation.value());
-                                    fieldEditText.setContentDescription(annotation.value());
                                 }
+                            }
+
+                            try {
+                                fieldEditText.setContentDescription(findValue(annotation.value()));
+                            } catch (IllegalArgumentException e) {
+                                fieldEditText.setContentDescription(annotation.value());
                             }
                         } catch (Exception e) {
                             NLog.d("TextInputLayout error: " + e.toString());
@@ -337,6 +341,11 @@ public class TranslationManager {
 
                 // Selected locale doesnt exist, continue to fallback
                 if( ! localeExists && fallbackLocaleExists && !languageName.equalsIgnoreCase(translationOptions.getFallbackLocale()) ) {
+                    continue;
+                }
+
+                // fallback doesnt exist either, continue until we find something that matches fallbacks, ie: en-**
+                if( ! localeExists && ! fallbackLocaleExists && !translationOptions.getFallbackLocale().startsWith(languageName.substring(0, 2)) ) {
                     continue;
                 }
 
