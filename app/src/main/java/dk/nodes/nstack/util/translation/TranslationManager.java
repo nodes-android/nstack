@@ -415,8 +415,11 @@ public class TranslationManager {
 
     private void updateTranslationClass(String jsonData) {
         try {
-            JSONObject root = new JSONObject(jsonData);
-            JSONObject data = root.getJSONObject("data");
+            JSONObject data = new JSONObject(jsonData);
+
+            if( data.has("data") ) {
+                data = data.getJSONObject("data");
+            }
 
             // Fetched more than one language
             if(translationOptions.allLanguages()) {
