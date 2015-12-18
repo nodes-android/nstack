@@ -173,26 +173,25 @@ public class TranslationManager {
                     } catch (Exception e) {
                         NLog.d("Method.invoke error: " + e.toString());
                     }
-                } else if (f.getType() == android.widget.Toolbar.class) {
-                    /**
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && f.getType() == android.widget.Toolbar.class) {
+                    /*
                      * cotg: this only works on API 21+, so we need to surround with
                      * version check
+                     * edit 121815 Chnt: moved version-check to before type-check. Can't get Toolbar.class if it's not Lollipop
                      */
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        try {
-                            f.setAccessible(true);
-                            android.widget.Toolbar toolbar = (android.widget.Toolbar) f.get(view);
+                    try {
+                        f.setAccessible(true);
+                        android.widget.Toolbar toolbar = (android.widget.Toolbar) f.get(view);
 
-                            try {
-                                toolbar.setTitle(findValue(annotation.value()));
-                                toolbar.setContentDescription(findValue(annotation.value()));
-                            } catch (IllegalArgumentException e) {
-                                toolbar.setTitle(annotation.value());
-                                toolbar.setContentDescription(annotation.value());
-                            }
-                        } catch (Exception e) {
-                            NLog.d("Method.invoke error: " + e.toString());
+                        try {
+                            toolbar.setTitle(findValue(annotation.value()));
+                            toolbar.setContentDescription(findValue(annotation.value()));
+                        } catch (IllegalArgumentException e) {
+                            toolbar.setTitle(annotation.value());
+                            toolbar.setContentDescription(annotation.value());
                         }
+                    } catch (Exception e) {
+                        NLog.d("Method.invoke error: " + e.toString());
                     }
                 }
             }
