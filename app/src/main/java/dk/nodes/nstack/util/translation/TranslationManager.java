@@ -1,6 +1,7 @@
 package dk.nodes.nstack.util.translation;
 
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.AppCompatEditText;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -84,7 +85,7 @@ public class TranslationManager {
                     } catch (Exception e) {
                         NLog.d("Method.invoke error: " + e.toString());
                     }
-                } else if (f.getType() == EditText.class) {
+                } else if (f.getType() == EditText.class || f.getType() == AppCompatEditText.class) {
 
                     try {
                         f.setAccessible(true);
@@ -323,6 +324,7 @@ public class TranslationManager {
         public void onSuccess(ArrayList<Language> languages);
 
         public void onFailure();
+
     }
 
     private void updateTranslationLanguageKeys(JSONObject data) {
@@ -335,17 +337,17 @@ public class TranslationManager {
                 String languageName = languageKeys.next();
 
                 // Only update current language, if we have more than one language
-                if(localeExists && !languageName.equalsIgnoreCase(translationOptions.getLanguageHeader())) {
+                if (localeExists && !languageName.equalsIgnoreCase(translationOptions.getLanguageHeader())) {
                     continue;
                 }
 
                 // Selected locale doesnt exist, continue to fallback
-                if( ! localeExists && fallbackLocaleExists && !languageName.equalsIgnoreCase(translationOptions.getFallbackLocale()) ) {
+                if (!localeExists && fallbackLocaleExists && !languageName.equalsIgnoreCase(translationOptions.getFallbackLocale())) {
                     continue;
                 }
 
                 // fallback doesnt exist either, continue until we find something that matches fallbacks, ie: en-**
-                if( ! localeExists && ! fallbackLocaleExists && !translationOptions.getFallbackLocale().startsWith(languageName.substring(0, 2)) ) {
+                if (!localeExists && !fallbackLocaleExists && !translationOptions.getFallbackLocale().startsWith(languageName.substring(0, 2))) {
                     continue;
                 }
 
@@ -417,21 +419,21 @@ public class TranslationManager {
         try {
             JSONObject data = new JSONObject(jsonData);
 
-            if( data.has("data") ) {
+            if (data.has("data")) {
                 data = data.getJSONObject("data");
             }
 
             // Fetched more than one language
-            if(translationOptions.allLanguages()) {
+            if (translationOptions.allLanguages()) {
 
                 // We have our locale in the response
-                if( data.has(translationOptions.getLanguageHeader()) ) {
+                if (data.has(translationOptions.getLanguageHeader())) {
 
                 }
 
                 updateTranslationLanguageKeys(data);
 
-            // Only one language
+                // Only one language
             } else {
                 // No sections
                 if (translationOptions.isFlattenKeys()) {
@@ -443,8 +445,6 @@ public class TranslationManager {
                     parseSections(data);
                 }
             }
-
-
 
 
         } catch (Exception e) {
