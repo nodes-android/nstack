@@ -3,6 +3,7 @@ package dk.nodes.nstack.util.translation;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,7 +71,7 @@ public class TranslationManager {
 
             if (annotation != null) {
 
-                if (f.getType() == Button.class || f.getType() == TextView.class || f.getType() == AppCompatButton.class || f.getType() == AppCompatTextView.class) {
+                if (f.getType() == Button.class || f.getType() == TextView.class || f.getType() == AppCompatButton.class || f.getType() == AppCompatTextView.class || f.getType() == SwitchCompat.class) {
 
                     try {
                         f.setAccessible(true);
