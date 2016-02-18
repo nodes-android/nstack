@@ -357,6 +357,8 @@ public class TranslationManager {
                 NLog.d("updateTranslationLanguageKeys on: " + languageName);
                 JSONObject translationObject = data.getJSONObject(languageName);
 
+                translationOptions.setPickedLanguage(languageName);
+
                 // No sections
                 if (translationOptions.isFlattenKeys()) {
                     parseFlatTranslations(translationObject);
@@ -438,6 +440,8 @@ public class TranslationManager {
 
                 // Only one language
             } else {
+                translationOptions.setPickedLanguage(translationOptions.getLanguageHeader());
+
                 // No sections
                 if (translationOptions.isFlattenKeys()) {
                     parseFlatTranslations(data);
