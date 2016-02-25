@@ -1,5 +1,6 @@
 package dk.nodes.nstack.util.translation;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,17 +17,13 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.annotation.AnnotationTypeMismatchException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.backend.BackendManager;
-import dk.nodes.nstack.util.log.NLog;
+import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.model.Language;
 
 
@@ -59,7 +56,7 @@ public class TranslationManager {
         return instance;
     }
 
-    public static void translate(Object view) {
+    public static void translate(@NonNull Object view) {
         Field[] fields = view.getClass().getDeclaredFields();
 
         for (Field f : fields) {
@@ -82,7 +79,7 @@ public class TranslationManager {
                         }
 
                     } catch (Exception e) {
-                        NLog.d("Method.invoke error: " + e.toString());
+                        Logger.d("Method.invoke error: " + e.toString());
                     }
                 } else if (f.getType() == EditText.class) {
 
@@ -115,11 +112,11 @@ public class TranslationManager {
                                 fieldEditText.setContentDescription(annotation.value());
                             }
                         } catch (Exception e) {
-                            NLog.d("TextInputLayout error: " + e.toString());
+                            Logger.d("TextInputLayout error: " + e.toString());
                         }
 
                     } catch (Exception e) {
-                        NLog.d("Method.invoke error: " + e.toString());
+                        Logger.d("Method.invoke error: " + e.toString());
                     }
 
 
@@ -158,7 +155,7 @@ public class TranslationManager {
                         }
 
                     } catch (Exception e) {
-                        NLog.d("Method.invoke error: " + e.toString());
+                        Logger.d("Method.invoke error: " + e.toString());
                     }
                 }
             }
@@ -174,7 +171,7 @@ public class TranslationManager {
                 String value = String.valueOf(field.get(null));
                 return value;
             } catch (Exception e) {
-                NLog.e("findValue failed on key: " + key + ". Exception -> " + e.toString());
+                Logger.e("findValue failed on key: " + key + ". Exception -> " + e.toString());
                 throw new IllegalArgumentException();
             }
         }
@@ -189,7 +186,7 @@ public class TranslationManager {
                 String value = String.valueOf(field.get(null));
                 return value;
             } catch (Exception e) {
-                NLog.e("findValue failed on key: " + key + ". Exception -> " + e.toString());
+                Logger.e("findValue failed on key: " + key + ". Exception -> " + e.toString());
                 throw new IllegalArgumentException();
             }
         }
@@ -241,7 +238,7 @@ public class TranslationManager {
                 }
             });
         } catch (Exception e) {
-            NLog.e(e);
+            Logger.e(e);
         }
     }
 
@@ -250,7 +247,7 @@ public class TranslationManager {
      *
      * @param listener OnLanguageResultListener returns on onSuccess the ArrayList<Language> with all the languages
      */
-    public void getAllLanguages(final OnLanguageResultListener listener) {
+    public void getAllLanguages(@NonNull final OnLanguageResultListener listener) {
         try {
             BackendManager.getInstance().getAllLanguages(new Callback() {
                 @Override
@@ -279,12 +276,12 @@ public class TranslationManager {
                 }
             });
         } catch (Exception e) {
-            NLog.e(e);
+            Logger.e(e);
             listener.onFailure();
         }
     }
 
-    public void switchFallbackLanguage(String languageHeader, final OnTranslationResultListener listener) {
+    public void switchFallbackLanguage(@NonNull String languageHeader, final OnTranslationResultListener listener) {
         try {
             InputStream stream = NStack.getStack().getApplicationContext().getAssets().open(translationOptions.getFallbackFile());
 
@@ -325,6 +322,10 @@ public class TranslationManager {
         public void onFailure();
     }
 
+    public void updateTranslationsFromAppOpen( JSONObject root ) {
+        updateTranslationLanguageKeys(root);
+    }
+
     private void updateTranslationLanguageKeys(JSONObject data) {
         try {
             Iterator<String> languageKeys = data.keys();
@@ -349,7 +350,7 @@ public class TranslationManager {
                     continue;
                 }
 
-                NLog.d("updateTranslationLanguageKeys on: " + languageName);
+                Logger.d("updateTranslationLanguageKeys on: " + languageName);
                 JSONObject translationObject = data.getJSONObject(languageName);
 
                 // No sections
@@ -363,7 +364,7 @@ public class TranslationManager {
                 }
             }
         } catch (Exception e) {
-            NLog.e(e);
+            Logger.e(e);
         }
     }
 
@@ -391,7 +392,7 @@ public class TranslationManager {
                     }
                 }
             } catch (Exception e) {
-                NLog.e("Parsing failed for section -> " + sectionKey + " | " + e.toString());
+                Logger.e("Parsing failed for section -> " + sectionKey + " | " + e.toString());
             }
         }
     }
@@ -408,7 +409,7 @@ public class TranslationManager {
                     updateField(classType, translationKey, jsonLanguage.getString(translationKey));
                 }
             } catch (Exception e) {
-                NLog.e("Parsing failed for key = " + translationKey);
+                Logger.e("Parsing failed for key = " + translationKey);
             }
         }
     }
@@ -448,7 +449,7 @@ public class TranslationManager {
 
 
         } catch (Exception e) {
-            NLog.e(e);
+            Logger.e(e);
         }
     }
 
@@ -458,8 +459,8 @@ public class TranslationManager {
             field.setAccessible(true);
             field.set(object, value);
         } catch (Exception e) {
-            NLog.e(e);
-            NLog.e("TranslationManager", "Error updating field: " + key + " : " + value);
+            Logger.e(e);
+            Logger.e("TranslationManager", "Error updating field: " + key + " : " + value);
         }
     }
 
@@ -469,8 +470,8 @@ public class TranslationManager {
             field.setAccessible(true);
             field.set(null, value);
         } catch (Exception e) {
-            NLog.e(e);
-            NLog.e("TranslationManager", "Error updating field: " + key + " : " + value);
+            Logger.e(e);
+            Logger.e("TranslationManager", "Error updating field: " + key + " : " + value);
         }
     }
 

@@ -1,6 +1,7 @@
 package dk.nodes.nstack.util.content;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
@@ -14,7 +15,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import dk.nodes.nstack.util.backend.BackendManager;
-import dk.nodes.nstack.util.log.NLog;
+import dk.nodes.nstack.util.log.Logger;
 
 /**
  * Created by Cesit on 16/10/15.
@@ -29,7 +30,7 @@ public class ContentManager {
     //Had to use context to write to filesystem.
     private final Context context;
 
-    public ContentManager(Context context) {
+    public ContentManager(@NonNull Context context) {
         this.context = context;
     }
 
@@ -51,14 +52,14 @@ public class ContentManager {
             BackendManager.getInstance().getContentResponse(BASE_URL + id, new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                    NLog.e("onFailure");
+                    Logger.e("onFailure");
                     if(request != null) {
-                        NLog.e(request.method());
-                        NLog.e(request.urlString());
-                        NLog.e(request.headers().toString());
+                        Logger.e(request.method());
+                        Logger.e(request.urlString());
+                        Logger.e(request.headers().toString());
                     }
                     if(e != null) {
-                        NLog.e(e);
+                        Logger.e(e);
                     }
                 }
 
@@ -72,7 +73,7 @@ public class ContentManager {
                 }
             });
         } catch( Exception e ) {
-            NLog.e(e);
+            Logger.e(e);
         }
     }
 
@@ -110,7 +111,7 @@ public class ContentManager {
             contentResponse = stringBuilder.toString();
 
         } catch (Exception e) {
-            NLog.e(e);
+            Logger.e(e);
             contentResponse = null;
         }
         finally {
@@ -118,7 +119,7 @@ public class ContentManager {
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {
-                    NLog.e(e);
+                    Logger.e(e);
                 }
             }
         }
@@ -143,14 +144,14 @@ public class ContentManager {
 
         }
         catch (Exception e) {
-            NLog.e(e);
+            Logger.e(e);
         }
         finally {
             if(fileOutputStream != null) {
                 try {
                     fileOutputStream.close();
                 } catch (IOException e) {
-                    NLog.e(e);
+                    Logger.e(e);
                 }
             }
         }

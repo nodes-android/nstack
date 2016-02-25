@@ -3,6 +3,12 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+
+        <!-- <item name="alertDialogTheme">@style/Theme.AppCompat.Light.Dialog.Alert</item> -->
+    </style>
+
+    <style name="myDialog" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="windowActionBar">false</item>
     </style>
 
 </resources>

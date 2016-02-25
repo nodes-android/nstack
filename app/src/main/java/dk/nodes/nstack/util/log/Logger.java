@@ -7,7 +7,7 @@ import dk.nodes.nstack.NStack;
 /**
  * Created by joso on 02/10/2015.
  */
-public class NLog {
+public class Logger {
     private final static String TAG = "NLog";
 
     public static void d(String msg) {

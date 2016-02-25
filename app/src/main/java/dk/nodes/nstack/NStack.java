@@ -1,7 +1,10 @@
 package dk.nodes.nstack;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
+import dk.nodes.nstack.util.appopen.AppOpen;
+import dk.nodes.nstack.util.appopen.AppOpenManager;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.content.ContentManager;
 import dk.nodes.nstack.util.translation.TranslationManager;
@@ -20,6 +23,7 @@ public final class NStack {
 
     private TranslationManager translationManager;
     private ContentManager contentManager;
+    private AppOpenManager appOpenManager;
 
     /**
      * Initializes the singleton
@@ -27,7 +31,7 @@ public final class NStack {
      * @param applicationKey Get this from the NStack.io site in keys
      * @param apiKey Get this from the NStack.io site in keys
      */
-    public static void init(Context context, String applicationKey, String apiKey) {
+    public static void init( @NonNull Context context, @NonNull String applicationKey, @NonNull String apiKey) {
         instance = new NStack(context, applicationKey, apiKey);
     }
 
@@ -91,6 +95,14 @@ public final class NStack {
         }
 
         return contentManager;
+    }
+
+    public AppOpenManager getAppOpenManager() {
+        if( appOpenManager == null ) {
+            appOpenManager = new AppOpenManager();
+        }
+
+        return appOpenManager;
     }
 
 }

@@ -4,16 +4,22 @@ import android.content.Context;
 
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.MultipartBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import dk.nodes.nstack.util.log.NLog;
+import dk.nodes.nstack.util.appopen.AppOpenSettings;
+import dk.nodes.nstack.util.log.Logger;
 import okio.Buffer;
 
 /**
@@ -27,7 +33,6 @@ public class BackendManager {
 
     private BackendManager() {
         client = new OkHttpClient();
-        //client = UnsafeSSLClient.getUnsafeOkHttpClient();
         initClient();
     }
 
@@ -36,8 +41,8 @@ public class BackendManager {
         client.setWriteTimeout(10, TimeUnit.SECONDS);
         client.setReadTimeout(30, TimeUnit.SECONDS);
 
-        client.interceptors().add(new LoggingInterceptor());
         client.interceptors().add(new NStackInterceptor());
+        client.interceptors().add(new LoggingInterceptor());
     }
 
     public static BackendManager getInstance() {
@@ -69,7 +74,7 @@ public class BackendManager {
 
             client.setCache(cache);
         } catch (Exception e) {
-            NLog.e(e);
+            Logger.e(e);
         }
     }
 
@@ -114,6 +119,36 @@ public class BackendManager {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+    public void getAppOpen(String url, AppOpenSettings settings, Callback callback) {
+        RequestBody requestBody = new MultipartBuilder()
+                .type(MultipartBuilder.FORM)
+                .addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"guid\""),
+                        RequestBody.create(null, settings.guid))
+                .addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"version\""),
+                        RequestBody.create(null, settings.version))
+                .addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"old_version\""),
+                        RequestBody.create(null, settings.oldVersion))
+                .addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"platform\""),
+                        RequestBody.create(null, settings.platform))
+                .addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"last_updated\""),
+                        RequestBody.create(null, new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(settings.lastUpdated != null ? settings.lastUpdated : new Date())))
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+
 
         client.newCall(request).enqueue(callback);
     }
