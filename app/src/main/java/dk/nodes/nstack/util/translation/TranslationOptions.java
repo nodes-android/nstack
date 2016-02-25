@@ -16,6 +16,7 @@ public class TranslationOptions {
     private final String NSTACK_CONTENT_URL = "https://baas.like.st/api/v1/translate/mobile/keys";
     private String fallbackFile;
     private String customContentURL = null;
+    private String pickedLanguage;
 
     public TranslationOptions() {
         Locale deviceLocale = NStack.getStack().getApplicationContext().getResources().getConfiguration().locale;
@@ -113,5 +114,13 @@ public class TranslationOptions {
      */
     private String cleanLocale( String locale ) {
         return locale.replaceAll("_","-");
+    }
+
+    public String getPickedLanguage() {
+        return pickedLanguage;
+    }
+
+    public void setPickedLanguage(String pickedLanguage) {
+        this.pickedLanguage = pickedLanguage;
     }
 }
