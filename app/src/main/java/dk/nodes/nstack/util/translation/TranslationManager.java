@@ -1,10 +1,12 @@
 package dk.nodes.nstack.util.translation;
 
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.internal.app.ToolbarActionBar;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -159,6 +161,22 @@ public class TranslationManager {
                                 fieldToggleButton.setTextOff(value);
                             } catch (IllegalArgumentException e) {
                             }
+                        }
+
+                    } catch (Exception e) {
+                        NLog.d("Method.invoke error: " + e.toString());
+                    }
+                } else if (f.getType() == Toolbar.class || f.getType() == ToolbarActionBar.class || f.getType() == android.widget.Toolbar.class) {
+
+                    try {
+                        f.setAccessible(true);
+                        Toolbar toolbar = (Toolbar) f.get(view);
+                        try {
+                            toolbar.setTitle(findValue((annotation.value())));
+                            toolbar.setContentDescription(findValue((annotation.value())));
+                        } catch (IllegalArgumentException e) {
+                            toolbar.setTitle(annotation.value());
+                            toolbar.setContentDescription(annotation.value());
                         }
 
                     } catch (Exception e) {
