@@ -94,7 +94,7 @@ public class BackendManager {
 
     public void getLanguage(Callback callback) throws Exception {
         Request request = new Request.Builder()
-                .url("https://baas.like.st/api/v1/translate/mobile/languages/best_fit")
+                .url("https://nstack.io/api/v1/translate/mobile/languages/best_fit")
                 .build();
 
         client.newCall(request).enqueue(callback);
@@ -103,7 +103,7 @@ public class BackendManager {
 
     public void getAllLanguages(Callback callback) throws Exception {
         Request request = new Request.Builder()
-                .url("https://baas.like.st/api/v1/translate/mobile/languages")
+                .url("https://nstack.io/api/v1/translate/mobile/languages")
                 .build();
 
         client.newCall(request).enqueue(callback);

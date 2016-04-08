@@ -22,7 +22,7 @@ import dk.nodes.nstack.util.log.NLog;
 public class ContentManager {
 
     //Using "baas.like.st" because of SSL certificate error when using "nstack.io"
-    private static final String BASE_URL = "https://baas.like.st/api/v1/content/responses/";
+    private static final String BASE_URL = "https://nstack.io/api/v1/content/responses/";
     private static final String BASE_FILENAME = "content-responses-";
     private static final String BASE_FILE_TYPE = ".dat";
 
