@@ -1,5 +1,6 @@
 package dk.nodes.nstack.util.translation;
 
+import android.os.Build;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.internal.app.ToolbarActionBar;
 import android.support.v7.widget.AppCompatButton;
@@ -166,7 +167,7 @@ public class TranslationManager {
                     } catch (Exception e) {
                         NLog.d("Method.invoke error: " + e.toString());
                     }
-                } else if (f.getType() == Toolbar.class || f.getType() == ToolbarActionBar.class || f.getType() == android.widget.Toolbar.class) {
+                } else if (f.getType() == Toolbar.class || f.getType() == ToolbarActionBar.class) {
 
                     try {
                         f.setAccessible(true);
@@ -181,6 +182,26 @@ public class TranslationManager {
 
                     } catch (Exception e) {
                         NLog.d("Method.invoke error: " + e.toString());
+                    }
+                } // check these only on lollipop or newer (API 21)
+                else if(Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
+                {
+                    if(f.getType() == android.widget.Toolbar.class)
+                    {
+                        try {
+                            f.setAccessible(true);
+                            Toolbar toolbar = (Toolbar) f.get(view);
+                            try {
+                                toolbar.setTitle(findValue((annotation.value())));
+                                toolbar.setContentDescription(findValue((annotation.value())));
+                            } catch (IllegalArgumentException e) {
+                                toolbar.setTitle(annotation.value());
+                                toolbar.setContentDescription(annotation.value());
+                            }
+
+                        } catch (Exception e) {
+                            NLog.d("Method.invoke error: " + e.toString());
+                        }
                     }
                 }
             }

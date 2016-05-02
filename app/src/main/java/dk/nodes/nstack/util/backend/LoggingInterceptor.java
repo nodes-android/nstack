@@ -56,7 +56,12 @@ public class LoggingInterceptor implements Interceptor {
         MediaType contentType = null;
         if(responseHasBody) {
             contentType = response1.body().contentType();
-            if(contentType != null && !contentType.toString().contains("application/xml")) {
+            if(contentType != null && !(contentType.toString().contains("application/xml") ||
+                    contentType.toString().contains("application/json"))) {
+                responseHasBody = false;
+            }
+            if(contentType == null)
+            {
                 responseHasBody = false;
             }
         }
