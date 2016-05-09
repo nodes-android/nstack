@@ -52,10 +52,10 @@ public class AppOpen {
             }
 
             else if( updateObject.has("new_in_version") ) {
-                JSONObject newerVersion = updateObject.getJSONObject("new_in_version");
-                translateObject = newerVersion.getJSONObject("translate");
+                JSONObject newInVersion = updateObject.getJSONObject("new_in_version");
+                translateObject = newInVersion.getJSONObject("translate");
 
-                appopen.versionDescription = newerVersion.optString("version");
+                appopen.versionDescription = newInVersion.optString("version");
                 appopen.changelogAvailable = true;
             }
 
@@ -86,7 +86,7 @@ public class AppOpen {
         // Rate reminder
         try {
             JSONObject translateObject = json.getJSONObject("data").getJSONObject("translate");
-            JSONObject versionControlObject = translateObject.getJSONObject("versionControl");
+            JSONObject versionControlObject = translateObject.getJSONObject("rateReminder");
 
             appopen.rateReminder.body = versionControlObject.optString("body");
             appopen.rateReminder.laterBtn = versionControlObject.optString("laterBtn");
@@ -95,6 +95,14 @@ public class AppOpen {
             appopen.rateReminder.yesBtn = versionControlObject.optString("yesBtn");
         } catch( Exception e ) {
             Logger.e(e);
+        }
+
+        // Use versionControl translations if none are provided by update object
+        if (appopen.update.title == null) {
+            appopen.update.title =  appopen.forcedUpdate ? appopen.versionControl.forceHeader :
+                                    appopen.updateAvailable ? appopen.versionControl.updateHeader :
+                                    appopen.changelogAvailable ? appopen.versionControl.newInVersionHeader :
+                                    "";
         }
 
         // General Translations

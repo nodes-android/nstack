@@ -1,12 +1,12 @@
 package dk.nodes.nstackexampleproject;
 
 import android.app.Dialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.appopen.AppOpenManager;
+import dk.nodes.nstack.util.log.Logger;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,25 +19,25 @@ public class MainActivity extends AppCompatActivity {
         NStack.getStack().getAppOpenManager().openApp(this, new AppOpenManager.AppOpenCallbacks() {
             @Override
             public void onForcedUpdate(Dialog dialog) {
-                Log.d("", "dialog: " + dialog);
+                Logger.d("", "dialog: " + dialog);
                 dialog.show();
             }
 
             @Override
             public void onUpdate(Dialog dialog) {
-                Log.d("", "dialog: " + dialog);
+                Logger.d("", "dialog: " + dialog);
                 dialog.show();
             }
 
             @Override
             public void onChangelog(Dialog dialog) {
-                Log.d("", "dialog: " + dialog);
+                Logger.d("", "dialog: " + dialog);
                 dialog.show();
             }
 
             @Override
             public void onFailure() {
-                Log.d("", "dialog: ");
+                Logger.d("", "dialog: ");
             }
         });
     }

@@ -1,6 +1,5 @@
 package dk.nodes.nstack.util.translation;
 
-import java.io.File;
 import java.util.Locale;
 
 import dk.nodes.nstack.NStack;

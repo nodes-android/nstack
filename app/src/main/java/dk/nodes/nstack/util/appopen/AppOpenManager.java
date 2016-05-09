@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
-import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -22,7 +21,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 import dk.nodes.nstack.NStack;
-import dk.nodes.nstack.R;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.log.Logger;
@@ -32,7 +30,7 @@ import dk.nodes.nstack.util.log.Logger;
 public class AppOpenManager {
 
     private final static String KEY_SETTINGS = "APP_OPEN_SETTINGS";
-    private final static String BASE_URL = "https://baas.like.st/api/v1/open";
+    private final static String BASE_URL = "https://nstack.io/api/v1/open";
 
     private AppOpenCallbacks listener;
     private AppOpen appOpen;
@@ -125,9 +123,9 @@ public class AppOpenManager {
                     //, R.style.myDialog
             );
 
-            builder .setTitle("appOpen.versionControl.forceHeader")
-                    .setMessage("appOpen.update.message")
-                    .setPositiveButton("appOpen.update.positiveBtn", new DialogInterface.OnClickListener() {
+            builder .setTitle(appOpen.update.title)
+                    .setMessage(appOpen.update.message)
+                    .setPositiveButton(appOpen.update.positiveBtn, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             try {
                                 NStack.getStack().getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.storeLink)));
@@ -152,9 +150,9 @@ public class AppOpenManager {
                     //, R.style.myDialog
             );
 
-            builder .setTitle("appOpen.versionControl.updateHeader")
-                    .setMessage("appOpen.update.message")
-                    .setPositiveButton("appOpen.versionControl.positiveBtn", new DialogInterface.OnClickListener() {
+            builder .setTitle(appOpen.update.title)
+                    .setMessage(appOpen.update.message)
+                    .setPositiveButton(appOpen.update.positiveBtn, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             try {
                                 NStack.getStack().getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.storeLink)));
@@ -183,9 +181,9 @@ public class AppOpenManager {
                     //, R.style.myDialog
             );
 
-            builder .setTitle("appOpen.versionControl.newInVersionHeader")
-                    .setMessage("appOpen.update.message")
-                    .setPositiveButton("appOpen.versionControl.okBtn", new DialogInterface.OnClickListener() {
+            builder .setTitle(appOpen.versionControl.newInVersionHeader)
+                    .setMessage(appOpen.update.message)
+                    .setPositiveButton(appOpen.versionControl.okBtn, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
                         }

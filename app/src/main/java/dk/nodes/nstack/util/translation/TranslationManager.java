@@ -394,7 +394,7 @@ public class TranslationManager {
                     continue;
                 }
 
-                NLog.d("updateTranslationLanguageKeys on: " + languageName);
+                Logger.d("updateTranslationLanguageKeys on: " + languageName);
                 JSONObject translationObject = data.getJSONObject(languageName);
 
                 translationOptions.setPickedLanguage(languageName);
@@ -438,7 +438,7 @@ public class TranslationManager {
                     }
                 }
             } catch (Exception e) {
-                NLog.e("Parsing failed for section -> " + sectionKey + " | " + e.toString());
+                Logger.e("Parsing failed for section -> " + sectionKey + " | " + e.toString());
             }
         }
     }
@@ -455,7 +455,7 @@ public class TranslationManager {
                     updateField(classType, translationKey, jsonLanguage.getString(translationKey));
                 }
             } catch (Exception e) {
-                NLog.e("Parsing failed for key = " + translationKey);
+                Logger.e("Parsing failed for key = " + translationKey);
             }
         }
     }
