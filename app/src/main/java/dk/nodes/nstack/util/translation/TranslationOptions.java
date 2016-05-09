@@ -13,7 +13,7 @@ public class TranslationOptions {
     private String fallbackLocale = "en-US";
     private boolean flattenKeys = false;
     private boolean allLanguages = true;
-    private final String NSTACK_CONTENT_URL = "https://baas.like.st/api/v1/translate/mobile/keys";
+    private final String NSTACK_CONTENT_URL = "https://nstack.io/api/v1/translate/mobile/keys";
     private String fallbackFile;
     private String customContentURL = null;
     private String pickedLanguage;
