@@ -1,12 +1,11 @@
 apply plugin: 'com.android.application'
-apply from: 'translation.gradle'
+apply plugin: 'dk.nstack.translation.plugin'
 
-project.translation.appId = "bOdrNuZd4syxuAz6gyCb3xwBCjA8U4h4IcQI"
-project.translation.apiKey = "X0ENl5QpKI51tS9CzKSt1PGwfZeq2gBMTU58"
-project.translation.acceptHeader = "da-DK"
-project.translation.modelPath = "dk.nodes.nstackexampleproject.util.model"
-project.translation.classPath = "nstackexampleproject/src/main/java/dk/nodes/nstackexampleproject/util/model/Translation.java"
-project.translation.stringsPath = "nstackexampleproject/src/main/res/values/translationstrings.xml"
+translation {
+    appId = "bOdrNuZd4syxuAz6gyCb3xwBCjA8U4h4IcQI"
+    apiKey = "X0ENl5QpKI51tS9CzKSt1PGwfZeq2gBMTU58"
+    acceptHeader = "da-DK"
+}
 
 android {
     compileSdkVersion 22
@@ -28,6 +27,11 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
+
 dependencies {
     compile 'dk.nodes.nstack:v1:+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -35,4 +39,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.+'
     compile 'com.android.support:design:22.+'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'dk.nodes.nstack:translation:0.3'
 }
