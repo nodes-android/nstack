@@ -1,13 +1,12 @@
 package dk.nodes.nstack.util.translation;
 
-import android.support.annotation.NonNull;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.internal.app.ToolbarActionBar;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.EditText;
@@ -164,7 +163,7 @@ public class TranslationManager {
                     } catch (Exception e) {
                         Logger.d("Method.invoke error: " + e.toString());
                     }
-                } else if (f.getType() == Toolbar.class || f.getType() == ToolbarActionBar.class) {
+                } else if (f.getType() == Toolbar.class) {
 
                     try {
                         f.setAccessible(true);
