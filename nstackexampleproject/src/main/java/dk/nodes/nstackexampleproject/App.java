@@ -1,11 +1,8 @@
 package dk.nodes.nstackexampleproject;
 
 import android.app.Application;
-import android.app.Dialog;
-import android.util.Log;
 
 import dk.nodes.nstack.NStack;
-import dk.nodes.nstack.util.appopen.AppOpenManager;
 import dk.nodes.nstackexampleproject.util.model.Translation;
 /**
  * Created by joso on 18/11/15.

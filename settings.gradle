@@ -1,1 +1,1 @@
-include ':app', ':app', ':nstackexampleproject'
+include ':app', ':nstackexampleproject'
