@@ -114,10 +114,10 @@ public class BackendManager {
         client.newCall(request).enqueue(callback);
     }
 
-    public void getContentResponse(String url, Callback callback) throws Exception {
+    public void getContentResponse(int id, Callback callback) throws Exception {
         //example url https://nstack.io/api/v1/content/responses/0
         Request request = new Request.Builder()
-                .url(url)
+                .url("https://nstack.io/api/v1/content/responses/" + id)
                 .build();
 
         client.newCall(request).enqueue(callback);
