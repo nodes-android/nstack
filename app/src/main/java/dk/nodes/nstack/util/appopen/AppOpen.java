@@ -12,6 +12,7 @@ public class AppOpen {
     public final VersionControl versionControl = new VersionControl();
     public final RateReminder rateReminder = new RateReminder();
 
+    public boolean rateRequestAvailable = false;
     public boolean updateAvailable = false;
     public boolean forcedUpdate = false;
     public boolean changelogAvailable = false;
@@ -93,6 +94,8 @@ public class AppOpen {
             appopen.rateReminder.noBtn = versionControlObject.optString("noBtn");
             appopen.rateReminder.title = versionControlObject.optString("title");
             appopen.rateReminder.yesBtn = versionControlObject.optString("yesBtn");
+
+            appopen.rateRequestAvailable = true;
         } catch( Exception e ) {
             Logger.e(e);
         }

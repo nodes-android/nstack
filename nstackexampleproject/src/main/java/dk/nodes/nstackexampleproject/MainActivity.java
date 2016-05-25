@@ -36,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onRateReminder(Dialog dialog) {
+                Logger.d("", "dialog: " + dialog);
+                dialog.show();
+            }
+
+            @Override
             public void onFailure() {
                 Logger.d("", "dialog: ");
             }

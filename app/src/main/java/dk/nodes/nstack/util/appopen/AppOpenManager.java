@@ -2,6 +2,7 @@ package dk.nodes.nstack.util.appopen;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -89,6 +90,7 @@ public class AppOpenManager {
                         public void run() {
                             handleTranslations();
                             handleVersionControl(activity);
+                            handleRateRequest(activity);
                         }
                     });
 
@@ -112,6 +114,44 @@ public class AppOpenManager {
 
         if( updateTranslationsFromAppOpen ) {
             NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(appOpen.translationRoot);
+        }
+    }
+
+    private void handleRateRequest(final Activity activity) {
+        boolean showReminder = activity.getSharedPreferences("rated", Context.MODE_PRIVATE).getBoolean("showRateReminder", true);
+
+        if (appOpen.rateRequestAvailable && showReminder) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(
+                    activity instanceof AppCompatActivity ? ((AppCompatActivity) activity).getSupportActionBar().getThemedContext() : activity
+                    //, R.style.myDialog
+            )
+                    .setTitle(appOpen.rateReminder.title)
+                    .setMessage(appOpen.rateReminder.body)
+                    .setPositiveButton(appOpen.rateReminder.yesBtn, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            try {
+                                NStack.getStack().getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.storeLink)));
+                            } catch (Exception e) {
+                                Logger.e(e);
+                            }
+                        }
+                    })
+                    .setNeutralButton(appOpen.rateReminder.laterBtn, null)
+                    .setNegativeButton(appOpen.rateReminder.noBtn, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            activity.getSharedPreferences("rated", Context.MODE_PRIVATE)
+                                    .edit()
+                                    .putBoolean("showRateReminder", false)
+                            .commit();
+                        }
+                    });
+
+            if (listener != null) {
+                listener.onRateReminder(builder.create());
+            } else {
+                builder.create().show();
+            }
         }
     }
 
@@ -202,6 +242,7 @@ public class AppOpenManager {
         void onForcedUpdate(Dialog dialog);
         void onUpdate(Dialog dialog);
         void onChangelog(Dialog dialog);
+        void onRateReminder(Dialog dialog);
         void onFailure();
     }
 
