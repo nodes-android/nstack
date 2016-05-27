@@ -121,31 +121,42 @@ public class AppOpenManager {
         boolean showReminder = activity.getSharedPreferences("rated", Context.MODE_PRIVATE).getBoolean("showRateReminder", true);
 
         if (appOpen.rateRequestAvailable && showReminder) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(
-                    activity instanceof AppCompatActivity ? ((AppCompatActivity) activity).getSupportActionBar().getThemedContext() : activity
-                    //, R.style.myDialog
-            )
-                    .setTitle(appOpen.rateReminder.title)
-                    .setMessage(appOpen.rateReminder.body)
-                    .setPositiveButton(appOpen.rateReminder.yesBtn, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            try {
-                                NStack.getStack().getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.storeLink)));
-                            } catch (Exception e) {
-                                Logger.e(e);
-                            }
-                        }
-                    })
-                    .setNeutralButton(appOpen.rateReminder.laterBtn, null)
-                    .setNegativeButton(appOpen.rateReminder.noBtn, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            activity.getSharedPreferences("rated", Context.MODE_PRIVATE)
-                                    .edit()
-                                    .putBoolean("showRateReminder", false)
-                            .commit();
-                        }
-                    });
+
+            AlertDialog.Builder builder;
+
+            if(activity instanceof  AppCompatActivity) {
+                if(((AppCompatActivity) activity).getSupportActionBar() != null) {
+                    builder = new AlertDialog.Builder(
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext()
+                    );
+                } else{
+                    builder = new AlertDialog.Builder(activity);
+                }
+            } else{
+                builder = new AlertDialog.Builder(activity);
+            }
+
+            builder.setTitle(appOpen.rateReminder.title)
+            .setMessage(appOpen.rateReminder.body)
+            .setPositiveButton(appOpen.rateReminder.yesBtn, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    try {
+                        NStack.getStack().getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.storeLink)));
+                    } catch (Exception e) {
+                        Logger.e(e);
+                    }
+                }
+            })
+            .setNeutralButton(appOpen.rateReminder.laterBtn, null)
+            .setNegativeButton(appOpen.rateReminder.noBtn, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    activity.getSharedPreferences("rated", Context.MODE_PRIVATE)
+                            .edit()
+                            .putBoolean("showRateReminder", false)
+                    .commit();
+                }
+            });
 
             if (listener != null) {
                 listener.onRateReminder(builder.create());
