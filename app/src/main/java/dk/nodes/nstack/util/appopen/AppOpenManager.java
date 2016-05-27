@@ -130,14 +130,10 @@ public class AppOpenManager {
                             ((AppCompatActivity) activity).getSupportActionBar().getThemedContext()
                     );
                 } else{
-                    builder = new AlertDialog.Builder(
-                           activity
-                    );
+                    builder = new AlertDialog.Builder(activity);
                 }
             } else{
-                builder = new AlertDialog.Builder(
-                        activity
-                );
+                builder = new AlertDialog.Builder(activity);
             }
 
             builder.setTitle(appOpen.rateReminder.title)
