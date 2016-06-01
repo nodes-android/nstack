@@ -79,11 +79,7 @@ public final class NStack {
     }
 
     public TranslationManager getTranslationManager() {
-        if( translationManager == null ) {
-            translationManager = new TranslationManager();
-        }
-
-        return translationManager;
+        return TranslationManager.getInstance();
     }
 
     public AppOpenManager getAppOpenManager() {
