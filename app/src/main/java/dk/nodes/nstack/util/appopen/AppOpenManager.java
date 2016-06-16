@@ -174,7 +174,7 @@ public class AppOpenManager {
     }
 
     private void handleVersionControl(Activity activity) {
-        // hack because nstack return empty message and text in title
+        // Smallish naming hack
         if(appOpen.update != null) {
             if(appOpen.update.positiveBtn != null) {
                 if (appOpen.update.positiveBtn.contains("AppStore")) {
