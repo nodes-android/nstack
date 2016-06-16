@@ -1,5 +1,8 @@
 package dk.nodes.nstack.util.appopen;
 
+import android.util.Log;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import dk.nodes.nstack.util.log.Logger;
@@ -28,7 +31,6 @@ public class AppOpen {
 
     public static AppOpen parseFromJson(JSONObject json) {
         AppOpen appopen = new AppOpen();
-
         // Update
         try {
             JSONObject updateObject = json.getJSONObject("data").getJSONObject("update");
@@ -55,15 +57,16 @@ public class AppOpen {
             else if( updateObject.has("new_in_version") ) {
                 JSONObject newInVersion = updateObject.getJSONObject("new_in_version");
                 translateObject = newInVersion.getJSONObject("translate");
-
+                boolean state = newInVersion.optBoolean("state", false);
                 appopen.versionDescription = newInVersion.optString("version");
-                appopen.changelogAvailable = true;
+                appopen.changelogAvailable = state;
             }
 
             if( translateObject != null ) {
                 appopen.update.title = translateObject.optString("title");
                 appopen.update.message = translateObject.optString("message");
                 appopen.update.positiveBtn = translateObject.optString("positiveBtn");
+                appopen.update.negativeBtn = translateObject.optString("negativeBtn");
             }
         } catch( Exception e ) {
             Logger.e(e);
@@ -126,6 +129,7 @@ public class AppOpen {
         public String title;
         public String message;
         public String positiveBtn;
+        public String negativeBtn;
     }
 
     class VersionControl {

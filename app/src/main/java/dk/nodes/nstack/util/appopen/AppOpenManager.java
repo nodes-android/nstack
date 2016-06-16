@@ -5,12 +5,18 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
@@ -29,7 +35,7 @@ import dk.nodes.nstack.util.log.Logger;
  * Created by joso on 17/11/15.
  */
 public class AppOpenManager {
-
+    private final static String TAG = AppOpenManager.class.getSimpleName();
     private final static String KEY_SETTINGS = "APP_OPEN_SETTINGS";
     private final static String BASE_URL = "https://nstack.io/api/v1/open";
 
@@ -62,6 +68,7 @@ public class AppOpenManager {
     public void openApp(final Activity activity, @Nullable AppOpenCallbacks listener) {
         this.listener = listener;
 
+        //Log.d("debug", settings.toString());
         BackendManager.getInstance().getAppOpen(BASE_URL, settings, new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -77,13 +84,14 @@ public class AppOpenManager {
                     JSONObject root = new JSONObject(json);
 
                     appOpen = AppOpen.parseFromJson(root);
-
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
+                    JSONObject jo = root.getJSONObject("data");
+                    if(jo != null)
+                    {
+                        if(jo.has("last_updated"))
+                        {
+                            settings.lastUpdatedString = jo.getString("last_updated");
                         }
-                    });
+                    }
 
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
@@ -91,10 +99,9 @@ public class AppOpenManager {
                             handleTranslations();
                             handleVersionControl(activity);
                             handleRateRequest(activity);
+                            settings.save();
                         }
                     });
-
-
 
                 } catch(Exception e) {
                     Logger.e(e);
@@ -167,19 +174,40 @@ public class AppOpenManager {
     }
 
     private void handleVersionControl(Activity activity) {
+        // hack because nstack return empty message and text in title
+        if(appOpen.update != null) {
+            if(appOpen.update.positiveBtn != null) {
+                if (appOpen.update.positiveBtn.contains("AppStore")) {
+                    appOpen.update.positiveBtn = appOpen.update.positiveBtn.replace("AppStore", "Play Store");
+                }
+            }
+        }
+
+
         // Forced update
         if( appOpen.updateAvailable && appOpen.forcedUpdate ) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(
-                    activity instanceof AppCompatActivity ? ((AppCompatActivity) activity).getSupportActionBar().getThemedContext() : activity
-                    //, R.style.myDialog
-            );
 
-            builder .setTitle(appOpen.update.title)
-                    .setMessage(appOpen.update.message)
+            AlertDialog.Builder builder;
+            if(activity instanceof  AppCompatActivity) {
+                if(((AppCompatActivity) activity).getSupportActionBar() != null) {
+                    builder = new AlertDialog.Builder(
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext()
+                    );
+                } else{
+                    builder = new AlertDialog.Builder(activity);
+                }
+            } else{
+                builder = new AlertDialog.Builder(activity);
+            }
+
+            builder
+                    .setMessage(appOpen.update.title)
                     .setPositiveButton(appOpen.update.positiveBtn, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             try {
-                                NStack.getStack().getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.storeLink)));
+                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.storeLink));
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                NStack.getStack().getApplicationContext().startActivity(i);
                             } catch( Exception e ) {
                                 Logger.e(e);
                             }
@@ -196,23 +224,32 @@ public class AppOpenManager {
 
         // Normal update
         else if( appOpen.updateAvailable ) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(
-                    activity instanceof AppCompatActivity ? ((AppCompatActivity) activity).getSupportActionBar().getThemedContext() : activity
-                    //, R.style.myDialog
-            );
+            AlertDialog.Builder builder;
+            if(activity instanceof  AppCompatActivity) {
+                if(((AppCompatActivity) activity).getSupportActionBar() != null) {
+                    builder = new AlertDialog.Builder(
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext()
+                    );
+                } else{
+                    builder = new AlertDialog.Builder(activity);
+                }
+            } else{
+                builder = new AlertDialog.Builder(activity);
+            }
 
-            builder .setTitle(appOpen.update.title)
-                    .setMessage(appOpen.update.message)
+            builder .setMessage(appOpen.update.title)
                     .setPositiveButton(appOpen.update.positiveBtn, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             try {
-                                NStack.getStack().getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.storeLink)));
+                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.storeLink));
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                NStack.getStack().getApplicationContext().startActivity(i);
                             } catch( Exception e ) {
                                 Logger.e(e);
                             }
                         }
                     })
-                    .setNegativeButton(appOpen.versionControl.negativeBtn, new DialogInterface.OnClickListener() {
+                    .setNegativeButton(appOpen.update.negativeBtn, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                         }
                     })
@@ -227,14 +264,22 @@ public class AppOpenManager {
 
         // Updated, show change log
         else if( appOpen.changelogAvailable ) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(
-                    activity instanceof AppCompatActivity ? ((AppCompatActivity) activity).getSupportActionBar().getThemedContext() : activity
-                    //, R.style.myDialog
-            );
+            AlertDialog.Builder builder;
+            if(activity instanceof  AppCompatActivity) {
+                if(((AppCompatActivity) activity).getSupportActionBar() != null) {
+                    builder = new AlertDialog.Builder(
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext()
+                    );
+                } else{
+                    builder = new AlertDialog.Builder(activity);
+                }
+            } else{
+                builder = new AlertDialog.Builder(activity);
+            }
 
-            builder .setTitle(appOpen.versionControl.newInVersionHeader)
-                    .setMessage(appOpen.update.message)
-                    .setPositiveButton(appOpen.versionControl.okBtn, new DialogInterface.OnClickListener() {
+            builder .setTitle(appOpen.update.title)
+                    .setMessage(Html.fromHtml(appOpen.update.message))
+                    .setPositiveButton(appOpen.update.negativeBtn, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
                         }
