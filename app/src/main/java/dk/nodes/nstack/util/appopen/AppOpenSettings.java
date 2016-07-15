@@ -39,7 +39,7 @@ public class AppOpenSettings {
             Logger.e(e);
         }
 
-        lastUpdated = new Date();
+        lastUpdated = new Date(0);
         lastUpdatedString = dateFormat.format(lastUpdated);
         load();
     }
@@ -61,7 +61,7 @@ public class AppOpenSettings {
         SharedPreferences prefs = context.getSharedPreferences(APPOPEN_INFO_KEY, Context.MODE_PRIVATE);
         oldVersion = prefs.getString(VERSION_INFO_KEY, version);
         guid = prefs.getString(GUID_KEY, UUID.randomUUID().toString());
-        lastUpdatedString = prefs.getString(LAST_UPDATED_KEY, dateFormat.format(new Date()));
+        lastUpdatedString = prefs.getString(LAST_UPDATED_KEY, dateFormat.format(new Date(0)));
         /*
         String str_date = prefs.getString(LAST_UPDATED_KEY, dateFormat.format(new Date()));
         try {

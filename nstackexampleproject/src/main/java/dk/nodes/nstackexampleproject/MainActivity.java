@@ -3,10 +3,14 @@ package dk.nodes.nstackexampleproject;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.appopen.AppOpenManager;
 import dk.nodes.nstack.util.log.Logger;
+import dk.nodes.nstackexampleproject.util.model.Translation;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,5 +50,9 @@ public class MainActivity extends AppCompatActivity {
                 Logger.d("", "dialog: ");
             }
         });
+
+        TextView textView = (TextView) findViewById(R.id.test_tv);
+        textView.setText(Translation.testSectionJoao.testkeyjoao);
+
     }
 }
