@@ -39,7 +39,7 @@ public class AppOpenSettings {
             Logger.e(e);
         }
 
-        lastUpdated = new Date(0);
+        lastUpdated = new Date();
         lastUpdatedString = dateFormat.format(lastUpdated);
         load();
     }

@@ -24,13 +24,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onForcedUpdate(Dialog dialog) {
                 Logger.d("", "dialog: " + dialog);
-                dialog.show();
+                //dialog.show();
             }
 
             @Override
             public void onUpdate(Dialog dialog) {
                 Logger.d("", "dialog: " + dialog);
-                dialog.show();
+                //dialog.show();
             }
 
             @Override
@@ -49,10 +49,15 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure() {
                 Logger.d("", "dialog: ");
             }
+
+            @Override
+            public void translationsUpdated() {
+                TextView textView = (TextView) findViewById(R.id.test_tv);
+                textView.setText(Translation.testSectionJoao.testkeyjoao);
+            }
         });
 
-        TextView textView = (TextView) findViewById(R.id.test_tv);
-        textView.setText(Translation.testSectionJoao.testkeyjoao);
+
 
     }
 }

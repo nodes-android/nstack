@@ -22,14 +22,19 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.cache.CacheManager;
+import dk.nodes.nstack.util.cache.TranslationsManager;
 import dk.nodes.nstack.util.log.Logger;
 /**
  * Created by joso on 17/11/15.
@@ -42,8 +47,6 @@ public class AppOpenManager {
     private AppOpenCallbacks listener;
     private AppOpen appOpen;
     private AppOpenSettings settings = new AppOpenSettings();
-
-    private boolean updateTranslationsFromAppOpen = true;
 
     public AppOpenManager(  ) {
         checkSettings();
@@ -115,13 +118,32 @@ public class AppOpenManager {
     }
 
     private void handleTranslations() {
+
         if( appOpen.translationRoot == null ) {
-            return;
+            //No new translations - load translations from cache
+            if (TranslationsManager.with(NStack.getStack().getApplicationContext()).contains(TranslationsManager.Key.TRANSLATIONS)) {
+
+                String translations = TranslationsManager.with(NStack.getStack().getApplicationContext()).getString(TranslationsManager.Key.TRANSLATIONS);
+                try {
+
+                    JSONObject jsonTranslations = new JSONObject(translations);
+                    NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(jsonTranslations);
+                    AppOpenManager.this.listener.translationsUpdated();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            //New translations - save new translations into cache
+            TranslationsManager.with(NStack.getStack().getApplicationContext()).putString(TranslationsManager.Key.TRANSLATIONS, appOpen.translationRoot.toString());
+            settings.lastUpdatedString = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date());
+
+            NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(appOpen.translationRoot);
+            AppOpenManager.this.listener.translationsUpdated();
+
         }
 
-        if( updateTranslationsFromAppOpen ) {
-            NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(appOpen.translationRoot);
-        }
     }
 
     private void handleRateRequest(final Activity activity) {
@@ -300,13 +322,7 @@ public class AppOpenManager {
         void onChangelog(Dialog dialog);
         void onRateReminder(Dialog dialog);
         void onFailure();
+        void translationsUpdated();
     }
 
-    public boolean updateTranslationsFromAppOpen() {
-        return updateTranslationsFromAppOpen;
-    }
-
-    public void setUpdateTranslationsFromAppOpen(boolean updateTranslationsFromAppOpen) {
-        this.updateTranslationsFromAppOpen = updateTranslationsFromAppOpen;
-    }
 }

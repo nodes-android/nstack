@@ -140,7 +140,8 @@ public class BackendManager {
                         RequestBody.create(null, settings.platform))
                 .addPart(
                         Headers.of("Content-Disposition", "form-data; name=\"last_updated\""),
-                        RequestBody.create(null, new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(settings.lastUpdated != null ? settings.lastUpdated : new Date(0))))
+                        RequestBody.create(null, settings.lastUpdatedString != null ? settings.lastUpdatedString : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format( new Date(0))))
+//                        RequestBody.create(null, new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(settings.lastUpdated != null ? settings.lastUpdated : new Date(0))))
                 .build();
 
         Request request = new Request.Builder()
