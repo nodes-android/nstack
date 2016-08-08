@@ -39,7 +39,7 @@ public class AppOpenManager {
     private final static String BASE_URL = "https://nstack.io/api/v1/open";
 
     private RateCallbacks rateListener;
-    private TranslationsCallbacks translationsListener;
+    private AppOpenCallbacks translationsListener;
 
     private VersionControlCallbacks versionControlListener;
     private AppOpen appOpen;
@@ -65,20 +65,31 @@ public class AppOpenManager {
         }
     }
 
-    public void openApp(final Activity activity, @Nullable VersionControlCallbacks versionControlListener,
-                        @Nullable RateCallbacks rateListener,
-                        @Nullable TranslationsCallbacks translationsListener) {
-
+    public void checkVersionControl(final Activity activity,
+                                    @Nullable VersionControlCallbacks versionControlListener) {
         this.versionControlListener = versionControlListener;
+
+        handleVersionControl(activity);
+    }
+
+    public void checkRateReminder(final Activity activity, @Nullable RateCallbacks rateListener) {
         this.rateListener = rateListener;
+
+        handleRateRequest(activity);
+    }
+
+    public void openApp() {
+        openApp(null);
+    }
+
+    public void openApp(@Nullable AppOpenCallbacks translationsListener) {
         this.translationsListener = translationsListener;
 
-        //Log.d("debug", settings.toString());
         BackendManager.getInstance().getAppOpen(BASE_URL, settings, new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                if( AppOpenManager.this.versionControlListener != null ) {
-                    AppOpenManager.this.versionControlListener.onFailure();
+                if( AppOpenManager.this.translationsListener != null ) {
+                    AppOpenManager.this.translationsListener.onFailure();
                 }
             }
 
@@ -102,8 +113,6 @@ public class AppOpenManager {
                         @Override
                         public void run() {
                             handleTranslations();
-                            handleVersionControl(activity);
-                            handleRateRequest(activity);
                             settings.save();
                         }
                     });
@@ -111,8 +120,8 @@ public class AppOpenManager {
                 } catch(Exception e) {
                     Logger.e(e);
 
-                    if( AppOpenManager.this.versionControlListener != null ) {
-                        AppOpenManager.this.versionControlListener.onFailure();
+                    if( AppOpenManager.this.translationsListener != null ) {
+                        AppOpenManager.this.translationsListener.onFailure();
                     }
                 }
             }
@@ -120,7 +129,6 @@ public class AppOpenManager {
     }
 
     private void handleTranslations() {
-
         if( appOpen.translationRoot == null ) {
             //No new translations - load translations from cache
             if (PrefsManager.with(NStack.getStack().getApplicationContext()).contains(PrefsManager.Key.TRANSLATIONS)) {
@@ -130,7 +138,7 @@ public class AppOpenManager {
 
                     JSONObject jsonTranslations = new JSONObject(translations);
                     NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(jsonTranslations);
-                    AppOpenManager.this.translationsListener.translationsUpdated();
+                    AppOpenManager.this.translationsListener.onUpdated();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -142,7 +150,7 @@ public class AppOpenManager {
             settings.lastUpdatedString = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date());
 
             NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(appOpen.translationRoot);
-            AppOpenManager.this.translationsListener.translationsUpdated();
+            AppOpenManager.this.translationsListener.onUpdated();
 
         }
 
@@ -322,15 +330,15 @@ public class AppOpenManager {
         void onForcedUpdate(Dialog dialog);
         void onUpdate(Dialog dialog);
         void onChangelog(Dialog dialog);
-        void onFailure();
     }
 
     public interface RateCallbacks {
         void onRateReminder(Dialog dialog);
     }
 
-    public interface TranslationsCallbacks {
-        void translationsUpdated();
+    public interface AppOpenCallbacks {
+        void onUpdated();
+        void onFailure();
     }
 
 }

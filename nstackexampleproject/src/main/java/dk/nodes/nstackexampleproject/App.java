@@ -27,6 +27,9 @@ public class App extends Application {
 
         // Translation
         NStack.getStack().getTranslationManager().setTranslationClass(Translation.class);
+
+        NStack.getStack().getAppOpenManager().openApp();
+
 //        // These are the default options
 //        NStack.getStack()
 //                .getTranslationManager()

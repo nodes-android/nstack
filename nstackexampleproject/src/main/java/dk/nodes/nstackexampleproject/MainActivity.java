@@ -3,12 +3,10 @@ package dk.nodes.nstackexampleproject;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
 
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.appopen.AppOpenManager;
 import dk.nodes.nstack.util.log.Logger;
-import dk.nodes.nstackexampleproject.util.model.Translation;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,8 +15,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // App open
-        NStack.getStack().getAppOpenManager().openApp(this, new AppOpenManager.VersionControlCallbacks() {
+        NStack.getStack().getAppOpenManager().checkVersionControl(this, new AppOpenManager.VersionControlCallbacks() {
             @Override
             public void onForcedUpdate(Dialog dialog) {
                 Logger.d("", "dialog: " + dialog);
@@ -36,27 +33,14 @@ public class MainActivity extends AppCompatActivity {
                 Logger.d("", "dialog: " + dialog);
                 dialog.show();
             }
-
-            @Override
-            public void onFailure() {
-                Logger.d("", "dialog: ");
-            }
-
-        }, new AppOpenManager.RateCallbacks() {
-            @Override
-            public void onRateReminder(Dialog dialog) {
-                Logger.d("", "dialog: " + dialog);
-                dialog.show();
-            }
-        }, new AppOpenManager.TranslationsCallbacks() {
-            @Override
-            public void translationsUpdated() {
-                TextView textView = (TextView) findViewById(R.id.test_tv);
-                textView.setText(Translation.testSectionJoao.testkeyjoao);
-            }
         });
 
+        NStack.getStack().getAppOpenManager().checkRateReminder(this, new AppOpenManager.RateCallbacks() {
+            @Override
+            public void onRateReminder(Dialog dialog) {
 
+            }
+        });
 
     }
 }
