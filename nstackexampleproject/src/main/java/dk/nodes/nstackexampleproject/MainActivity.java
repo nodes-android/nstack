@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.appopen.AppOpenManager;
 import dk.nodes.nstack.util.log.Logger;
@@ -20,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // App open
-        NStack.getStack().getAppOpenManager().openApp(this, new AppOpenManager.AppOpenCallbacks() {
+        NStack.getStack().getAppOpenManager().openApp(this, new AppOpenManager.VersionControlCallbacks() {
             @Override
             public void onForcedUpdate(Dialog dialog) {
                 Logger.d("", "dialog: " + dialog);
@@ -40,16 +38,17 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onRateReminder(Dialog dialog) {
-                Logger.d("", "dialog: " + dialog);
-                dialog.show();
-            }
-
-            @Override
             public void onFailure() {
                 Logger.d("", "dialog: ");
             }
 
+        }, new AppOpenManager.RateCallbacks() {
+            @Override
+            public void onRateReminder(Dialog dialog) {
+                Logger.d("", "dialog: " + dialog);
+                dialog.show();
+            }
+        }, new AppOpenManager.TranslationsCallbacks() {
             @Override
             public void translationsUpdated() {
                 TextView textView = (TextView) findViewById(R.id.test_tv);

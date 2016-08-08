@@ -5,8 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,9 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
@@ -26,7 +21,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -34,7 +28,7 @@ import java.util.UUID;
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.cache.CacheManager;
-import dk.nodes.nstack.util.cache.TranslationsManager;
+import dk.nodes.nstack.util.cache.PrefsManager;
 import dk.nodes.nstack.util.log.Logger;
 /**
  * Created by joso on 17/11/15.
@@ -44,7 +38,10 @@ public class AppOpenManager {
     private final static String KEY_SETTINGS = "APP_OPEN_SETTINGS";
     private final static String BASE_URL = "https://nstack.io/api/v1/open";
 
-    private AppOpenCallbacks listener;
+    private RateCallbacks rateListener;
+    private TranslationsCallbacks translationsListener;
+
+    private VersionControlCallbacks versionControlListener;
     private AppOpen appOpen;
     private AppOpenSettings settings = new AppOpenSettings();
 
@@ -68,15 +65,20 @@ public class AppOpenManager {
         }
     }
 
-    public void openApp(final Activity activity, @Nullable AppOpenCallbacks listener) {
-        this.listener = listener;
+    public void openApp(final Activity activity, @Nullable VersionControlCallbacks versionControlListener,
+                        @Nullable RateCallbacks rateListener,
+                        @Nullable TranslationsCallbacks translationsListener) {
+
+        this.versionControlListener = versionControlListener;
+        this.rateListener = rateListener;
+        this.translationsListener = translationsListener;
 
         //Log.d("debug", settings.toString());
         BackendManager.getInstance().getAppOpen(BASE_URL, settings, new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                if( AppOpenManager.this.listener != null ) {
-                    AppOpenManager.this.listener.onFailure();
+                if( AppOpenManager.this.versionControlListener != null ) {
+                    AppOpenManager.this.versionControlListener.onFailure();
                 }
             }
 
@@ -109,8 +111,8 @@ public class AppOpenManager {
                 } catch(Exception e) {
                     Logger.e(e);
 
-                    if( AppOpenManager.this.listener != null ) {
-                        AppOpenManager.this.listener.onFailure();
+                    if( AppOpenManager.this.versionControlListener != null ) {
+                        AppOpenManager.this.versionControlListener.onFailure();
                     }
                 }
             }
@@ -121,14 +123,14 @@ public class AppOpenManager {
 
         if( appOpen.translationRoot == null ) {
             //No new translations - load translations from cache
-            if (TranslationsManager.with(NStack.getStack().getApplicationContext()).contains(TranslationsManager.Key.TRANSLATIONS)) {
+            if (PrefsManager.with(NStack.getStack().getApplicationContext()).contains(PrefsManager.Key.TRANSLATIONS)) {
 
-                String translations = TranslationsManager.with(NStack.getStack().getApplicationContext()).getString(TranslationsManager.Key.TRANSLATIONS);
+                String translations = PrefsManager.with(NStack.getStack().getApplicationContext()).getString(PrefsManager.Key.TRANSLATIONS);
                 try {
 
                     JSONObject jsonTranslations = new JSONObject(translations);
                     NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(jsonTranslations);
-                    AppOpenManager.this.listener.translationsUpdated();
+                    AppOpenManager.this.translationsListener.translationsUpdated();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -136,11 +138,11 @@ public class AppOpenManager {
             }
         } else {
             //New translations - save new translations into cache
-            TranslationsManager.with(NStack.getStack().getApplicationContext()).putString(TranslationsManager.Key.TRANSLATIONS, appOpen.translationRoot.toString());
+            PrefsManager.with(NStack.getStack().getApplicationContext()).putString(PrefsManager.Key.TRANSLATIONS, appOpen.translationRoot.toString());
             settings.lastUpdatedString = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date());
 
             NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(appOpen.translationRoot);
-            AppOpenManager.this.listener.translationsUpdated();
+            AppOpenManager.this.translationsListener.translationsUpdated();
 
         }
 
@@ -187,8 +189,8 @@ public class AppOpenManager {
                 }
             });
 
-            if (listener != null) {
-                listener.onRateReminder(builder.create());
+            if (rateListener != null) {
+                rateListener.onRateReminder(builder.create());
             } else {
                 builder.create().show();
             }
@@ -237,8 +239,8 @@ public class AppOpenManager {
                     })
                     .setCancelable(false);
 
-            if( listener != null ) {
-                listener.onForcedUpdate(builder.create());
+            if( versionControlListener != null ) {
+                versionControlListener.onForcedUpdate(builder.create());
             } else {
                 builder.create().show();
             }
@@ -277,8 +279,8 @@ public class AppOpenManager {
                     })
                     .setCancelable(true);
 
-            if( listener != null ) {
-                listener.onUpdate(builder.create());
+            if( versionControlListener != null ) {
+                versionControlListener.onUpdate(builder.create());
             } else {
                 builder.create().show();
             }
@@ -308,20 +310,26 @@ public class AppOpenManager {
                     })
                     .setCancelable(true);
 
-            if( listener != null ) {
-                listener.onChangelog(builder.create());
+            if( versionControlListener != null ) {
+                versionControlListener.onChangelog(builder.create());
             } else {
                 builder.create().show();
             }
         }
     }
 
-    public interface AppOpenCallbacks {
+    public interface VersionControlCallbacks {
         void onForcedUpdate(Dialog dialog);
         void onUpdate(Dialog dialog);
         void onChangelog(Dialog dialog);
-        void onRateReminder(Dialog dialog);
         void onFailure();
+    }
+
+    public interface RateCallbacks {
+        void onRateReminder(Dialog dialog);
+    }
+
+    public interface TranslationsCallbacks {
         void translationsUpdated();
     }
 
