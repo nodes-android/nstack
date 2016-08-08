@@ -26,18 +26,11 @@ public class App extends Application {
         NStack.getStack().enableDebug();
 
         // Translation
-        NStack.getStack().getTranslationManager().setTranslationClass(Translation.class);
-
-        NStack.getStack().getAppOpenManager().openApp();
-
-//        // These are the default options
-//        NStack.getStack()
-//                .getTranslationManager()
-//                .options()
-//                .fallbackLocale("en-US");
-
-        // Translation callback
-        //NStack.getStack().getTranslationManager().updateTranslationsSilently();
+        NStack.getStack()
+                .translationClass(Translation.class)
+                .locale("en-GB")
+                .fallbackLocale("en-US");
+        NStack.getStack().openApp();
 
         // NStack content download
         try {
