@@ -123,7 +123,7 @@ public class BackendManager {
         client.newCall(request).enqueue(callback);
     }
 
-    public void getAppOpen(String url, AppOpenSettings settings, Callback callback) {
+    public void getAppOpen(String url, AppOpenSettings settings, String acceptHeader, Callback callback) {
         RequestBody requestBody = new MultipartBuilder()
                 .type(MultipartBuilder.FORM)
                 .addPart(
@@ -141,11 +141,11 @@ public class BackendManager {
                 .addPart(
                         Headers.of("Content-Disposition", "form-data; name=\"last_updated\""),
                         RequestBody.create(null, settings.lastUpdatedString != null ? settings.lastUpdatedString : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format( new Date(0))))
-//                        RequestBody.create(null, new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(settings.lastUpdated != null ? settings.lastUpdated : new Date(0))))
                 .build();
 
         Request request = new Request.Builder()
                 .url(url)
+                .header("Accept-Language", acceptHeader)
                 .post(requestBody)
                 .build();
 

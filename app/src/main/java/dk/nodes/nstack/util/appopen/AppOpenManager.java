@@ -30,6 +30,8 @@ import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.cache.PrefsManager;
 import dk.nodes.nstack.util.log.Logger;
+import dk.nodes.nstack.util.translation.TranslationOptions;
+
 /**
  * Created by joso on 17/11/15.
  */
@@ -44,6 +46,7 @@ public class AppOpenManager {
     private VersionControlCallbacks versionControlListener;
     private AppOpen appOpen;
     private AppOpenSettings settings = new AppOpenSettings();
+    private TranslationOptions translationOptions = new TranslationOptions();
 
     public AppOpenManager(  ) {
         checkSettings();
@@ -85,7 +88,7 @@ public class AppOpenManager {
     public void openApp(@Nullable AppOpenCallbacks translationsListener) {
         this.translationsListener = translationsListener;
 
-        BackendManager.getInstance().getAppOpen(BASE_URL, settings, new Callback() {
+        BackendManager.getInstance().getAppOpen(BASE_URL, settings, translationOptions.getLanguageHeader(), new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
                 if( AppOpenManager.this.translationsListener != null ) {
