@@ -103,7 +103,7 @@ public final class NStack {
         getAppOpenManager().openApp();
     }
 
-    public void appOpen(@Nullable AppOpenManager.AppOpenCallbacks translationsListener) {
+    public void openApp(@Nullable AppOpenManager.AppOpenCallbacks translationsListener) {
         getAppOpenManager().openApp(translationsListener);
     }
 

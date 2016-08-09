@@ -30,7 +30,7 @@ public class App extends Application {
                 .translationClass(Translation.class)
                 .locale("en-GB")
                 .fallbackLocale("en-US");
-        NStack.getStack().openApp();
+
 
         // NStack content download
         try {
