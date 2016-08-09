@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import dk.nodes.nstack.util.appopen.AppOpenSettings;
 import dk.nodes.nstack.util.log.Logger;
@@ -31,23 +30,13 @@ public class BackendManager {
     protected OkHttpClient client;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    private BackendManager() {
-        client = new OkHttpClient();
-        initClient();
-    }
-
-    protected void initClient() {
-        client.setConnectTimeout(10, TimeUnit.SECONDS);
-        client.setWriteTimeout(10, TimeUnit.SECONDS);
-        client.setReadTimeout(30, TimeUnit.SECONDS);
-
-        client.interceptors().add(new NStackInterceptor());
-        client.interceptors().add(new LoggingInterceptor());
+    private BackendManager(OkHttpClient httpClient) {
+        client = httpClient;
     }
 
     public static BackendManager getInstance() {
         if (instance == null) {
-            instance = new BackendManager();
+            instance = new BackendManager(ClientProvider.provideHttpClient());
         }
 
         return instance;
