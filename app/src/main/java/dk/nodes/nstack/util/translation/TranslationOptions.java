@@ -48,7 +48,7 @@ public class TranslationOptions {
      * @param fallbackFile Path to the json file in Assets
      * @return
      */
-    public TranslationOptions fallback( String fallbackFile ) {
+    public TranslationOptions fallbackAssetFile( String fallbackFile ) {
         this.fallbackFile = fallbackFile;
         return this;
     }
