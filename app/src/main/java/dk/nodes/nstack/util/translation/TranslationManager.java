@@ -366,7 +366,21 @@ public class TranslationManager {
     }
 
     public void updateTranslationsFromAppOpen( JSONObject root ) {
-        updateTranslationLanguageKeys(root);
+
+        try {
+            // No sections
+            if (translationOptions.isFlattenKeys()) {
+                parseFlatTranslations(root);
+            }
+
+            // Sections
+            else {
+                parseSections(root);
+            }
+        } catch (Exception e) {
+            Logger.e(e);
+        }
+
     }
 
     private void updateTranslationLanguageKeys(JSONObject data) {
