@@ -7,6 +7,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import dk.nodes.nstack.mock.MockActivity;
+import dk.nodes.nstack.mock.ResponseInterceptor;
 import dk.nodes.nstack.util.appopen.AppOpenManager;
 /**
  * Created by joso on 09/08/16.
@@ -56,6 +57,7 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
 
     public void test_openApp() throws Exception {
         final CountDownLatch signal = new CountDownLatch(1);
+        ResponseInterceptor.mockResponse = ResponseInterceptor.mockValidTranslationResponse;
         NStack.init(getInstrumentation().getContext(), "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
 
         NStack.getStack().openApp(new AppOpenManager.AppOpenCallbacks() {
@@ -78,6 +80,7 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
 
     public void test_versionControl() throws Exception {
         final CountDownLatch signal = new CountDownLatch(1);
+        ResponseInterceptor.mockResponse = ResponseInterceptor.mockValidVersionControlResponse;
         NStack.init(getInstrumentation().getContext(), "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
 
         NStack.getStack().getAppOpenManager().checkVersionControl(getActivity(), new AppOpenManager.VersionControlCallbacks() {
