@@ -2,6 +2,7 @@ package dk.nodes.nstack.util.translation;
 
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -87,7 +88,7 @@ public class TranslationManager {
                     } catch (Exception e) {
                         Logger.d("Method.invoke error: " + e.toString());
                     }
-                } else if (f.getType() == EditText.class || f.getType() == AppCompatEditText.class) {
+                } else if (f.getType() == TextInputEditText.class || f.getType() == EditText.class || f.getType() == AppCompatEditText.class) {
 
                     try {
                         f.setAccessible(true);

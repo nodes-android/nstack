@@ -49,6 +49,6 @@ task installArchives(type: Upload) {
         configuration = configurations.default
         pom.groupId = 'dk.nodes.nstack'
         pom.artifactId = 'v1'
-        pom.version = '10'
+        pom.version = '11'
     }
 }
