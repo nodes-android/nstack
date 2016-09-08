@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import dk.nodes.nstack.util.appopen.AppOpenSettings;
 import dk.nodes.nstack.util.log.Logger;
@@ -31,23 +30,13 @@ public class BackendManager {
     protected OkHttpClient client;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    private BackendManager() {
-        client = new OkHttpClient();
-        initClient();
-    }
-
-    protected void initClient() {
-        client.setConnectTimeout(10, TimeUnit.SECONDS);
-        client.setWriteTimeout(10, TimeUnit.SECONDS);
-        client.setReadTimeout(30, TimeUnit.SECONDS);
-
-        client.interceptors().add(new NStackInterceptor());
-        client.interceptors().add(new LoggingInterceptor());
+    private BackendManager(OkHttpClient httpClient) {
+        client = httpClient;
     }
 
     public static BackendManager getInstance() {
         if (instance == null) {
-            instance = new BackendManager();
+            instance = new BackendManager(ClientProvider.provideHttpClient());
         }
 
         return instance;
@@ -123,7 +112,7 @@ public class BackendManager {
         client.newCall(request).enqueue(callback);
     }
 
-    public void getAppOpen(String url, AppOpenSettings settings, Callback callback) {
+    public void getAppOpen(String url, AppOpenSettings settings, String acceptHeader, Callback callback) {
         RequestBody requestBody = new MultipartBuilder()
                 .type(MultipartBuilder.FORM)
                 .addPart(
@@ -140,11 +129,12 @@ public class BackendManager {
                         RequestBody.create(null, settings.platform))
                 .addPart(
                         Headers.of("Content-Disposition", "form-data; name=\"last_updated\""),
-                        RequestBody.create(null, new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(settings.lastUpdated != null ? settings.lastUpdated : new Date())))
+                        RequestBody.create(null, settings.lastUpdatedString != null ? settings.lastUpdatedString : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format( new Date(0))))
                 .build();
 
         Request request = new Request.Builder()
                 .url(url)
+                .header("Accept-Language", acceptHeader)
                 .post(requestBody)
                 .build();
 

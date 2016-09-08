@@ -2,10 +2,12 @@ package dk.nodes.nstack;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import dk.nodes.nstack.util.appopen.AppOpenManager;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.translation.TranslationManager;
+import dk.nodes.nstack.util.translation.TranslationOptions;
 
 /**
  * Created by joso on 02/10/2015.
@@ -88,6 +90,26 @@ public final class NStack {
         }
 
         return appOpenManager;
+    }
+
+    /**
+     * Delegates calls to managers
+     */
+    public TranslationOptions translationOptions() {
+        return getTranslationManager().options();
+    }
+
+    public void openApp() {
+        getAppOpenManager().openApp();
+    }
+
+    public void openApp(@Nullable AppOpenManager.AppOpenCallbacks translationsListener) {
+        getAppOpenManager().openApp(translationsListener);
+    }
+
+    public TranslationOptions translationClass(Class<?> translationClass) {
+        getTranslationManager().setTranslationClass(translationClass);
+        return getTranslationManager().options();
     }
 
 }

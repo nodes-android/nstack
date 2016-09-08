@@ -22,19 +22,15 @@ public class App extends Application {
         super.onCreate();
 
         // NStack
-        NStack.init(this, "bOdrNuZd4syxuAz6gyCb3xwBCjA8U4h4IcQI", "X0ENl5QpKI51tS9CzKSt1PGwfZeq2gBMTU58");
+        NStack.init(this, "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
         NStack.getStack().enableDebug();
 
         // Translation
-        NStack.getStack().getTranslationManager().setTranslationClass(Translation.class);
-        // These are the default options
         NStack.getStack()
-                .getTranslationManager()
-                .options()
+                .translationClass(Translation.class)
+                .locale("en-GB")
                 .fallbackLocale("en-US");
 
-        // Translation callback
-        NStack.getStack().getTranslationManager().updateTranslationsSilently();
 
         // NStack content download
         try {
