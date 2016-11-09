@@ -1,8 +1,5 @@
 package dk.nodes.nstack.util.appopen;
 
-import android.util.Log;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import dk.nodes.nstack.util.log.Logger;
@@ -14,11 +11,13 @@ public class AppOpen {
     public final Update update = new Update();
     public final VersionControl versionControl = new VersionControl();
     public final RateReminder rateReminder = new RateReminder();
+    public final Message message = new Message();
 
     public boolean rateRequestAvailable = false;
     public boolean updateAvailable = false;
     public boolean forcedUpdate = false;
     public boolean changelogAvailable = false;
+    public boolean messageAvailable = false;
 
     public JSONObject translationRoot;
 
@@ -122,6 +121,23 @@ public class AppOpen {
             Logger.e(e);
         }
 
+        // Message
+        try {
+            JSONObject messageObject = json.getJSONObject("data").getJSONObject("message");
+
+            appopen.message.id = messageObject.optInt("id");
+            appopen.message.projectId = messageObject.optInt("project_id");
+            appopen.message.platform = messageObject.optString("platform");
+            appopen.message.showSetting = messageObject.optString("show_setting");
+            appopen.message.viewCount = messageObject.optInt("view_count");
+            appopen.message.message = messageObject.optString("message");
+
+            appopen.messageAvailable = true;
+
+        } catch( Exception e ) {
+            Logger.e(e);
+        }
+
         return appopen;
     }
 
@@ -147,6 +163,15 @@ public class AppOpen {
         public String yesBtn;
         public String laterBtn;
         public String noBtn;
+    }
+
+    class Message {
+        public int id;
+        public int projectId;
+        public String platform;
+        public String showSetting;
+        public int viewCount;
+        public String message;
     }
 
 }

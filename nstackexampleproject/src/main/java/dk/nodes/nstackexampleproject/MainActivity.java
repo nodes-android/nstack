@@ -3,6 +3,7 @@ package dk.nodes.nstackexampleproject;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import dk.nodes.nstack.NStack;
@@ -47,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRateReminder(Dialog dialog) {
 
+            }
+        });
+
+        NStack.getStack().getAppOpenManager().checkMessages(this, new AppOpenManager.MessagesCallbacks() {
+            @Override
+            public void onMessage(Dialog dialog) {
+                Log.d(MainActivity.class.getSimpleName(), "message received");
+                dialog.show();
             }
         });
 
