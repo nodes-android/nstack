@@ -17,6 +17,7 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
     boolean initializedNStack = false;
     boolean openedApp = false;
     boolean versionControl = false;
+    boolean message = false;
 
     public NStackTest() {
         super(MockActivity.class);
@@ -102,5 +103,86 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
 
         signal.await(1, TimeUnit.SECONDS);
         assertTrue(versionControl);
+    }
+
+    public void test_messages() throws Exception {
+        final CountDownLatch signal = new CountDownLatch(1);
+        ResponseInterceptor.mockResponse = ResponseInterceptor.mockValidMessageShowOnceResponse;
+        NStack.init(getInstrumentation().getContext(), "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
+
+        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new AppOpenManager.MessagesCallbacks() {
+            @Override
+            public void onMessage(Dialog dialog) {
+                message = true;
+            }
+        });
+
+        signal.await(1, TimeUnit.SECONDS);
+        assertTrue(message);
+    }
+
+    public void test_messages_show_once() throws Exception {
+        final CountDownLatch signal = new CountDownLatch(1);
+        ResponseInterceptor.mockResponse = ResponseInterceptor.mockValidMessageShowOnceResponse;
+        NStack.init(getInstrumentation().getContext(), "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
+
+        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new AppOpenManager.MessagesCallbacks() {
+            @Override
+            public void onMessage(Dialog dialog) {
+                message = true;
+            }
+        });
+
+        signal.await(1, TimeUnit.SECONDS);
+        assertTrue(message);
+
+        message = false;
+
+        ResponseInterceptor.mockResponse = ResponseInterceptor.mockValidMessageShowOnceResponse;
+        NStack.init(getInstrumentation().getContext(), "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
+
+        //Since previous call had a show-once message the callback will never be called,
+        //even if the payload still brings a message
+        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new AppOpenManager.MessagesCallbacks() {
+            @Override
+            public void onMessage(Dialog dialog) {
+                message = true;
+            }
+        });
+
+        signal.await(1, TimeUnit.SECONDS);
+        assertFalse(message);
+    }
+
+    public void test_messages_show_always() throws Exception {
+        final CountDownLatch signal = new CountDownLatch(1);
+        ResponseInterceptor.mockResponse = ResponseInterceptor.mockValidMessageShowOnceResponse;
+        NStack.init(getInstrumentation().getContext(), "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
+
+        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new AppOpenManager.MessagesCallbacks() {
+            @Override
+            public void onMessage(Dialog dialog) {
+                message = true;
+            }
+        });
+
+        signal.await(1, TimeUnit.SECONDS);
+        assertTrue(message);
+
+        message = false;
+
+        ResponseInterceptor.mockResponse = ResponseInterceptor.mockValidMessageShowOnceResponse;
+        NStack.init(getInstrumentation().getContext(), "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
+
+        //Since previous call had a show-always message the callback will still be called
+        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new AppOpenManager.MessagesCallbacks() {
+            @Override
+            public void onMessage(Dialog dialog) {
+                message = true;
+            }
+        });
+
+        signal.await(1, TimeUnit.SECONDS);
+        assertTrue(message);
     }
 }
