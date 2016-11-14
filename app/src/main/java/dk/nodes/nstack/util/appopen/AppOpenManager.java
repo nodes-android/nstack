@@ -136,6 +136,7 @@ public class AppOpenManager {
                     AppOpenManager.this.appOpen.updateAvailable = false;
                     AppOpenManager.this.appOpen.changelogAvailable = false;
                     AppOpenManager.this.appOpen.forcedUpdate = false;
+                    AppOpenManager.this.appOpen.messageAvailable = false;
 
                     if( AppOpenManager.this.translationsListener != null ) {
                         AppOpenManager.this.translationsListener.onFailure();
