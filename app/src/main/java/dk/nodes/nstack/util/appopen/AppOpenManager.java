@@ -148,8 +148,9 @@ public class AppOpenManager {
 
                     JSONObject jsonTranslations = new JSONObject(translations);
                     NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(jsonTranslations);
-                    AppOpenManager.this.translationsListener.onUpdated();
-
+                    if (AppOpenManager.this.translationsListener != null) {
+                        AppOpenManager.this.translationsListener.onUpdated();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -160,7 +161,9 @@ public class AppOpenManager {
             settings.lastUpdatedString = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date());
 
             NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(appOpen.translationRoot);
-            AppOpenManager.this.translationsListener.onUpdated();
+            if (AppOpenManager.this.translationsListener != null) {
+                AppOpenManager.this.translationsListener.onUpdated();
+            }
         }
 
     }
