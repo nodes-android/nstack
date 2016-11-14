@@ -130,6 +130,13 @@ public class AppOpenManager {
                 } catch(Exception e) {
                     Logger.e(e);
 
+                    // Fail with proper settings
+                    AppOpenManager.this.appOpen = AppOpen.parseFromJson(new JSONObject());
+                    AppOpenManager.this.appOpen.rateRequestAvailable = false;
+                    AppOpenManager.this.appOpen.updateAvailable = false;
+                    AppOpenManager.this.appOpen.changelogAvailable = false;
+                    AppOpenManager.this.appOpen.forcedUpdate = false;
+
                     if( AppOpenManager.this.translationsListener != null ) {
                         AppOpenManager.this.translationsListener.onFailure();
                     }
@@ -148,8 +155,9 @@ public class AppOpenManager {
 
                     JSONObject jsonTranslations = new JSONObject(translations);
                     NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(jsonTranslations);
-                    AppOpenManager.this.translationsListener.onUpdated();
-
+                    if (AppOpenManager.this.translationsListener != null) {
+                        AppOpenManager.this.translationsListener.onUpdated();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -160,13 +168,19 @@ public class AppOpenManager {
             settings.lastUpdatedString = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date());
 
             NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(appOpen.translationRoot);
-            AppOpenManager.this.translationsListener.onUpdated();
-
+            if (AppOpenManager.this.translationsListener != null) {
+                AppOpenManager.this.translationsListener.onUpdated();
+            }
         }
 
     }
 
     private void handleRateRequest(final Activity activity) {
+        if (appOpen == null) {
+            Logger.e("HandleRateRequestControl", "App open object is null, parsing failed or response timed out.");
+            return;
+        }
+
         boolean showReminder = activity.getSharedPreferences("rated", Context.MODE_PRIVATE).getBoolean("showRateReminder", true);
 
         if (appOpen.rateRequestAvailable && showReminder) {
@@ -288,6 +302,11 @@ public class AppOpenManager {
     }
 
     private void handleVersionControl(Activity activity) {
+        if(appOpen == null) {
+            Logger.e("HandleVersionControl", "App open object is null, parsing failed or response timed out.");
+            return;
+        }
+
         // Smallish naming hack
         if(appOpen.update != null) {
             if(appOpen.update.positiveBtn != null) {
