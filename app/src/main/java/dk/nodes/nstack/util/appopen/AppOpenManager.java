@@ -42,6 +42,7 @@ public class AppOpenManager {
 
     private RateCallbacks rateListener;
     private AppOpenCallbacks translationsListener;
+    private MessagesCallbacks messagesListener;
 
     private VersionControlCallbacks versionControlListener;
     private AppOpen appOpen;
@@ -79,6 +80,12 @@ public class AppOpenManager {
         this.rateListener = rateListener;
 
         handleRateRequest(activity);
+    }
+
+    public void checkMessages(final Activity activity, @Nullable MessagesCallbacks messagesListener) {
+        this.messagesListener = messagesListener;
+
+        handleMessages(activity);
     }
 
     public void openApp() {
@@ -222,6 +229,78 @@ public class AppOpenManager {
         }
     }
 
+    private void handleMessages(final Activity activity) {
+
+        boolean showMessage = activity.getSharedPreferences("message", Context.MODE_PRIVATE).getBoolean("showMessage", true);
+
+        if (appOpen.messageAvailable && showMessage) {
+
+            AlertDialog.Builder builder;
+
+            if(activity instanceof  AppCompatActivity) {
+                if(((AppCompatActivity) activity).getSupportActionBar() != null) {
+                    builder = new AlertDialog.Builder(
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext()
+                    );
+                } else{
+                    builder = new AlertDialog.Builder(activity);
+                }
+            } else{
+                builder = new AlertDialog.Builder(activity);
+            }
+
+            builder.setMessage(appOpen.message.message)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            try {
+                                markMessageViewed();
+                            } catch (Exception e) {
+                                Logger.e(e);
+                            }
+                        }
+                    })
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                markMessageViewed();
+                            }
+                        });
+
+            if (messagesListener != null) {
+                messagesListener.onMessage(builder.create());
+            } else {
+                builder.create().show();
+            }
+
+            //update showMessage bool from sharedPrefs depending on message showSettings
+            activity.getSharedPreferences("message", Context.MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("showMessage", appOpen.message.showSetting.equals("show_always"))
+                    .commit();
+
+        }
+    }
+
+    public void markMessageViewed() {
+        try {
+            BackendManager.getInstance().viewMessage(settings, appOpen.message.id, new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    Logger.e(e);
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    if (!response.isSuccessful()) {
+                        throw new IOException("Unexpected code " + response);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Logger.e(e);
+        }
+    }
+
     private void handleVersionControl(Activity activity) {
         if(appOpen == null) {
             Logger.e("HandleVersionControl", "App open object is null, parsing failed or response timed out.");
@@ -356,6 +435,10 @@ public class AppOpenManager {
 
     public interface RateCallbacks {
         void onRateReminder(Dialog dialog);
+    }
+
+    public interface MessagesCallbacks {
+        void onMessage(Dialog dialog);
     }
 
     public interface AppOpenCallbacks {

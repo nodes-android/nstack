@@ -138,7 +138,24 @@ public class BackendManager {
                 .post(requestBody)
                 .build();
 
+        client.newCall(request).enqueue(callback);
+    }
 
+    public void viewMessage(AppOpenSettings settings, int messageId, Callback callback) {
+        RequestBody requestBody = new MultipartBuilder()
+                .type(MultipartBuilder.FORM)
+                .addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"guid\""),
+                        RequestBody.create(null, settings.guid))
+                .addPart(
+                        Headers.of("Content-Disposition", "form-data; name=\"message_id\""),
+                        RequestBody.create(null, String.valueOf(messageId)))
+                .build();
+
+        Request request = new Request.Builder()
+                .url("https://nstack.io/api/v1/notify/messages/views")
+                .post(requestBody)
+                .build();
 
         client.newCall(request).enqueue(callback);
     }
