@@ -18,7 +18,7 @@ public class SplashActivity extends AppCompatActivity {
 
         NStack.getStack().openApp(new AppOpenManager.AppOpenCallbacks() {
             @Override
-            public void onUpdated() {
+            public void onUpdated(boolean cached) {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
             }
 

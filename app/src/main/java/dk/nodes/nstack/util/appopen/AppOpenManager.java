@@ -17,7 +17,6 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -98,9 +97,7 @@ public class AppOpenManager {
         BackendManager.getInstance().getAppOpen(BASE_URL, settings, translationOptions.getLanguageHeader(), new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                if( AppOpenManager.this.translationsListener != null ) {
-                    AppOpenManager.this.translationsListener.onFailure();
-                }
+                handleAppOpenFailure();
             }
 
             @Override
@@ -130,37 +127,58 @@ public class AppOpenManager {
                 } catch(Exception e) {
                     Logger.e(e);
 
-                    // Fail with proper settings
-                    AppOpenManager.this.appOpen = AppOpen.parseFromJson(new JSONObject());
-                    AppOpenManager.this.appOpen.rateRequestAvailable = false;
-                    AppOpenManager.this.appOpen.updateAvailable = false;
-                    AppOpenManager.this.appOpen.changelogAvailable = false;
-                    AppOpenManager.this.appOpen.forcedUpdate = false;
-                    AppOpenManager.this.appOpen.messageAvailable = false;
-
-                    if( AppOpenManager.this.translationsListener != null ) {
-                        AppOpenManager.this.translationsListener.onFailure();
-                    }
+                    handleAppOpenFailure();
                 }
             }
         });
+    }
+
+    private void handleAppOpenFailure() {
+        // Fail with proper settings
+        AppOpenManager.this.appOpen = AppOpen.parseFromJson(new JSONObject());
+        AppOpenManager.this.appOpen.rateRequestAvailable = false;
+        AppOpenManager.this.appOpen.updateAvailable = false;
+        AppOpenManager.this.appOpen.changelogAvailable = false;
+        AppOpenManager.this.appOpen.forcedUpdate = false;
+        AppOpenManager.this.appOpen.messageAvailable = false;
+
+        // Try updating translations with cached if they exist
+        if (PrefsManager.with(NStack.getStack().getApplicationContext()).contains(PrefsManager.Key.TRANSLATIONS)) {
+            try {
+                updateTranslationsFromCache();
+                if (AppOpenManager.this.translationsListener != null) {
+                    AppOpenManager.this.translationsListener.onUpdated(true);
+                }
+            } catch (Exception ex) {
+                if (AppOpenManager.this.translationsListener != null) {
+                    AppOpenManager.this.translationsListener.onFailure();
+                }
+            }
+        }
+
+        // Fail if we dont have any cached translations
+        else if (AppOpenManager.this.translationsListener != null) {
+            AppOpenManager.this.translationsListener.onFailure();
+        }
+    }
+
+    private void updateTranslationsFromCache() throws Exception {
+        String translations = PrefsManager.with(NStack.getStack().getApplicationContext()).getString(PrefsManager.Key.TRANSLATIONS);
+        JSONObject jsonTranslations = new JSONObject(translations);
+        NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(jsonTranslations);
     }
 
     private void handleTranslations() {
         if( appOpen.translationRoot == null ) {
             //No new translations - load translations from cache
             if (PrefsManager.with(NStack.getStack().getApplicationContext()).contains(PrefsManager.Key.TRANSLATIONS)) {
-
-                String translations = PrefsManager.with(NStack.getStack().getApplicationContext()).getString(PrefsManager.Key.TRANSLATIONS);
                 try {
-
-                    JSONObject jsonTranslations = new JSONObject(translations);
-                    NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(jsonTranslations);
+                    updateTranslationsFromCache();
                     if (AppOpenManager.this.translationsListener != null) {
-                        AppOpenManager.this.translationsListener.onUpdated();
+                        AppOpenManager.this.translationsListener.onUpdated(true);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    Logger.e(e);
                 }
             }
         } else {
@@ -170,7 +188,7 @@ public class AppOpenManager {
 
             NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(appOpen.translationRoot);
             if (AppOpenManager.this.translationsListener != null) {
-                AppOpenManager.this.translationsListener.onUpdated();
+                AppOpenManager.this.translationsListener.onUpdated(false);
             }
         }
 
@@ -443,7 +461,7 @@ public class AppOpenManager {
     }
 
     public interface AppOpenCallbacks {
-        void onUpdated();
+        void onUpdated(boolean cached);
         void onFailure();
     }
 
