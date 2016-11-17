@@ -40,7 +40,7 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
 
         NStack.getStack().openApp(new AppOpenManager.AppOpenCallbacks() {
             @Override
-            public void onUpdated() {
+            public void onUpdated(boolean cached) {
                 initializedNStack = true;
                 signal.countDown();
             }
@@ -63,7 +63,7 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
 
         NStack.getStack().openApp(new AppOpenManager.AppOpenCallbacks() {
             @Override
-            public void onUpdated() {
+            public void onUpdated(boolean cached) {
                 openedApp = true;
                 signal.countDown();
             }

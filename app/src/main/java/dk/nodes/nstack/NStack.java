@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import dk.nodes.nstack.util.appopen.AppOpenManager;
-import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.translation.TranslationManager;
 import dk.nodes.nstack.util.translation.TranslationOptions;
 
@@ -38,8 +37,6 @@ public final class NStack {
         this.applicationContext = context.getApplicationContext();
         this.applicationKey = applicationKey;
         this.apiKey = apiKey;
-
-        BackendManager.getInstance().initCache(this.applicationContext);
     }
 
     public static NStack getStack() {

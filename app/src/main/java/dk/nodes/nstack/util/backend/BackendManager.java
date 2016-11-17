@@ -2,23 +2,23 @@ package dk.nodes.nstack.util.backend;
 
 import android.content.Context;
 
-import com.squareup.okhttp.Cache;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Headers;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.MultipartBuilder;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.appopen.AppOpenSettings;
 import dk.nodes.nstack.util.log.Logger;
+import okhttp3.Cache;
+import okhttp3.Callback;
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import okio.Buffer;
 
 /**
@@ -36,7 +36,7 @@ public class BackendManager {
 
     public static BackendManager getInstance() {
         if (instance == null) {
-            instance = new BackendManager(ClientProvider.provideHttpClient());
+            instance = new BackendManager(ClientProvider.provideHttpClient(initCache(NStack.getStack().getApplicationContext())));
         }
 
         return instance;
@@ -54,17 +54,19 @@ public class BackendManager {
         }
     }
 
-    public void initCache(Context context) {
+    public static Cache initCache(Context context) {
         try {
             File cacheDirectory = context.getCacheDir();
 
             int cacheSize = 10 * 1024 * 1024; // 10 MiB
             Cache cache = new Cache(cacheDirectory, cacheSize);
 
-            client.setCache(cache);
+            return cache;
         } catch (Exception e) {
             Logger.e(e);
         }
+
+        return null;
     }
 
     public Response getTranslation(String url, String acceptHeader) throws Exception {
@@ -113,8 +115,8 @@ public class BackendManager {
     }
 
     public void getAppOpen(String url, AppOpenSettings settings, String acceptHeader, Callback callback) {
-        RequestBody requestBody = new MultipartBuilder()
-                .type(MultipartBuilder.FORM)
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
                 .addPart(
                         Headers.of("Content-Disposition", "form-data; name=\"guid\""),
                         RequestBody.create(null, settings.guid))
@@ -142,8 +144,8 @@ public class BackendManager {
     }
 
     public void viewMessage(AppOpenSettings settings, int messageId, Callback callback) {
-        RequestBody requestBody = new MultipartBuilder()
-                .type(MultipartBuilder.FORM)
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
                 .addPart(
                         Headers.of("Content-Disposition", "form-data; name=\"guid\""),
                         RequestBody.create(null, settings.guid))

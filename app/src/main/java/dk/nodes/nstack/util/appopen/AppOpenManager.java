@@ -13,10 +13,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -30,6 +26,9 @@ import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.cache.PrefsManager;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.translation.TranslationOptions;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * Created by joso on 17/11/15.
@@ -94,24 +93,30 @@ public class AppOpenManager {
     public void openApp(@Nullable AppOpenCallbacks translationsListener) {
         this.translationsListener = translationsListener;
 
+        try {
+            updateTranslationsFromCache();
+        } catch(Exception e) {
+            // Since we probably didnt have anything cached, handle it as a failure
+            handleAppOpenFailure();
+            Logger.e(e);
+        }
+
         BackendManager.getInstance().getAppOpen(BASE_URL, settings, translationOptions.getLanguageHeader(), new Callback() {
             @Override
-            public void onFailure(Request request, IOException e) {
+            public void onFailure(Call call, IOException e) {
                 handleAppOpenFailure();
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException {
                 try {
                     String json = response.body().string();
                     JSONObject root = new JSONObject(json);
 
                     appOpen = AppOpen.parseFromJson(root);
                     JSONObject jo = root.getJSONObject("data");
-                    if(jo != null)
-                    {
-                        if(jo.has("last_updated"))
-                        {
+                    if (jo != null) {
+                        if (jo.has("last_updated")) {
                             settings.lastUpdatedString = jo.getString("last_updated");
                         }
                     }
@@ -124,7 +129,7 @@ public class AppOpenManager {
                         }
                     });
 
-                } catch(Exception e) {
+                } catch (Exception e) {
                     Logger.e(e);
 
                     handleAppOpenFailure();
@@ -166,9 +171,15 @@ public class AppOpenManager {
         String translations = PrefsManager.with(NStack.getStack().getApplicationContext()).getString(PrefsManager.Key.TRANSLATIONS);
         JSONObject jsonTranslations = new JSONObject(translations);
         NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(jsonTranslations);
+        Logger.d("Updated translations from cache...");
     }
 
     private void handleTranslations() {
+        if (appOpen == null) {
+            Logger.e("handleTranslations()", "App open object is null, parsing failed or response timed out.");
+            return;
+        }
+
         if( appOpen.translationRoot == null ) {
             //No new translations - load translations from cache
             if (PrefsManager.with(NStack.getStack().getApplicationContext()).contains(PrefsManager.Key.TRANSLATIONS)) {
@@ -185,6 +196,7 @@ public class AppOpenManager {
             //New translations - save new translations into cache
             PrefsManager.with(NStack.getStack().getApplicationContext()).putString(PrefsManager.Key.TRANSLATIONS, appOpen.translationRoot.toString());
             settings.lastUpdatedString = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date());
+            Logger.d("Saved translations to cache...");
 
             NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(appOpen.translationRoot);
             if (AppOpenManager.this.translationsListener != null) {
@@ -249,6 +261,10 @@ public class AppOpenManager {
     }
 
     private void handleMessages(final Activity activity) {
+        if (appOpen == null) {
+            Logger.e("handleMessages", "App open object is null, parsing failed or response timed out.");
+            return;
+        }
 
         boolean showMessage = activity.getSharedPreferences("message", Context.MODE_PRIVATE).getBoolean("showMessage", true);
 
@@ -281,7 +297,11 @@ public class AppOpenManager {
                     .setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialog) {
-                                markMessageViewed();
+                                try {
+                                    markMessageViewed();
+                                } catch (Exception e) {
+                                    Logger.e(e);
+                                }
                             }
                         });
 
@@ -304,12 +324,12 @@ public class AppOpenManager {
         try {
             BackendManager.getInstance().viewMessage(settings, appOpen.message.id, new Callback() {
                 @Override
-                public void onFailure(Request request, IOException e) {
+                public void onFailure(Call call, IOException e) {
                     Logger.e(e);
                 }
 
                 @Override
-                public void onResponse(Response response) throws IOException {
+                public void onResponse(Call call, Response response) throws IOException {
                     if (!response.isSuccessful()) {
                         throw new IOException("Unexpected code " + response);
                     }

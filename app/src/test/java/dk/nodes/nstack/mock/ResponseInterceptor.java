@@ -1,12 +1,12 @@
 package dk.nodes.nstack.mock;
 
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
-
 import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 /**
  * Created by joso on 09/08/16.
  */
@@ -21,7 +21,7 @@ public class ResponseInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
 
-        if (request.httpUrl().toString().contains("v1/open")) {
+        if (request.url().toString().contains("v1/open")) {
             return new Response.Builder().code(200).body(ResponseBody.create(MediaType.parse("application/json"), mockResponse)).build();
         }
 

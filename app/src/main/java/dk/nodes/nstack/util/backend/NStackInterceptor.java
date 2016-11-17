@@ -1,17 +1,11 @@
 package dk.nodes.nstack.util.backend;
 
-import android.util.Log;
-
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
-
 import java.io.IOException;
 
 import dk.nodes.nstack.NStack;
-import okio.Buffer;
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by joso on 08/10/15.

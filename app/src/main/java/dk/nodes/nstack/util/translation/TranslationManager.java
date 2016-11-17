@@ -14,10 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +28,9 @@ import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.model.Language;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 
 /**
@@ -239,12 +238,12 @@ public class TranslationManager {
         try {
             BackendManager.getInstance().getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
                 @Override
-                public void onFailure(Request request, IOException e) {
+                public void onFailure(Call call, IOException e) {
 
                 }
 
                 @Override
-                public void onResponse(Response response) throws IOException {
+                public void onResponse(Call call, Response response) throws IOException {
                     if (!response.isSuccessful()) {
                         throw new IOException("Unexpected code " + response);
                     }
@@ -266,14 +265,15 @@ public class TranslationManager {
 
     public void updateTranslationsSilently() {
         try {
+
             BackendManager.getInstance().getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
                 @Override
-                public void onFailure(Request request, IOException e) {
+                public void onFailure(Call call, IOException e) {
 
                 }
 
                 @Override
-                public void onResponse(Response response) throws IOException {
+                public void onResponse(Call call, Response response) throws IOException {
                     if (!response.isSuccessful())
                         throw new IOException("Unexpected code " + response);
 
@@ -294,11 +294,12 @@ public class TranslationManager {
         try {
             BackendManager.getInstance().getAllLanguages(new Callback() {
                 @Override
-                public void onFailure(Request request, IOException e) {
+                public void onFailure(Call call, IOException e) {
+
                 }
 
                 @Override
-                public void onResponse(Response response) throws IOException {
+                public void onResponse(Call call, Response response) throws IOException {
                     if (!response.isSuccessful())
                         throw new IOException("Unexpected code " + response);
 
