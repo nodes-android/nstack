@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.cache.PrefsManager;
 import dk.nodes.nstack.util.log.Logger;
+import dk.nodes.nstack.util.translation.TranslationManager;
 import dk.nodes.nstack.util.translation.TranslationOptions;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -45,7 +47,7 @@ public class AppOpenManager {
     private VersionControlCallbacks versionControlListener;
     private AppOpen appOpen;
     private AppOpenSettings settings = new AppOpenSettings();
-    private TranslationOptions translationOptions = new TranslationOptions();
+    //private TranslationOptions translationOptions = new TranslationOptions();
 
     public AppOpenManager(  ) {
         checkSettings();
@@ -101,7 +103,7 @@ public class AppOpenManager {
             Logger.e(e);
         }
 
-        BackendManager.getInstance().getAppOpen(BASE_URL, settings, translationOptions.getLanguageHeader(), new Callback() {
+        BackendManager.getInstance().getAppOpen(BASE_URL, settings, TranslationManager.getInstance().options().getLanguageHeader(), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 handleAppOpenFailure();
