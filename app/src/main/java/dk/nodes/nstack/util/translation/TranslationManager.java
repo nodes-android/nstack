@@ -26,6 +26,7 @@ import java.util.Iterator;
 
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.backend.BackendManager;
+import dk.nodes.nstack.util.cache.PrefsManager;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.model.Language;
 import okhttp3.Call;
@@ -477,6 +478,9 @@ public class TranslationManager {
 
     private void updateTranslationClass(String jsonData) {
         try {
+            // Save translation data into the App open cache
+            PrefsManager.with(NStack.getStack().getApplicationContext()).putString(PrefsManager.Key.TRANSLATIONS, jsonData);
+
             JSONObject data = new JSONObject(jsonData);
 
             if (data.has("data")) {
