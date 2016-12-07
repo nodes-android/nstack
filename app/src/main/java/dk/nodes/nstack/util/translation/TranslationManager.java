@@ -26,6 +26,7 @@ import java.util.Iterator;
 
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.backend.BackendManager;
+import dk.nodes.nstack.util.cache.PrefsManager;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.model.Language;
 import okhttp3.Call;
@@ -412,6 +413,9 @@ public class TranslationManager {
                 Logger.d("updateTranslationLanguageKeys on: " + languageName);
                 JSONObject translationObject = data.getJSONObject(languageName);
 
+                // Save translation data into the App open cache, now that we have the correct language
+                PrefsManager.with(NStack.getStack().getApplicationContext()).putString(PrefsManager.Key.TRANSLATIONS, translationObject.toString());
+
                 translationOptions.setPickedLanguage(languageName);
 
                 // No sections
@@ -496,6 +500,9 @@ public class TranslationManager {
                 // Only one language
             } else {
                 translationOptions.setPickedLanguage(translationOptions.getLanguageHeader());
+
+                // Save translation data into the App open cache
+                PrefsManager.with(NStack.getStack().getApplicationContext()).putString(PrefsManager.Key.TRANSLATIONS, jsonData);
 
                 // No sections
                 if (translationOptions.isFlattenKeys()) {

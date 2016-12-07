@@ -109,4 +109,9 @@ public final class NStack {
         return getTranslationManager().options();
     }
 
+    public void changeLanguage(String locale, TranslationManager.OnTranslationResultListener callback) {
+        TranslationManager.getInstance().options().locale(locale);
+        TranslationManager.getInstance().updateTranslations(callback);
+    }
+
 }

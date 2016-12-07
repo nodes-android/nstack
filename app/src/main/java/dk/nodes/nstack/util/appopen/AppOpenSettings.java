@@ -2,6 +2,7 @@ package dk.nodes.nstack.util.appopen;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.log.Logger;
+
 /**
  * Created by joso on 19/11/15.
  */
@@ -35,7 +37,7 @@ public class AppOpenSettings {
             Context applicationContext = NStack.getStack().getApplicationContext();
             version = applicationContext.getPackageManager().getPackageInfo(applicationContext.getPackageName(), 0).versionName;
             oldVersion = applicationContext.getPackageManager().getPackageInfo(applicationContext.getPackageName(), 0).versionName;
-        } catch(Exception e) {
+        } catch (Exception e) {
             Logger.e(e);
         }
 
@@ -44,8 +46,7 @@ public class AppOpenSettings {
         load();
     }
 
-    public void save()
-    {
+    public void save() {
         Context context = NStack.getStack().getApplicationContext();
         SharedPreferences.Editor editor = context.getSharedPreferences(APPOPEN_INFO_KEY, Context.MODE_PRIVATE).edit();
 
@@ -55,8 +56,7 @@ public class AppOpenSettings {
         editor.commit();
     }
 
-    public void load()
-    {
+    public void load() {
         Context context = NStack.getStack().getApplicationContext();
         SharedPreferences prefs = context.getSharedPreferences(APPOPEN_INFO_KEY, Context.MODE_PRIVATE);
         oldVersion = prefs.getString(VERSION_INFO_KEY, version);
@@ -72,6 +72,12 @@ public class AppOpenSettings {
         */
     }
 
+    public static void resetLastUpdated() {
+        Context context = NStack.getStack().getApplicationContext();
+        SharedPreferences.Editor editor = context.getSharedPreferences(APPOPEN_INFO_KEY, Context.MODE_PRIVATE).edit();
+        editor.putString(LAST_UPDATED_KEY, null);
+        editor.commit();
+    }
 
     @Override
     public String toString() {

@@ -2,14 +2,15 @@ package dk.nodes.nstackexampleproject.util.model;
 
 /**
  * Created by nstack.io gradle translation plugin
- * Built from Accept Header: en-GB
- * Generated: Fri Jul 15 14:56:02 BST 2016
+ * Built from Accept Header: en-GB 
+ * Generated: Wed Dec 07 12:13:29 CET 2016 
  */
 
 public class Translation {
 	public final static class defaultSection {
 		public static String loltest = "loltest";
-		public static String ok = "Ok";
+		public static String ok = "Ok2";
+		public static String test = "test2";
 	}
 	public final static class rateReminder {
 		public static String body = "We can see you like the application. Would you like to rate it?";
@@ -18,8 +19,8 @@ public class Translation {
 		public static String title = "Rate the app";
 		public static String yesBtn = "Yes";
 	}
-	public final static class testSectionJoao {
-		public static String testkeyjoao = "test value joao";
+	public final static class testSectionJoao2 {
+		public static String testkeyjoao = "test joao new";
 	}
 	public final static class versionControl {
 		public static String forceHeader = "New version ios out, you have to update!";
