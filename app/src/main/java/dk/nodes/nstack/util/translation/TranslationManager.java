@@ -413,6 +413,9 @@ public class TranslationManager {
                 Logger.d("updateTranslationLanguageKeys on: " + languageName);
                 JSONObject translationObject = data.getJSONObject(languageName);
 
+                // Save translation data into the App open cache, now that we have the correct language
+                PrefsManager.with(NStack.getStack().getApplicationContext()).putString(PrefsManager.Key.TRANSLATIONS, translationObject.toString());
+
                 translationOptions.setPickedLanguage(languageName);
 
                 // No sections
@@ -478,9 +481,6 @@ public class TranslationManager {
 
     private void updateTranslationClass(String jsonData) {
         try {
-            // Save translation data into the App open cache
-            PrefsManager.with(NStack.getStack().getApplicationContext()).putString(PrefsManager.Key.TRANSLATIONS, jsonData);
-
             JSONObject data = new JSONObject(jsonData);
 
             if (data.has("data")) {
@@ -500,6 +500,9 @@ public class TranslationManager {
                 // Only one language
             } else {
                 translationOptions.setPickedLanguage(translationOptions.getLanguageHeader());
+
+                // Save translation data into the App open cache
+                PrefsManager.with(NStack.getStack().getApplicationContext()).putString(PrefsManager.Key.TRANSLATIONS, jsonData);
 
                 // No sections
                 if (translationOptions.isFlattenKeys()) {
