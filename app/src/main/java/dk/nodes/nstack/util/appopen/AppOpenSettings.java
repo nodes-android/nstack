@@ -21,20 +21,18 @@ public class AppOpenSettings {
     public final String platform = "android";
     public Date lastUpdated;
     public String lastUpdatedString;
-    private final static String APPOPEN_INFO_KEY = "APPOPEN_INFO";
-    private final static String VERSION_INFO_KEY = "VERSION_KEY";
-    private final static String GUID_KEY = "GUID_KEY";
-    private final static String LAST_UPDATED_KEY = "LAST_UPDATED_KEY";
     SimpleDateFormat dateFormat;
 
-    public AppOpenSettings() {
+    private CacheManager cacheManager;
+
+    public AppOpenSettings(Context context) {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         guid = UUID.randomUUID().toString();
+        cacheManager = new CacheManager(context);
 
         try {
-            Context applicationContext = NStack.getStack().getApplicationContext();
-            version = applicationContext.getPackageManager().getPackageInfo(applicationContext.getPackageName(), 0).versionName;
-            oldVersion = applicationContext.getPackageManager().getPackageInfo(applicationContext.getPackageName(), 0).versionName;
+            version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+            oldVersion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (Exception e) {
             Logger.e(e);
         }
@@ -45,22 +43,20 @@ public class AppOpenSettings {
     }
 
     public void save() {
-        Context context = NStack.getStack().getApplicationContext();
-        CacheManager.with(context, APPOPEN_INFO_KEY).putString(CacheManager.Key.VERSION_INFO_KEY, version);
-        CacheManager.with(context, APPOPEN_INFO_KEY).putString(CacheManager.Key.GUID_KEY, guid);
-        CacheManager.with(context, APPOPEN_INFO_KEY).putString(CacheManager.Key.LAST_UPDATED_KEY, lastUpdatedString);
+        cacheManager.setVersionInfo(version);
+        cacheManager.setGUI(guid);
+        cacheManager.setLastUpdated(lastUpdatedString);
     }
 
     public void load() {
-        Context context = NStack.getStack().getApplicationContext();
-        oldVersion = CacheManager.with(context, APPOPEN_INFO_KEY).getString(CacheManager.Key.VERSION_INFO_KEY);
-        guid = CacheManager.with(context, APPOPEN_INFO_KEY).getString(CacheManager.Key.GUID_KEY);
-        lastUpdatedString = CacheManager.with(context, APPOPEN_INFO_KEY).getString(CacheManager.Key.LAST_UPDATED_KEY);
+
+        oldVersion = cacheManager.getVersionInfo();
+        guid = cacheManager.getGUI();
+        lastUpdatedString = cacheManager.getLastUpdated();
     }
 
-    public static void resetLastUpdated() {
-        Context context = NStack.getStack().getApplicationContext();
-        CacheManager.with(context, APPOPEN_INFO_KEY).clear(CacheManager.Key.LAST_UPDATED_KEY);
+    public void resetLastUpdated() {
+        cacheManager.clearLastUpdated();
     }
 
     @Override

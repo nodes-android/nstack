@@ -28,51 +28,65 @@ public class CacheManager {
         RATE_REMINDER_KEY
     }
 
-    public static CacheManager with(@NonNull final Context context) {
-        return new CacheManager(context.getSharedPreferences(PREFERENCES_DEFAULT, Context.MODE_PRIVATE));
+    public CacheManager(Context context) {
+        this.sharedPreferences = context.getSharedPreferences(PREFERENCES_DEFAULT, Context.MODE_PRIVATE);
     }
 
-    public static CacheManager with(@NonNull final Context context, final String name) {
-        return new CacheManager(context.getSharedPreferences(name, Context.MODE_PRIVATE));
+
+    public boolean hasTranslations() {
+        return contains(Key.TRANSLATIONS);
     }
 
-    private CacheManager(final SharedPreferences sharedPreferences) {
-        this.sharedPreferences = sharedPreferences;
+    public String getTranslations() {
+        return getString(Key.TRANSLATIONS);
     }
 
-    // Shared Prefs
-
-    public boolean contains(@NonNull final CacheManager.Key data) {
-        return sharedPreferences.contains(data.name());
+    public void saveTranslations(String translationsJson) {
+        putString(CacheManager.Key.TRANSLATIONS, translationsJson);
     }
 
-    public String getString(@NonNull final Key data) {
-        return sharedPreferences.getString(data.name(), null);
+    public boolean showMessage() {
+        return getBoolean(Key.SHOW_MESSAGE_KEY);
     }
 
-    public void putString(@NonNull final String key, @NonNull final String string) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(key, string);
-        editor.commit();
+    public void updateShowMessage(boolean showMessage) {
+        putBoolean(Key.SHOW_MESSAGE_KEY, showMessage);
     }
 
-    public void putString(@NonNull final Key data, @NonNull final String string) {
-        putString(data.name(), string);
+    public boolean showRateReminder() {
+        return getBoolean(Key.RATE_REMINDER_KEY);
     }
 
-    // Used for rate reminder and message and should return true by default
-    public boolean getBoolean(@NonNull final Key data) {
-        return sharedPreferences.getBoolean(data.name(), true);
+    public void updateShowRateReminder(boolean showMessage) {
+        putBoolean(Key.RATE_REMINDER_KEY, showMessage);
     }
 
-    public void putBoolean(@NonNull final Key data, @NonNull final Boolean value) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(data.name(), value);
-        editor.commit();
+    public String getLastUpdated() {
+        return getString(Key.LAST_UPDATED_KEY);
     }
 
-    public void clear(@NonNull final Key data) {
-        sharedPreferences.edit().remove(data.name()).commit();
+    public void setLastUpdated(String lastUpdated) {
+        putString(Key.LAST_UPDATED_KEY, lastUpdated);
+    }
+
+    public void clearLastUpdated() {
+        clear(Key.LAST_UPDATED_KEY);
+    }
+
+    public String getGUI() {
+        return getString(Key.GUID_KEY);
+    }
+
+    public void setGUI(String gui) {
+        putString(Key.GUID_KEY, gui);
+    }
+
+    public String getVersionInfo() {
+        return getString(Key.VERSION_INFO_KEY);
+    }
+
+    public void setVersionInfo(String versionInfo) {
+        putString(Key.VERSION_INFO_KEY, versionInfo);
     }
 
     // File Cache
@@ -99,6 +113,41 @@ public class CacheManager {
         }
 
         return null;
+    }
+
+    // Shared Prefs handling
+
+    private boolean contains(@NonNull final CacheManager.Key data) {
+        return sharedPreferences.contains(data.name());
+    }
+
+    private String getString(@NonNull final Key data) {
+        return sharedPreferences.getString(data.name(), null);
+    }
+
+    private void putString(@NonNull final String key, @NonNull final String string) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, string);
+        editor.commit();
+    }
+
+    private void putString(@NonNull final Key data, @NonNull final String string) {
+        putString(data.name(), string);
+    }
+
+    // Used for rate reminder and message and should return true by default
+    private boolean getBoolean(@NonNull final Key data) {
+        return sharedPreferences.getBoolean(data.name(), true);
+    }
+
+    private void putBoolean(@NonNull final Key data, @NonNull final Boolean value) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(data.name(), value);
+        editor.commit();
+    }
+
+    private void clear(@NonNull final Key data) {
+        sharedPreferences.edit().remove(data.name()).commit();
     }
 
 }

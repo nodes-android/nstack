@@ -43,22 +43,28 @@ public class AppOpenManager {
 
     private VersionControlCallbacks versionControlListener;
     private AppOpen appOpen;
-    private AppOpenSettings settings = new AppOpenSettings();
+    private AppOpenSettings settings;
+
+    private Context context;
+    private CacheManager cacheManager;
     //private TranslationOptions translationOptions = new TranslationOptions();
 
-    public AppOpenManager(  ) {
+    public AppOpenManager(Context context) {
+        this.context = context;
+        cacheManager = new CacheManager(context);
+        settings = new AppOpenSettings(context);
         checkSettings();
     }
 
     private void checkSettings() {
         try {
-            settings = (AppOpenSettings) CacheManager.loadObject(NStack.getStack().getApplicationContext(), KEY_SETTINGS);
+            settings = (AppOpenSettings) cacheManager.loadObject(NStack.getStack().getApplicationContext(), KEY_SETTINGS);
 
             if( settings == null ) {
-                settings = new AppOpenSettings();
+                settings = new AppOpenSettings(context);
             }
         } catch( Exception e ) {
-            settings = new AppOpenSettings();
+            settings = new AppOpenSettings(context);
         }
 
         if( settings.guid == null ) {
@@ -100,7 +106,7 @@ public class AppOpenManager {
             Logger.e(e);
         }
 
-        BackendManager.getInstance().getAppOpen(BASE_URL, settings, TranslationManager.getInstance().options().getLanguageHeader(), new Callback() {
+        BackendManager.getInstance().getAppOpen(BASE_URL, settings, NStack.getStack().getTranslationManager().options().getLanguageHeader(), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 handleAppOpenFailure();
@@ -147,7 +153,7 @@ public class AppOpenManager {
         AppOpenManager.this.appOpen.messageAvailable = false;
 
         // Try updating translations with cached if they exist
-        if (CacheManager.with(NStack.getStack().getApplicationContext()).contains(CacheManager.Key.TRANSLATIONS)) {
+        if (cacheManager.hasTranslations()) {
             try {
                 updateTranslationsFromCache();
                 if (AppOpenManager.this.translationsListener != null) {
@@ -167,7 +173,7 @@ public class AppOpenManager {
     }
 
     private void updateTranslationsFromCache() throws Exception {
-        String translations = CacheManager.with(NStack.getStack().getApplicationContext()).getString(CacheManager.Key.TRANSLATIONS);
+        String translations = cacheManager.getTranslations();
         JSONObject jsonTranslations = new JSONObject(translations);
         NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(jsonTranslations);
         Logger.d("Updated translations from cache...");
@@ -181,7 +187,7 @@ public class AppOpenManager {
 
         if( appOpen.translationRoot == null ) {
             //No new translations - load translations from cache
-            if (CacheManager.with(NStack.getStack().getApplicationContext()).contains(CacheManager.Key.TRANSLATIONS)) {
+            if (cacheManager.hasTranslations()) {
                 try {
                     updateTranslationsFromCache();
                     if (AppOpenManager.this.translationsListener != null) {
@@ -193,7 +199,7 @@ public class AppOpenManager {
             }
         } else {
             //New translations - save new translations into cache
-            CacheManager.with(NStack.getStack().getApplicationContext()).putString(CacheManager.Key.TRANSLATIONS, appOpen.translationRoot.toString());
+            cacheManager.saveTranslations(appOpen.translationRoot.toString());
             settings.lastUpdatedString = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date());
             Logger.d("Saved translations to cache...");
 
@@ -211,9 +217,7 @@ public class AppOpenManager {
             return;
         }
 
-        boolean showReminder = CacheManager.with(activity).getBoolean(CacheManager.Key.RATE_REMINDER_KEY);
-
-        if (appOpen.rateRequestAvailable && showReminder) {
+        if (appOpen.rateRequestAvailable && cacheManager.showRateReminder()) {
 
             AlertDialog.Builder builder;
 
@@ -244,7 +248,7 @@ public class AppOpenManager {
             .setNegativeButton(appOpen.rateReminder.noBtn, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    CacheManager.with(activity).putBoolean(CacheManager.Key.RATE_REMINDER_KEY, false);
+                    cacheManager.updateShowRateReminder(false);
                 }
             });
 
@@ -262,9 +266,7 @@ public class AppOpenManager {
             return;
         }
 
-        boolean showMessage = CacheManager.with(activity).getBoolean(CacheManager.Key.SHOW_MESSAGE_KEY);
-
-        if (appOpen.messageAvailable && showMessage) {
+        if (appOpen.messageAvailable && cacheManager.showMessage()) {
 
             AlertDialog.Builder builder;
 
@@ -308,7 +310,7 @@ public class AppOpenManager {
             }
 
             //update showMessage bool from sharedPrefs depending on message showSettings
-            CacheManager.with(activity).putBoolean(CacheManager.Key.SHOW_MESSAGE_KEY, appOpen.message.showSetting.equals("show_always"));
+            cacheManager.updateShowMessage(appOpen.message.showSetting.equals("show_always"));
         }
     }
 

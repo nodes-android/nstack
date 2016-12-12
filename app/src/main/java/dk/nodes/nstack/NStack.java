@@ -37,6 +37,7 @@ public final class NStack {
         this.applicationContext = context.getApplicationContext();
         this.applicationKey = applicationKey;
         this.apiKey = apiKey;
+        this.translationManager = new TranslationManager(applicationContext);
     }
 
     public static NStack getStack() {
@@ -78,12 +79,12 @@ public final class NStack {
     }
 
     public TranslationManager getTranslationManager() {
-        return TranslationManager.getInstance();
+        return translationManager;
     }
 
     public AppOpenManager getAppOpenManager() {
         if( appOpenManager == null ) {
-            appOpenManager = new AppOpenManager();
+            appOpenManager = new AppOpenManager(applicationContext);
         }
 
         return appOpenManager;
@@ -110,8 +111,8 @@ public final class NStack {
     }
 
     public void changeLanguage(String locale, TranslationManager.OnTranslationResultListener callback) {
-        TranslationManager.getInstance().options().locale(locale);
-        TranslationManager.getInstance().updateTranslations(callback);
+        getTranslationManager().options().locale(locale);
+        getTranslationManager().updateTranslations(callback);
     }
 
 }

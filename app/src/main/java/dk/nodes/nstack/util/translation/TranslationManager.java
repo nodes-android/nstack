@@ -1,5 +1,6 @@
 package dk.nodes.nstack.util.translation;
 
+import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -41,10 +42,11 @@ public class TranslationManager {
 
     private static TranslationManager instance = null;
     private static Class<?> classType;
-    private TranslationOptions translationOptions = new TranslationOptions();
+    private static TranslationOptions translationOptions = new TranslationOptions();
+    private CacheManager cacheManager;
 
-    public TranslationManager() {
-
+    public TranslationManager(Context context) {
+        cacheManager = new CacheManager(context);
     }
 
     public void setTranslationClass(Class<?> translationClass) {
@@ -53,14 +55,6 @@ public class TranslationManager {
 
     public TranslationOptions options() {
         return translationOptions;
-    }
-
-    public static TranslationManager getInstance() {
-        if (instance == null) {
-            instance = new TranslationManager();
-        }
-
-        return instance;
     }
 
     public static void translate(@NonNull Object view) {
@@ -208,7 +202,7 @@ public class TranslationManager {
 
     private static String findValue(String key) throws IllegalArgumentException {
         // Flat / No sections
-        if (TranslationManager.getInstance().options().isFlattenKeys()) {
+        if (translationOptions.isFlattenKeys()) {
             try {
                 Field field = classType.getField(key);
                 String value = String.valueOf(field.get(null));
@@ -414,7 +408,7 @@ public class TranslationManager {
                 JSONObject translationObject = data.getJSONObject(languageName);
 
                 // Save translation data into the App open cache, now that we have the correct language
-                CacheManager.with(NStack.getStack().getApplicationContext()).putString(CacheManager.Key.TRANSLATIONS, translationObject.toString());
+                cacheManager.saveTranslations(translationObject.toString());
 
                 translationOptions.setPickedLanguage(languageName);
 
@@ -502,7 +496,7 @@ public class TranslationManager {
                 translationOptions.setPickedLanguage(translationOptions.getLanguageHeader());
 
                 // Save translation data into the App open cache
-                CacheManager.with(NStack.getStack().getApplicationContext()).putString(CacheManager.Key.TRANSLATIONS, jsonData);
+                cacheManager.saveTranslations(jsonData);
 
                 // No sections
                 if (translationOptions.isFlattenKeys()) {
