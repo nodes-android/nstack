@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NStack</string>
+    <string name="z_x_y_single_public_resource">Public String</string>
 </resources>

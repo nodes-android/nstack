@@ -1,0 +1,3 @@
+<resources>
+    <public name="z_x_y_single_public_resource" type="string"/>
+</resources>
