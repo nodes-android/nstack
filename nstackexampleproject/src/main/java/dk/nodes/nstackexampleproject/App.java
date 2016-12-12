@@ -4,9 +4,11 @@ import android.app.Application;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.backend.BackendManager;
+import dk.nodes.nstack.util.translation.TranslationManager;
 import dk.nodes.nstackexampleproject.util.model.Translation;
 import okhttp3.Call;
 /**
@@ -28,6 +30,21 @@ public class App extends Application {
                 .locale("en-GB")
                 .fallbackLocale("en-US");
 
+//        To test changing the language on the phone
+
+//        String transLocale = Locale.getDefault().toString().replace('_', '-');
+//
+//        NStack.getStack().changeLanguage(transLocale, new TranslationManager.OnTranslationResultListener() {
+//            @Override
+//            public void onSuccess() {
+//
+//            }
+//
+//            @Override
+//            public void onFailure() {
+//
+//            }
+//        });
 
         // NStack content download
         try {

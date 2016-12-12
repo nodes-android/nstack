@@ -106,7 +106,7 @@ public class AppOpenManager {
             Logger.e(e);
         }
 
-        BackendManager.getInstance().getAppOpen(BASE_URL, settings, NStack.getStack().getTranslationManager().options().getLanguageHeader(), new Callback() {
+        BackendManager.getInstance().getAppOpen(BASE_URL, settings, NStack.getStack().getTranslationOptions().getLanguageHeader(), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 handleAppOpenFailure();

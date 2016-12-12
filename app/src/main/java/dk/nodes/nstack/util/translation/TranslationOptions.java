@@ -1,8 +1,8 @@
 package dk.nodes.nstack.util.translation;
 
+import android.content.Context;
 import java.util.Locale;
 
-import dk.nodes.nstack.NStack;
 
 /**
  * Created by joso on 05/10/15.
@@ -17,8 +17,8 @@ public class TranslationOptions {
     private String customContentURL = null;
     private String pickedLanguage;
 
-    public TranslationOptions() {
-        Locale deviceLocale = NStack.getStack().getApplicationContext().getResources().getConfiguration().locale;
+    public TranslationOptions(Context context) {
+        Locale deviceLocale = context.getResources().getConfiguration().locale;
         String localeString = deviceLocale.toString().replace("_", "-");
         this.languageHeader = cleanLocale(localeString);
     }

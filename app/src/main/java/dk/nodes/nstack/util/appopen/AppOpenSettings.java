@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.log.Logger;
 
@@ -49,10 +48,9 @@ public class AppOpenSettings {
     }
 
     public void load() {
-
-        oldVersion = cacheManager.getVersionInfo();
-        guid = cacheManager.getGUI();
-        lastUpdatedString = cacheManager.getLastUpdated();
+        oldVersion = cacheManager.getVersionInfo() != null ? cacheManager.getVersionInfo() : version;
+        guid = cacheManager.getGUI() != null ? cacheManager.getGUI() : UUID.randomUUID().toString();
+        lastUpdatedString = cacheManager.getLastUpdated() != null ? cacheManager.getLastUpdated() : dateFormat.format(new Date(0));
     }
 
     public void resetLastUpdated() {

@@ -40,24 +40,20 @@ import okhttp3.Response;
  */
 public class TranslationManager {
 
-    private static TranslationManager instance = null;
     private static Class<?> classType;
-    private static TranslationOptions translationOptions = new TranslationOptions();
+    private TranslationOptions translationOptions;
     private CacheManager cacheManager;
 
-    public TranslationManager(Context context) {
+    public TranslationManager(Context context, TranslationOptions translationOptions) {
         cacheManager = new CacheManager(context);
+        this.translationOptions = translationOptions;
     }
 
     public void setTranslationClass(Class<?> translationClass) {
         classType = translationClass;
     }
 
-    public TranslationOptions options() {
-        return translationOptions;
-    }
-
-    public static void translate(@NonNull Object view) {
+    public void translate(@NonNull Object view) {
         Field[] fields = view.getClass().getDeclaredFields();
 
         for (Field f : fields) {
@@ -200,7 +196,7 @@ public class TranslationManager {
     }
 
 
-    private static String findValue(String key) throws IllegalArgumentException {
+    private String findValue(String key) throws IllegalArgumentException {
         // Flat / No sections
         if (translationOptions.isFlattenKeys()) {
             try {

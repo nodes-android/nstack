@@ -21,7 +21,7 @@ public class NStackInterceptor implements Interceptor {
         Request originalRequest = chain.request();
 
         Request newRequest = originalRequest.newBuilder()
-                .header("Accept-Language", NStack.getStack().getTranslationManager().options().getLanguageHeader())
+                .header("Accept-Language", NStack.getStack().getTranslationOptions().getLanguageHeader())
                 .header("X-Application-Id", NStack.getStack().getApplicationKey())
                 .header("X-Rest-Api-Key", NStack.getStack().getApiKey())
                 .build();

@@ -23,6 +23,8 @@ public final class NStack {
     private TranslationManager translationManager;
     private AppOpenManager appOpenManager;
 
+    private TranslationOptions translationOptions;
+
     /**
      * Initializes the singleton
      * @param context Use the application context to avoid leaks
@@ -37,7 +39,8 @@ public final class NStack {
         this.applicationContext = context.getApplicationContext();
         this.applicationKey = applicationKey;
         this.apiKey = apiKey;
-        this.translationManager = new TranslationManager(applicationContext);
+        this.translationOptions = new TranslationOptions(applicationContext);
+        this.translationManager = new TranslationManager(applicationContext, translationOptions);
     }
 
     public static NStack getStack() {
@@ -90,12 +93,13 @@ public final class NStack {
         return appOpenManager;
     }
 
+    public TranslationOptions getTranslationOptions() {
+        return translationOptions;
+    }
+
     /**
      * Delegates calls to managers
      */
-    public TranslationOptions translationOptions() {
-        return getTranslationManager().options();
-    }
 
     public void openApp() {
         getAppOpenManager().openApp();
@@ -106,13 +110,13 @@ public final class NStack {
     }
 
     public TranslationOptions translationClass(Class<?> translationClass) {
-        getTranslationManager().setTranslationClass(translationClass);
-        return getTranslationManager().options();
+        translationManager.setTranslationClass(translationClass);
+        return translationOptions;
     }
 
     public void changeLanguage(String locale, TranslationManager.OnTranslationResultListener callback) {
-        getTranslationManager().options().locale(locale);
-        getTranslationManager().updateTranslations(callback);
+        translationOptions.locale(locale);
+        translationManager.updateTranslations(callback);
     }
 
 }
