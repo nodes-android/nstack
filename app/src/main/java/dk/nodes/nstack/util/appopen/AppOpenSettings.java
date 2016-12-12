@@ -1,15 +1,13 @@
 package dk.nodes.nstack.util.appopen;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
 import dk.nodes.nstack.NStack;
+import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.log.Logger;
 
 /**
@@ -48,35 +46,21 @@ public class AppOpenSettings {
 
     public void save() {
         Context context = NStack.getStack().getApplicationContext();
-        SharedPreferences.Editor editor = context.getSharedPreferences(APPOPEN_INFO_KEY, Context.MODE_PRIVATE).edit();
-
-        editor.putString(VERSION_INFO_KEY, version).apply();
-        editor.putString(GUID_KEY, guid).apply();
-        editor.putString(LAST_UPDATED_KEY, lastUpdatedString);
-        editor.commit();
+        CacheManager.with(context, APPOPEN_INFO_KEY).putString(CacheManager.Key.VERSION_INFO_KEY, version);
+        CacheManager.with(context, APPOPEN_INFO_KEY).putString(CacheManager.Key.GUID_KEY, guid);
+        CacheManager.with(context, APPOPEN_INFO_KEY).putString(CacheManager.Key.LAST_UPDATED_KEY, lastUpdatedString);
     }
 
     public void load() {
         Context context = NStack.getStack().getApplicationContext();
-        SharedPreferences prefs = context.getSharedPreferences(APPOPEN_INFO_KEY, Context.MODE_PRIVATE);
-        oldVersion = prefs.getString(VERSION_INFO_KEY, version);
-        guid = prefs.getString(GUID_KEY, UUID.randomUUID().toString());
-        lastUpdatedString = prefs.getString(LAST_UPDATED_KEY, dateFormat.format(new Date(0)));
-        /*
-        String str_date = prefs.getString(LAST_UPDATED_KEY, dateFormat.format(new Date()));
-        try {
-            lastUpdated = dateFormat.parse(str_date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        */
+        oldVersion = CacheManager.with(context, APPOPEN_INFO_KEY).getString(CacheManager.Key.VERSION_INFO_KEY);
+        guid = CacheManager.with(context, APPOPEN_INFO_KEY).getString(CacheManager.Key.GUID_KEY);
+        lastUpdatedString = CacheManager.with(context, APPOPEN_INFO_KEY).getString(CacheManager.Key.LAST_UPDATED_KEY);
     }
 
     public static void resetLastUpdated() {
         Context context = NStack.getStack().getApplicationContext();
-        SharedPreferences.Editor editor = context.getSharedPreferences(APPOPEN_INFO_KEY, Context.MODE_PRIVATE).edit();
-        editor.putString(LAST_UPDATED_KEY, null);
-        editor.commit();
+        CacheManager.with(context, APPOPEN_INFO_KEY).clear(CacheManager.Key.LAST_UPDATED_KEY);
     }
 
     @Override

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,10 +23,8 @@ import java.util.UUID;
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.cache.CacheManager;
-import dk.nodes.nstack.util.cache.PrefsManager;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.translation.TranslationManager;
-import dk.nodes.nstack.util.translation.TranslationOptions;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -150,7 +147,7 @@ public class AppOpenManager {
         AppOpenManager.this.appOpen.messageAvailable = false;
 
         // Try updating translations with cached if they exist
-        if (PrefsManager.with(NStack.getStack().getApplicationContext()).contains(PrefsManager.Key.TRANSLATIONS)) {
+        if (CacheManager.with(NStack.getStack().getApplicationContext()).contains(CacheManager.Key.TRANSLATIONS)) {
             try {
                 updateTranslationsFromCache();
                 if (AppOpenManager.this.translationsListener != null) {
@@ -170,7 +167,7 @@ public class AppOpenManager {
     }
 
     private void updateTranslationsFromCache() throws Exception {
-        String translations = PrefsManager.with(NStack.getStack().getApplicationContext()).getString(PrefsManager.Key.TRANSLATIONS);
+        String translations = CacheManager.with(NStack.getStack().getApplicationContext()).getString(CacheManager.Key.TRANSLATIONS);
         JSONObject jsonTranslations = new JSONObject(translations);
         NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(jsonTranslations);
         Logger.d("Updated translations from cache...");
@@ -184,7 +181,7 @@ public class AppOpenManager {
 
         if( appOpen.translationRoot == null ) {
             //No new translations - load translations from cache
-            if (PrefsManager.with(NStack.getStack().getApplicationContext()).contains(PrefsManager.Key.TRANSLATIONS)) {
+            if (CacheManager.with(NStack.getStack().getApplicationContext()).contains(CacheManager.Key.TRANSLATIONS)) {
                 try {
                     updateTranslationsFromCache();
                     if (AppOpenManager.this.translationsListener != null) {
@@ -196,7 +193,7 @@ public class AppOpenManager {
             }
         } else {
             //New translations - save new translations into cache
-            PrefsManager.with(NStack.getStack().getApplicationContext()).putString(PrefsManager.Key.TRANSLATIONS, appOpen.translationRoot.toString());
+            CacheManager.with(NStack.getStack().getApplicationContext()).putString(CacheManager.Key.TRANSLATIONS, appOpen.translationRoot.toString());
             settings.lastUpdatedString = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date());
             Logger.d("Saved translations to cache...");
 
@@ -214,7 +211,7 @@ public class AppOpenManager {
             return;
         }
 
-        boolean showReminder = activity.getSharedPreferences("rated", Context.MODE_PRIVATE).getBoolean("showRateReminder", true);
+        boolean showReminder = CacheManager.with(activity).getBoolean(CacheManager.Key.RATE_REMINDER_KEY);
 
         if (appOpen.rateRequestAvailable && showReminder) {
 
@@ -247,10 +244,7 @@ public class AppOpenManager {
             .setNegativeButton(appOpen.rateReminder.noBtn, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    activity.getSharedPreferences("rated", Context.MODE_PRIVATE)
-                            .edit()
-                            .putBoolean("showRateReminder", false)
-                    .commit();
+                    CacheManager.with(activity).putBoolean(CacheManager.Key.RATE_REMINDER_KEY, false);
                 }
             });
 
@@ -268,7 +262,7 @@ public class AppOpenManager {
             return;
         }
 
-        boolean showMessage = activity.getSharedPreferences("message", Context.MODE_PRIVATE).getBoolean("showMessage", true);
+        boolean showMessage = CacheManager.with(activity).getBoolean(CacheManager.Key.SHOW_MESSAGE_KEY);
 
         if (appOpen.messageAvailable && showMessage) {
 
@@ -314,11 +308,7 @@ public class AppOpenManager {
             }
 
             //update showMessage bool from sharedPrefs depending on message showSettings
-            activity.getSharedPreferences("message", Context.MODE_PRIVATE)
-                    .edit()
-                    .putBoolean("showMessage", appOpen.message.showSetting.equals("show_always"))
-                    .commit();
-
+            CacheManager.with(activity).putBoolean(CacheManager.Key.SHOW_MESSAGE_KEY, appOpen.message.showSetting.equals("show_always"));
         }
     }
 
