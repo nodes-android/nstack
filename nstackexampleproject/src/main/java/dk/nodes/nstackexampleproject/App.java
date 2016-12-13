@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.Locale;
 
 import dk.nodes.nstack.NStack;
-import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.translation.TranslationManager;
 import dk.nodes.nstackexampleproject.util.model.Translation;
 import okhttp3.Call;

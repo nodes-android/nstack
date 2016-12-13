@@ -8,6 +8,7 @@ import dk.nodes.nstack.util.appopen.AppOpenManager;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.backend.ClientProvider;
 import dk.nodes.nstack.util.cache.CacheManager;
+import dk.nodes.nstack.util.translation.TranslationAPIClient;
 import dk.nodes.nstack.util.translation.TranslationManager;
 import dk.nodes.nstack.util.translation.TranslationOptions;
 
@@ -29,6 +30,7 @@ public final class NStack {
     private TranslationOptions translationOptions;
     private CacheManager cacheManager;
     private BackendManager backendManager;
+    private TranslationAPIClient translationAPIClient;
 
     /**
      * Initializes the singleton
@@ -46,6 +48,7 @@ public final class NStack {
         this.apiKey = apiKey;
         this.translationOptions = new TranslationOptions(applicationContext);
         this.translationManager = new TranslationManager(applicationContext, translationOptions);
+        this.translationAPIClient = new TranslationAPIClient(translationManager, translationOptions);
         this.cacheManager = new CacheManager(applicationContext);
     }
 
@@ -93,7 +96,7 @@ public final class NStack {
 
     public AppOpenManager getAppOpenManager() {
         if( appOpenManager == null ) {
-            appOpenManager = new AppOpenManager(applicationContext);
+            appOpenManager = new AppOpenManager(applicationContext, translationManager);
         }
 
         return appOpenManager;
@@ -129,7 +132,7 @@ public final class NStack {
 
     public void changeLanguage(String locale, TranslationManager.OnTranslationResultListener callback) {
         translationOptions.locale(locale);
-        translationManager.updateTranslations(callback);
+        translationAPIClient.updateTranslations(callback);
     }
 
 }

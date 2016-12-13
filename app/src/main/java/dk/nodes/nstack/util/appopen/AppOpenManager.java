@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.UUID;
 
 import dk.nodes.nstack.NStack;
-import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.translation.TranslationManager;
@@ -47,10 +46,11 @@ public class AppOpenManager {
 
     private Context context;
     private CacheManager cacheManager;
-    //private TranslationOptions translationOptions = new TranslationOptions();
+    private TranslationManager translationManager;
 
-    public AppOpenManager(Context context) {
+    public AppOpenManager(Context context, TranslationManager translationManager) {
         this.context = context;
+        this.translationManager = translationManager;
         cacheManager = new CacheManager(context);
         settings = new AppOpenSettings(context);
         checkSettings();
@@ -175,7 +175,7 @@ public class AppOpenManager {
     private void updateTranslationsFromCache() throws Exception {
         String translations = cacheManager.getTranslations();
         JSONObject jsonTranslations = new JSONObject(translations);
-        NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(jsonTranslations);
+        translationManager.updateTranslationsFromAppOpen(jsonTranslations);
         Logger.d("Updated translations from cache...");
     }
 
@@ -203,7 +203,7 @@ public class AppOpenManager {
             settings.lastUpdatedString = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date());
             Logger.d("Saved translations to cache...");
 
-            NStack.getStack().getTranslationManager().updateTranslationsFromAppOpen(appOpen.translationRoot);
+            translationManager.updateTranslationsFromAppOpen(appOpen.translationRoot);
             if (AppOpenManager.this.translationsListener != null) {
                 AppOpenManager.this.translationsListener.onUpdated(false);
             }

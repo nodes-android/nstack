@@ -1,16 +1,10 @@
 package dk.nodes.nstack.util.backend;
 
-import android.content.Context;
-
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.appopen.AppOpenSettings;
-import dk.nodes.nstack.util.log.Logger;
-import okhttp3.Cache;
 import okhttp3.Callback;
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -26,9 +20,7 @@ import okio.Buffer;
  */
 public class BackendManager {
 
-    private static BackendManager instance;
     protected OkHttpClient client;
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     public BackendManager(OkHttpClient httpClient) {
         client = httpClient;

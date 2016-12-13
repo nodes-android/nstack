@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import dk.nodes.nstack.NStack;
-import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.model.Language;
@@ -225,96 +224,6 @@ public class TranslationManager {
         }
     }
 
-    public <T> void updateTranslations(final OnTranslationResultListener listener) {
-        try {
-            NStack.getStack().getBackendManager().getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (!response.isSuccessful()) {
-                        throw new IOException("Unexpected code " + response);
-                    }
-
-                    TranslationManager.this.updateTranslationClass(response.body().string());
-
-                    if (listener != null) {
-                        listener.onSuccess();
-                    }
-                }
-            });
-        } catch (Exception e) {
-            if (listener != null) {
-                listener.onFailure();
-            }
-        }
-    }
-
-
-    public void updateTranslationsSilently() {
-        try {
-
-            NStack.getStack().getBackendManager().getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (!response.isSuccessful())
-                        throw new IOException("Unexpected code " + response);
-
-                    TranslationManager.this.updateTranslationClass(response.body().string());
-                }
-            });
-        } catch (Exception e) {
-            Logger.e(e);
-        }
-    }
-
-    /**
-     * Get all the languages in an ArrayList<Language> - use .getLocale to get the locale
-     *
-     * @param listener OnLanguageResultListener returns on onSuccess the ArrayList<Language> with all the languages
-     */
-    public void getAllLanguages(@NonNull final OnLanguageResultListener listener) {
-        try {
-            NStack.getStack().getBackendManager().getAllLanguages(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (!response.isSuccessful())
-                        throw new IOException("Unexpected code " + response);
-
-                    try {
-                        JSONArray data = new JSONObject(response.body().string()).optJSONArray("data");
-
-                        final ArrayList<Language> languages = new ArrayList<>();
-
-                        for (int i = 0; i < data.length(); i++) {
-                            languages.add(Language.parseFrom(data.optJSONObject(i)));
-                        }
-
-                        listener.onSuccess(languages);
-                    } catch (JSONException e) {
-                        Logger.d(e.toString());
-                        listener.onFailure();
-                    }
-                }
-            });
-        } catch (Exception e) {
-            Logger.e(e);
-            listener.onFailure();
-        }
-    }
 
     public void switchFallbackLanguage(@NonNull String languageHeader, final OnTranslationResultListener listener) {
         try {
@@ -344,18 +253,9 @@ public class TranslationManager {
         }
     }
 
-
     public interface OnTranslationResultListener {
-        public void onSuccess();
-
-        public void onFailure();
-    }
-
-    public interface OnLanguageResultListener {
-        public void onSuccess(ArrayList<Language> languages);
-
-        public void onFailure();
-
+        void onSuccess();
+        void onFailure();
     }
 
     public void updateTranslationsFromAppOpen( JSONObject root ) {
@@ -469,7 +369,7 @@ public class TranslationManager {
         }
     }
 
-    private void updateTranslationClass(String jsonData) {
+    public void updateTranslationClass(String jsonData) {
         try {
             JSONObject data = new JSONObject(jsonData);
 
