@@ -7,7 +7,6 @@ import java.util.Date;
 import dk.nodes.nstack.util.appopen.AppOpenSettings;
 import okhttp3.Callback;
 import okhttp3.Headers;
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
