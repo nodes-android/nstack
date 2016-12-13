@@ -227,7 +227,7 @@ public class TranslationManager {
 
     public <T> void updateTranslations(final OnTranslationResultListener listener) {
         try {
-            BackendManager.getInstance().getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
+            NStack.getStack().getBackendManager().getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
 
@@ -257,7 +257,7 @@ public class TranslationManager {
     public void updateTranslationsSilently() {
         try {
 
-            BackendManager.getInstance().getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
+            NStack.getStack().getBackendManager().getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
 
@@ -283,7 +283,7 @@ public class TranslationManager {
      */
     public void getAllLanguages(@NonNull final OnLanguageResultListener listener) {
         try {
-            BackendManager.getInstance().getAllLanguages(new Callback() {
+            NStack.getStack().getBackendManager().getAllLanguages(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
 

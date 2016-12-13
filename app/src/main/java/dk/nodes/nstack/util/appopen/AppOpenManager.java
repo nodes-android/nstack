@@ -106,7 +106,7 @@ public class AppOpenManager {
             Logger.e(e);
         }
 
-        BackendManager.getInstance().getAppOpen(BASE_URL, settings, NStack.getStack().getTranslationOptions().getLanguageHeader(), new Callback() {
+        NStack.getStack().getBackendManager().getAppOpen(BASE_URL, settings, NStack.getStack().getTranslationOptions().getLanguageHeader(), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 handleAppOpenFailure();
@@ -316,7 +316,7 @@ public class AppOpenManager {
 
     public void markMessageViewed() {
         try {
-            BackendManager.getInstance().viewMessage(settings, appOpen.message.id, new Callback() {
+            NStack.getStack().getBackendManager().viewMessage(settings, appOpen.message.id, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     Logger.e(e);

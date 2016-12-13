@@ -31,24 +31,23 @@ public class App extends Application {
                 .fallbackLocale("en-US");
 
 //        To test changing the language on the phone
+        String transLocale = Locale.getDefault().toString().replace('_', '-');
 
-//        String transLocale = Locale.getDefault().toString().replace('_', '-');
-//
-//        NStack.getStack().changeLanguage(transLocale, new TranslationManager.OnTranslationResultListener() {
-//            @Override
-//            public void onSuccess() {
-//
-//            }
-//
-//            @Override
-//            public void onFailure() {
-//
-//            }
-//        });
+        NStack.getStack().changeLanguage(transLocale, new TranslationManager.OnTranslationResultListener() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
 
         // NStack content download
         try {
-            BackendManager.getInstance().getContentResponse(25, new okhttp3.Callback() {
+            NStack.getStack().getBackendManager().getContentResponse(25, new okhttp3.Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     Log.e("Example project", "Failed to download content");

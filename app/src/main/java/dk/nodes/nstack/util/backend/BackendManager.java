@@ -30,16 +30,8 @@ public class BackendManager {
     protected OkHttpClient client;
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    private BackendManager(OkHttpClient httpClient) {
+    public BackendManager(OkHttpClient httpClient) {
         client = httpClient;
-    }
-
-    public static BackendManager getInstance() {
-        if (instance == null) {
-            instance = new BackendManager(ClientProvider.provideHttpClient(initCache(NStack.getStack().getApplicationContext())));
-        }
-
-        return instance;
     }
 
     private static String bodyToString(final Request request) {
@@ -52,21 +44,6 @@ public class BackendManager {
         } catch (final IOException e) {
             return "did not work";
         }
-    }
-
-    public static Cache initCache(Context context) {
-        try {
-            File cacheDirectory = context.getCacheDir();
-
-            int cacheSize = 10 * 1024 * 1024; // 10 MiB
-            Cache cache = new Cache(cacheDirectory, cacheSize);
-
-            return cache;
-        } catch (Exception e) {
-            Logger.e(e);
-        }
-
-        return null;
     }
 
     public Response getTranslation(String url, String acceptHeader) throws Exception {

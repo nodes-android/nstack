@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import dk.nodes.nstack.util.log.Logger;
+import okhttp3.Cache;
+
 /**
  * Created by joso on 19/11/15.
  */
@@ -18,6 +21,7 @@ public class CacheManager {
     public static final String PREFERENCES_DEFAULT = "shared_prefs";
 
     SharedPreferences sharedPreferences;
+    Context context;
 
     public enum Key {
         TRANSLATIONS,
@@ -30,8 +34,8 @@ public class CacheManager {
 
     public CacheManager(Context context) {
         this.sharedPreferences = context.getSharedPreferences(PREFERENCES_DEFAULT, Context.MODE_PRIVATE);
+        this.context = context;
     }
-
 
     public boolean hasTranslations() {
         return contains(Key.TRANSLATIONS);
@@ -148,6 +152,21 @@ public class CacheManager {
 
     private void clear(@NonNull final Key data) {
         sharedPreferences.edit().remove(data.name()).commit();
+    }
+
+    public Cache initCache() {
+        try {
+            File cacheDirectory = context.getCacheDir();
+
+            int cacheSize = 10 * 1024 * 1024; // 10 MiB
+            Cache cache = new Cache(cacheDirectory, cacheSize);
+
+            return cache;
+        } catch (Exception e) {
+            Logger.e(e);
+        }
+
+        return null;
     }
 
 }

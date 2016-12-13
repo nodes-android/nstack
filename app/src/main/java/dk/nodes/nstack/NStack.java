@@ -5,6 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import dk.nodes.nstack.util.appopen.AppOpenManager;
+import dk.nodes.nstack.util.backend.BackendManager;
+import dk.nodes.nstack.util.backend.ClientProvider;
+import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.translation.TranslationManager;
 import dk.nodes.nstack.util.translation.TranslationOptions;
 
@@ -24,6 +27,8 @@ public final class NStack {
     private AppOpenManager appOpenManager;
 
     private TranslationOptions translationOptions;
+    private CacheManager cacheManager;
+    private BackendManager backendManager;
 
     /**
      * Initializes the singleton
@@ -41,6 +46,7 @@ public final class NStack {
         this.apiKey = apiKey;
         this.translationOptions = new TranslationOptions(applicationContext);
         this.translationManager = new TranslationManager(applicationContext, translationOptions);
+        this.cacheManager = new CacheManager(applicationContext);
     }
 
     public static NStack getStack() {
@@ -95,6 +101,13 @@ public final class NStack {
 
     public TranslationOptions getTranslationOptions() {
         return translationOptions;
+    }
+
+    public BackendManager getBackendManager() {
+        if (backendManager == null) {
+            backendManager = new BackendManager(ClientProvider.provideHttpClient(cacheManager.initCache()));
+        }
+        return backendManager;
     }
 
     /**
