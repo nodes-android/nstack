@@ -21,9 +21,11 @@ import java.util.Date;
 import java.util.UUID;
 
 import dk.nodes.nstack.NStack;
+import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.translation.TranslationManager;
+import dk.nodes.nstack.util.translation.TranslationOptions;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -45,13 +47,17 @@ public class AppOpenManager {
     private AppOpenSettings settings;
 
     private Context context;
+    private BackendManager backendManager;
     private CacheManager cacheManager;
     private TranslationManager translationManager;
+    private TranslationOptions translationOptions;
 
-    public AppOpenManager(Context context, TranslationManager translationManager) {
+    public AppOpenManager(Context context, BackendManager backendManager, TranslationManager translationManager, CacheManager cacheManager, TranslationOptions translationOptions) {
         this.context = context;
+        this.backendManager = backendManager;
         this.translationManager = translationManager;
-        cacheManager = new CacheManager(context);
+        this.translationOptions = translationOptions;
+        this.cacheManager = cacheManager;
         settings = new AppOpenSettings(context);
         checkSettings();
     }
@@ -106,7 +112,7 @@ public class AppOpenManager {
             Logger.e(e);
         }
 
-        NStack.getStack().getBackendManager().getAppOpen(BASE_URL, settings, NStack.getStack().getTranslationOptions().getLanguageHeader(), new Callback() {
+        backendManager.getAppOpen(BASE_URL, settings, translationOptions.getLanguageHeader(), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 handleAppOpenFailure();
@@ -316,7 +322,7 @@ public class AppOpenManager {
 
     public void markMessageViewed() {
         try {
-            NStack.getStack().getBackendManager().viewMessage(settings, appOpen.message.id, new Callback() {
+            backendManager.viewMessage(settings, appOpen.message.id, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     Logger.e(e);

@@ -8,9 +8,10 @@ import dk.nodes.nstack.util.appopen.AppOpenManager;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.backend.ClientProvider;
 import dk.nodes.nstack.util.cache.CacheManager;
-import dk.nodes.nstack.util.translation.TranslationAPIClient;
+import dk.nodes.nstack.util.translation.TranslationBackendManager;
 import dk.nodes.nstack.util.translation.TranslationManager;
 import dk.nodes.nstack.util.translation.TranslationOptions;
+import okhttp3.Callback;
 
 /**
  * Created by joso on 02/10/2015.
@@ -30,7 +31,7 @@ public final class NStack {
     private TranslationOptions translationOptions;
     private CacheManager cacheManager;
     private BackendManager backendManager;
-    private TranslationAPIClient translationAPIClient;
+    private TranslationBackendManager translationBackendManager;
 
     /**
      * Initializes the singleton
@@ -46,10 +47,11 @@ public final class NStack {
         this.applicationContext = context.getApplicationContext();
         this.applicationKey = applicationKey;
         this.apiKey = apiKey;
+        this.cacheManager = new CacheManager(applicationContext);
+        this.backendManager = new BackendManager(ClientProvider.provideHttpClient(cacheManager.initCache(), false));
         this.translationOptions = new TranslationOptions(applicationContext);
         this.translationManager = new TranslationManager(applicationContext, translationOptions);
-        this.translationAPIClient = new TranslationAPIClient(translationManager, translationOptions);
-        this.cacheManager = new CacheManager(applicationContext);
+        this.translationBackendManager = new TranslationBackendManager(backendManager, translationManager, translationOptions);
     }
 
     public static NStack getStack() {
@@ -66,11 +68,13 @@ public final class NStack {
 
     public NStack enableDebug() {
         debugMode = true;
+        backendManager.updateHttpClient(ClientProvider.provideHttpClient(cacheManager.initCache(), true));
         return this;
     }
 
     public NStack disableDebug() {
         debugMode = false;
+        backendManager.updateHttpClient(ClientProvider.provideHttpClient(cacheManager.initCache(), false));
         return this;
     }
 
@@ -90,13 +94,9 @@ public final class NStack {
         return applicationContext;
     }
 
-    public TranslationManager getTranslationManager() {
-        return translationManager;
-    }
-
     public AppOpenManager getAppOpenManager() {
         if( appOpenManager == null ) {
-            appOpenManager = new AppOpenManager(applicationContext, translationManager);
+            appOpenManager = new AppOpenManager(applicationContext, backendManager, translationManager, cacheManager, translationOptions);
         }
 
         return appOpenManager;
@@ -104,13 +104,6 @@ public final class NStack {
 
     public TranslationOptions getTranslationOptions() {
         return translationOptions;
-    }
-
-    public BackendManager getBackendManager() {
-        if (backendManager == null) {
-            backendManager = new BackendManager(ClientProvider.provideHttpClient(cacheManager.initCache()));
-        }
-        return backendManager;
     }
 
     /**
@@ -132,7 +125,11 @@ public final class NStack {
 
     public void changeLanguage(String locale, TranslationManager.OnTranslationResultListener callback) {
         translationOptions.locale(locale);
-        translationAPIClient.updateTranslations(callback);
+        translationBackendManager.updateTranslations(callback);
+    }
+
+    public void getContentResponse(int id, Callback callback) throws Exception {
+        backendManager.getContentResponse(id, callback);
     }
 
 }

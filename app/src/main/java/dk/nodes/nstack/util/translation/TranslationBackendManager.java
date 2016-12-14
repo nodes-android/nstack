@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import dk.nodes.nstack.NStack;
+import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.model.Language;
 import okhttp3.Call;
@@ -20,19 +21,21 @@ import okhttp3.Response;
  * Created by joaoalves on 13/12/2016.
  */
 
-public class TranslationAPIClient {
+public class TranslationBackendManager {
 
+    private BackendManager backendManager;
     private TranslationManager translationManager;
     private TranslationOptions translationOptions;
 
-    public TranslationAPIClient(TranslationManager translationManager, TranslationOptions translationOptions) {
+    public TranslationBackendManager(BackendManager backendManager, TranslationManager translationManager, TranslationOptions translationOptions) {
+        this.backendManager = backendManager;
         this.translationManager = translationManager;
         this.translationOptions = translationOptions;
     }
 
     public <T> void updateTranslations(final TranslationManager.OnTranslationResultListener listener) {
         try {
-            NStack.getStack().getBackendManager().getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
+            backendManager.getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
 
@@ -62,7 +65,7 @@ public class TranslationAPIClient {
     public void updateTranslationsSilently() {
         try {
 
-            NStack.getStack().getBackendManager().getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
+            backendManager.getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
 
@@ -88,7 +91,7 @@ public class TranslationAPIClient {
      */
     public void getAllLanguages(@NonNull final OnLanguageResultListener listener) {
         try {
-            NStack.getStack().getBackendManager().getAllLanguages(new Callback() {
+            backendManager.getAllLanguages(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
 

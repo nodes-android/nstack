@@ -46,7 +46,7 @@ public class App extends Application {
 
         // NStack content download
         try {
-            NStack.getStack().getBackendManager().getContentResponse(25, new okhttp3.Callback() {
+            NStack.getStack().getContentResponse(25, new okhttp3.Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     Log.e("Example project", "Failed to download content");

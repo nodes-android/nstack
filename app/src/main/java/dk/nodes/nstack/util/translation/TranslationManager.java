@@ -285,20 +285,20 @@ public class TranslationManager {
             while (languageKeys.hasNext()) {
                 String languageName = languageKeys.next();
 
-//                // Only update current language, if we have more than one language
-//                if (localeExists && !languageName.equalsIgnoreCase(translationOptions.getLanguageHeader())) {
-//                    continue;
-//                }
-//
-//                // Selected locale doesnt exist, continue to fallback
-//                if (!localeExists && fallbackLocaleExists && !languageName.equalsIgnoreCase(translationOptions.getFallbackLocale())) {
-//                    continue;
-//                }
-//
-//                // fallback doesnt exist either, continue until we find something that matches fallbacks, ie: en-**
-//                if (!localeExists && !fallbackLocaleExists && !translationOptions.getFallbackLocale().startsWith(languageName.substring(0, 2))) {
-//                    continue;
-//                }
+                // Only update current language, if we have more than one language
+                if (localeExists && !languageName.equalsIgnoreCase(translationOptions.getLanguageHeader())) {
+                    continue;
+                }
+
+                // Selected locale doesnt exist, continue to fallback
+                if (!localeExists && fallbackLocaleExists && !languageName.equalsIgnoreCase(translationOptions.getFallbackLocale())) {
+                    continue;
+                }
+
+                // fallback doesnt exist either, continue until we find something that matches fallbacks, ie: en-**
+                if (!localeExists && !fallbackLocaleExists && !translationOptions.getFallbackLocale().startsWith(languageName.substring(0, 2))) {
+                    continue;
+                }
 
                 Logger.d("updateTranslationLanguageKeys on: " + languageName);
                 JSONObject translationObject = data.getJSONObject(languageName);

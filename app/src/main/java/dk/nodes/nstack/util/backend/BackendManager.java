@@ -25,6 +25,10 @@ public class BackendManager {
         client = httpClient;
     }
 
+    public void updateHttpClient(OkHttpClient httpClient) {
+        client = httpClient;
+    }
+
     private static String bodyToString(final Request request) {
 
         try {
