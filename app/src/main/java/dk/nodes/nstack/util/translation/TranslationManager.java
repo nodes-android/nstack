@@ -1,37 +1,21 @@
 package dk.nodes.nstack.util.translation;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.log.Logger;
-import dk.nodes.nstack.util.model.Language;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 
 /**
@@ -54,141 +38,27 @@ public class TranslationManager {
 
     public void translate(@NonNull Object view) {
         Field[] fields = view.getClass().getDeclaredFields();
-
         for (Field f : fields) {
             Translate annotation = f.getAnnotation(Translate.class);
-
             if (annotation != null) {
-
-                if (f.getType() == Button.class || f.getType() == TextView.class || f.getType() == AppCompatButton.class || f.getType() == AppCompatTextView.class || f.getType() == SwitchCompat.class) {
-
-                    try {
-                        f.setAccessible(true);
-                        TextView fieldTextView = (TextView) f.get(view);
-
-                        try {
-                            fieldTextView.setText(findValue(annotation.value()));
-                            fieldTextView.setContentDescription(findValue(annotation.value()));
-                        } catch (IllegalArgumentException e) {
-                            fieldTextView.setText(annotation.value());
-                            fieldTextView.setContentDescription(annotation.value());
-                        }
-
-                    } catch (Exception e) {
-                        Logger.d("Method.invoke error: " + e.toString());
-                    }
-                } else if (f.getType() == TextInputEditText.class || f.getType() == EditText.class || f.getType() == AppCompatEditText.class) {
-
-                    try {
-                        f.setAccessible(true);
-                        EditText fieldEditText = (EditText) f.get(view);
-
-                        try {
-                            if (fieldEditText.getParent() instanceof TextInputLayout) {
-                                TextInputLayout til = (TextInputLayout) fieldEditText.getParent();
-                                til.setHint(annotation.value());
-                                try {
-                                    til.setHint(findValue(annotation.value()));
-                                    til.setContentDescription(findValue(annotation.value()));
-                                } catch (IllegalArgumentException e) {
-                                    til.setHint(annotation.value());
-                                    til.setContentDescription(annotation.value());
-                                }
-                            } else {
-                                try {
-                                    fieldEditText.setHint(findValue(annotation.value()));
-                                } catch (IllegalArgumentException e) {
-                                    fieldEditText.setHint(annotation.value());
-                                }
-                            }
-
-                            try {
-                                fieldEditText.setContentDescription(findValue(annotation.value()));
-                            } catch (IllegalArgumentException e) {
-                                fieldEditText.setContentDescription(annotation.value());
-                            }
-                        } catch (Exception e) {
-                            Logger.d("TextInputLayout error: " + e.toString());
-                        }
-
-                    } catch (Exception e) {
-                        Logger.d("Method.invoke error: " + e.toString());
-                    }
-
-
-                } else if (f.getType() == ToggleButton.class) {
-
-                    try {
-                        f.setAccessible(true);
-                        ToggleButton fieldToggleButton = (ToggleButton) f.get(view);
-                        Field translationField = null;
-
-                        try {
-                            String value = findValue(annotation.value());
-                            fieldToggleButton.setText(value);
-                            fieldToggleButton.setContentDescription(value);
-                            fieldToggleButton.setTextOn(value);
-                            fieldToggleButton.setTextOff(value);
-                        } catch (IllegalArgumentException e) {
-                            fieldToggleButton.setText(annotation.value());
-                            fieldToggleButton.setContentDescription(annotation.value());
-                        }
-
-                        if (annotation.toggleOn().length() > 0) {
-                            try {
-                                String value = findValue(annotation.toggleOn());
-                                fieldToggleButton.setTextOn(value);
-                            } catch (IllegalArgumentException e) {
-                            }
-                        }
-
-                        if (annotation.toggleOff().length() > 0) {
-                            try {
-                                String value = findValue(annotation.toggleOn());
-                                fieldToggleButton.setTextOff(value);
-                            } catch (IllegalArgumentException e) {
-                            }
-                        }
-
-                    } catch (Exception e) {
-                        Logger.d("Method.invoke error: " + e.toString());
-                    }
-                } else if (f.getType() == Toolbar.class) {
-
-                    try {
-                        f.setAccessible(true);
+                String translation = findValue(annotation.value());
+                f.setAccessible(true);
+                try {
+                    if (f.getType() == Toolbar.class || f.getType() == android.widget.Toolbar.class) {
                         Toolbar toolbar = (Toolbar) f.get(view);
-                        try {
-                            toolbar.setTitle(findValue((annotation.value())));
-                            toolbar.setContentDescription(findValue((annotation.value())));
-                        } catch (IllegalArgumentException e) {
-                            toolbar.setTitle(annotation.value());
-                            toolbar.setContentDescription(annotation.value());
-                        }
-
-                    } catch (Exception e) {
-                        Logger.d("Method.invoke error: " + e.toString());
+                        toolbar.setTitle(translation);
+                    } else if (f.getType() == EditText.class) {
+                        EditText editText = (EditText) f.get(view);
+                        editText.setHint(translation);
+                    } else if (f.getType() == TextInputLayout.class) {
+                        TextInputLayout til = (TextInputLayout) f.get(view);
+                        til.setHint(translation);
+                    } else {
+                        TextView textView = (TextView) f.get(view);
+                        textView.setText(translation);
                     }
-                } // check these only on lollipop or newer (API 21)
-                else if(Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
-                {
-                    if(f.getType() == android.widget.Toolbar.class)
-                    {
-                        try {
-                            f.setAccessible(true);
-                            Toolbar toolbar = (Toolbar) f.get(view);
-                            try {
-                                toolbar.setTitle(findValue((annotation.value())));
-                                toolbar.setContentDescription(findValue((annotation.value())));
-                            } catch (IllegalArgumentException e) {
-                                toolbar.setTitle(annotation.value());
-                                toolbar.setContentDescription(annotation.value());
-                            }
-
-                        } catch (Exception e) {
-                            Logger.d("Method.invoke error: " + e.toString());
-                        }
-                    }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -199,15 +69,12 @@ public class TranslationManager {
         // Flat / No sections
         if (translationOptions.isFlattenKeys()) {
             try {
-                Field field = classType.getField(key);
-                String value = String.valueOf(field.get(null));
-                return value;
+                return String.valueOf(classType.getField(key).get(null));
             } catch (Exception e) {
                 Logger.e("findValue failed on key: " + key + ". Exception -> " + e.toString());
                 throw new IllegalArgumentException();
             }
         }
-
         // Sections
         else {
             try {
@@ -215,8 +82,7 @@ public class TranslationManager {
                 String sectionKey = key.split("\\.")[1];
                 Class<?> sectionClass = Class.forName(classType.getName() + "$" + innerClassName);
                 Field field = sectionClass.getField(sectionKey);
-                String value = String.valueOf(field.get(null));
-                return value;
+                return String.valueOf(field.get(null));
             } catch (Exception e) {
                 Logger.e("findValue failed on key: " + key + ". Exception -> " + e.toString());
                 throw new IllegalArgumentException();
@@ -228,21 +94,16 @@ public class TranslationManager {
     public void switchFallbackLanguage(@NonNull String languageHeader, final OnTranslationResultListener listener) {
         try {
             InputStream stream = NStack.getStack().getApplicationContext().getAssets().open(translationOptions.getFallbackFile());
-
             int size = stream.available();
             byte[] buffer = new byte[size];
             stream.read(buffer);
             stream.close();
             String fallbackContents = new String(buffer);
-
             // Work around for something we should fix
             String oldLanguageHeader = translationOptions.getLanguageHeader();
             translationOptions.locale(languageHeader);
-
             updateTranslationClass(fallbackContents);
-
             translationOptions.locale(oldLanguageHeader);
-
             if (listener != null) {
                 listener.onSuccess();
             }
@@ -258,14 +119,12 @@ public class TranslationManager {
         void onFailure();
     }
 
-    public void updateTranslationsFromAppOpen( JSONObject root ) {
-
+    public void updateTranslationsFromAppOpen(JSONObject root) {
         try {
             // No sections
             if (translationOptions.isFlattenKeys()) {
                 parseFlatTranslations(root);
             }
-
             // Sections
             else {
                 parseSections(root);
@@ -273,7 +132,6 @@ public class TranslationManager {
         } catch (Exception e) {
             Logger.e(e);
         }
-
     }
 
     private void updateTranslationLanguageKeys(JSONObject data) {
@@ -284,35 +142,27 @@ public class TranslationManager {
 
             while (languageKeys.hasNext()) {
                 String languageName = languageKeys.next();
-
                 // Only update current language, if we have more than one language
                 if (localeExists && !languageName.equalsIgnoreCase(translationOptions.getLanguageHeader())) {
                     continue;
                 }
-
                 // Selected locale doesnt exist, continue to fallback
                 if (!localeExists && fallbackLocaleExists && !languageName.equalsIgnoreCase(translationOptions.getFallbackLocale())) {
                     continue;
                 }
-
                 // fallback doesnt exist either, continue until we find something that matches fallbacks, ie: en-**
                 if (!localeExists && !fallbackLocaleExists && !translationOptions.getFallbackLocale().startsWith(languageName.substring(0, 2))) {
                     continue;
                 }
-
                 Logger.d("updateTranslationLanguageKeys on: " + languageName);
                 JSONObject translationObject = data.getJSONObject(languageName);
-
                 // Save translation data into the App open cache, now that we have the correct language
                 cacheManager.saveTranslations(translationObject.toString());
-
                 translationOptions.setPickedLanguage(languageName);
-
                 // No sections
                 if (translationOptions.isFlattenKeys()) {
                     parseFlatTranslations(translationObject);
                 }
-
                 // Sections
                 else {
                     parseSections(translationObject);
@@ -324,7 +174,6 @@ public class TranslationManager {
     }
 
     private void parseSections(JSONObject sectionsObject) {
-
         Iterator<String> sectionKeys = sectionsObject.keys();
         while (sectionKeys.hasNext()) {
             String sectionKey = sectionKeys.next();
@@ -332,7 +181,6 @@ public class TranslationManager {
             try {
                 JSONObject sectionObject = sectionsObject.getJSONObject(sectionKey);
                 Iterator<String> translationKeys = sectionObject.keys();
-
                 if (sectionKey.equalsIgnoreCase("default")) {
                     sectionKey = "defaultSection";
                 }
@@ -354,10 +202,8 @@ public class TranslationManager {
 
     private void parseFlatTranslations(JSONObject jsonLanguage) {
         Iterator<String> translationKeys = jsonLanguage.keys();
-
         while (translationKeys.hasNext()) {
             String translationKey = translationKeys.next();
-
             // Reached actual translation string
             try {
                 if (jsonLanguage.get(translationKey) instanceof String) {
@@ -372,25 +218,19 @@ public class TranslationManager {
     public void updateTranslationClass(String jsonData) {
         try {
             JSONObject data = new JSONObject(jsonData);
-
             if (data.has("data")) {
                 data = data.getJSONObject("data");
             }
-
             // Fetched more than one language
             if (translationOptions.allLanguages()) {
-
                 // We have our locale in the response
                 if (data.has(translationOptions.getLanguageHeader())) {
 
                 }
-
                 updateTranslationLanguageKeys(data);
-
                 // Only one language
             } else {
                 translationOptions.setPickedLanguage(translationOptions.getLanguageHeader());
-
                 // Save translation data into the App open cache
                 cacheManager.saveTranslations(jsonData);
 
@@ -398,14 +238,11 @@ public class TranslationManager {
                 if (translationOptions.isFlattenKeys()) {
                     parseFlatTranslations(data);
                 }
-
                 // Sections
                 else {
                     parseSections(data);
                 }
             }
-
-
         } catch (Exception e) {
             Logger.e(e);
         }
