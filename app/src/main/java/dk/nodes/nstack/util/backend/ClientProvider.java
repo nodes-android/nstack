@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 
 import java.util.concurrent.TimeUnit;
 
-import dk.nodes.nstack.NStack;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -13,7 +12,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
  */
 public class ClientProvider {
 
-    public static OkHttpClient provideHttpClient(@Nullable Cache cache) {
+    public static OkHttpClient provideHttpClient(@Nullable Cache cache, boolean debug) {
         OkHttpClient.Builder client = new OkHttpClient()
                 .newBuilder()
                 .connectTimeout(10, TimeUnit.SECONDS)
@@ -22,7 +21,7 @@ public class ClientProvider {
 
         client.addInterceptor(new NStackInterceptor());
 
-        if(NStack.getStack().isDebugMode()) {
+        if(debug) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             client.addInterceptor(logging);

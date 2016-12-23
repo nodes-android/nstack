@@ -1,8 +1,8 @@
 package dk.nodes.nstack.util.translation;
 
+import android.content.Context;
 import java.util.Locale;
 
-import dk.nodes.nstack.NStack;
 
 /**
  * Created by joso on 05/10/15.
@@ -11,14 +11,14 @@ public class TranslationOptions {
     private String languageHeader = "da-DK";
     private String fallbackLocale = "en-US";
     private boolean flattenKeys = false;
-    private boolean allLanguages = true;
+    private boolean allLanguages = false;
     private final String NSTACK_CONTENT_URL = "https://nstack.io/api/v1/translate/mobile/keys";
     private String fallbackFile;
     private String customContentURL = null;
     private String pickedLanguage;
 
-    public TranslationOptions() {
-        Locale deviceLocale = NStack.getStack().getApplicationContext().getResources().getConfiguration().locale;
+    public TranslationOptions(Context context) {
+        Locale deviceLocale = context.getResources().getConfiguration().locale;
         String localeString = deviceLocale.toString().replace("_", "-");
         this.languageHeader = cleanLocale(localeString);
     }
