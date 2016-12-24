@@ -24,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onFailure() {
-
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
             }
         });
     }

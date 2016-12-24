@@ -132,4 +132,8 @@ public final class NStack {
         backendManager.getContentResponse(id, callback);
     }
 
+    public void translate(Object view){
+        translationManager.translate(view);
+    }
+
 }
