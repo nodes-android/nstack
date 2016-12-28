@@ -1,4 +1,4 @@
-package dk.nodes.nstack.util.translation;
+package dk.nodes.nstack.util.translation.options;
 
 import android.content.Context;
 import java.util.Locale;
@@ -12,7 +12,6 @@ public class TranslationOptions {
     private String fallbackLocale = "en-US";
     private boolean flattenKeys = false;
     private boolean allLanguages = false;
-    private final String NSTACK_CONTENT_URL = "https://nstack.io/api/v1/translate/mobile/keys";
     private String fallbackFile;
     private String customContentURL = null;
     private String pickedLanguage;
@@ -87,23 +86,23 @@ public class TranslationOptions {
         return fallbackLocale;
     }
 
-    protected boolean isFlattenKeys() {
+    public boolean isFlattenKeys() {
         return flattenKeys;
     }
 
-    protected boolean allLanguages() {
+    public boolean allLanguages() {
         return allLanguages;
     }
 
     /**
      * @return returns customContentURL if set, else NStack default + settings
      */
-    protected String getContentURL() {
+    public String getContentURL() {
         if( customContentURL != null ) {
             return customContentURL;
         }
 
-        return NSTACK_CONTENT_URL + "?all=" + Boolean.toString(allLanguages) + "&flat=" + Boolean.toString(flattenKeys);
+        return Constants.NSTACK_CONTENT_URL + "?all=" + Boolean.toString(allLanguages) + "&flat=" + Boolean.toString(flattenKeys);
     }
 
     /**

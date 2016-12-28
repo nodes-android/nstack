@@ -1,4 +1,4 @@
-package dk.nodes.nstack.util.translation;
+package dk.nodes.nstack.util.translation.backend;
 
 import android.support.annotation.NonNull;
 
@@ -9,10 +9,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.model.Language;
+import dk.nodes.nstack.util.translation.manager.OnTranslationResultListener;
+import dk.nodes.nstack.util.translation.manager.TranslationManager;
+import dk.nodes.nstack.util.translation.options.TranslationOptions;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -33,7 +35,7 @@ public class TranslationBackendManager {
         this.translationOptions = translationOptions;
     }
 
-    public <T> void updateTranslations(final TranslationManager.OnTranslationResultListener listener) {
+    public <T> void updateTranslations(@NonNull final OnTranslationResultListener callback) {
         try {
             backendManager.getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
                 @Override
@@ -46,18 +48,12 @@ public class TranslationBackendManager {
                     if (!response.isSuccessful()) {
                         throw new IOException("Unexpected code " + response);
                     }
-
                     translationManager.updateTranslationClass(response.body().string());
-
-                    if (listener != null) {
-                        listener.onSuccess();
-                    }
+                    callback.onSuccess();
                 }
             });
         } catch (Exception e) {
-            if (listener != null) {
-                listener.onFailure();
-            }
+            callback.onFailure();
         }
     }
 
@@ -87,9 +83,9 @@ public class TranslationBackendManager {
     /**
      * Get all the languages in an ArrayList<Language> - use .getLocale to get the locale
      *
-     * @param listener OnLanguageResultListener returns on onSuccess the ArrayList<Language> with all the languages
+     * @param callback OnLanguageResultListener returns on onSuccess the ArrayList<Language> with all the languages
      */
-    public void getAllLanguages(@NonNull final OnLanguageResultListener listener) {
+    public void getAllLanguages(@NonNull final OnLanguageResultListener callback) {
         try {
             backendManager.getAllLanguages(new Callback() {
                 @Override
@@ -101,32 +97,22 @@ public class TranslationBackendManager {
                 public void onResponse(Call call, Response response) throws IOException {
                     if (!response.isSuccessful())
                         throw new IOException("Unexpected code " + response);
-
                     try {
                         JSONArray data = new JSONObject(response.body().string()).optJSONArray("data");
-
                         final ArrayList<Language> languages = new ArrayList<>();
-
                         for (int i = 0; i < data.length(); i++) {
                             languages.add(Language.parseFrom(data.optJSONObject(i)));
                         }
-
-                        listener.onSuccess(languages);
+                        callback.onSuccess(languages);
                     } catch (JSONException e) {
                         Logger.d(e.toString());
-                        listener.onFailure();
+                        callback.onFailure();
                     }
                 }
             });
         } catch (Exception e) {
             Logger.e(e);
-            listener.onFailure();
+            callback.onFailure();
         }
     }
-
-    public interface OnLanguageResultListener {
-        void onSuccess(ArrayList<Language> languages);
-        void onFailure();
-    }
-
 }

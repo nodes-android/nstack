@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.util.Locale;
 
 import dk.nodes.nstack.NStack;
-import dk.nodes.nstack.util.translation.TranslationManager;
+import dk.nodes.nstack.util.translation.manager.OnTranslationResultListener;
+import dk.nodes.nstack.util.translation.manager.TranslationManager;
 import dk.nodes.nstackexampleproject.util.model.Translation;
 import okhttp3.Call;
 /**
@@ -32,7 +33,7 @@ public class App extends Application {
 //        To test changing the language on the phone
         String transLocale = Locale.getDefault().toString().replace('_', '-');
 
-        NStack.getStack().changeLanguage(transLocale, new TranslationManager.OnTranslationResultListener() {
+        NStack.getStack().changeLanguage(transLocale, new OnTranslationResultListener() {
             @Override
             public void onSuccess() {
 

@@ -9,13 +9,47 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <View
+            android:id="@+id/focus_thief"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/change_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="_CHANGE LANGUAGE"/>
+
+        <Button
+            android:id="@+id/list_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="_LANGUAGE LIST"/>
+
         <TextView
-            android:id="@+id/textview"
+            android:id="@+id/text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/app_compat_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/app_compat_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -30,12 +64,12 @@
             android:layout_height="wrap_content" />
 
         <EditText
-            android:id="@+id/edittext"
+            android:id="@+id/edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/textinputlayout"
+            android:id="@+id/text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -45,33 +79,28 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <ToggleButton
-            android:id="@+id/tooglebutton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <RadioButton
-            android:id="@+id/radiobutton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <CheckedTextView
-            android:id="@+id/checkedtextview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <CheckBox
-            android:id="@+id/checkbox"
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/app_compat_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/textinputedittext"
+            android:id="@+id/text_input_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RadioButton
+            android:id="@+id/radio_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <CheckedTextView
+            android:id="@+id/checked_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/check_box"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

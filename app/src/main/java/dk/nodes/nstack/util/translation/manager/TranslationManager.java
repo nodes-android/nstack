@@ -1,8 +1,10 @@
-package dk.nodes.nstack.util.translation;
+package dk.nodes.nstack.util.translation.manager;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,6 +18,8 @@ import java.util.Iterator;
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.log.Logger;
+import dk.nodes.nstack.util.translation.Translate;
+import dk.nodes.nstack.util.translation.options.TranslationOptions;
 
 
 /**
@@ -47,7 +51,9 @@ public class TranslationManager {
                     if (f.getType() == Toolbar.class || f.getType() == android.widget.Toolbar.class) {
                         Toolbar toolbar = (Toolbar) f.get(view);
                         toolbar.setTitle(translation);
-                    } else if (f.getType() == EditText.class) {
+                    } else if (f.getType() == EditText.class ||
+                            f.getType() == AppCompatEditText.class ||
+                            f.getType() == TextInputEditText.class) {
                         EditText editText = (EditText) f.get(view);
                         editText.setHint(translation);
                     } else if (f.getType() == TextInputLayout.class) {
@@ -63,7 +69,6 @@ public class TranslationManager {
             }
         }
     }
-
 
     private String findValue(String key) throws IllegalArgumentException {
         // Flat / No sections
@@ -91,7 +96,7 @@ public class TranslationManager {
     }
 
 
-    public void switchFallbackLanguage(@NonNull String languageHeader, final OnTranslationResultListener listener) {
+    public void switchFallbackLanguage(@NonNull String languageHeader, @NonNull final OnTranslationResultListener callback) {
         try {
             InputStream stream = NStack.getStack().getApplicationContext().getAssets().open(translationOptions.getFallbackFile());
             int size = stream.available();
@@ -104,34 +109,14 @@ public class TranslationManager {
             translationOptions.locale(languageHeader);
             updateTranslationClass(fallbackContents);
             translationOptions.locale(oldLanguageHeader);
-            if (listener != null) {
-                listener.onSuccess();
-            }
+            callback.onSuccess();
         } catch (Exception e) {
-            if (listener != null) {
-                listener.onFailure();
-            }
+            callback.onFailure();
         }
-    }
-
-    public interface OnTranslationResultListener {
-        void onSuccess();
-        void onFailure();
     }
 
     public void updateTranslationsFromAppOpen(JSONObject root) {
-        try {
-            // No sections
-            if (translationOptions.isFlattenKeys()) {
-                parseFlatTranslations(root);
-            }
-            // Sections
-            else {
-                parseSections(root);
-            }
-        } catch (Exception e) {
-            Logger.e(e);
-        }
+        parseTranslations(root);
     }
 
     private void updateTranslationLanguageKeys(JSONObject data) {
@@ -159,36 +144,49 @@ public class TranslationManager {
                 // Save translation data into the App open cache, now that we have the correct language
                 cacheManager.saveTranslations(translationObject.toString());
                 translationOptions.setPickedLanguage(languageName);
-                // No sections
-                if (translationOptions.isFlattenKeys()) {
-                    parseFlatTranslations(translationObject);
-                }
-                // Sections
-                else {
-                    parseSections(translationObject);
-                }
+                parseTranslations(translationObject);
             }
         } catch (Exception e) {
             Logger.e(e);
         }
     }
 
-    private void parseSections(JSONObject sectionsObject) {
-        Iterator<String> sectionKeys = sectionsObject.keys();
-        while (sectionKeys.hasNext()) {
-            String sectionKey = sectionKeys.next();
+    private void parseTranslations(JSONObject jsonObject) {
+        if (translationOptions.isFlattenKeys()) {
+            parseFlatTranslation(jsonObject);
+        } else {
+            parseSections(jsonObject);
+        }
+    }
 
+    private void parseFlatTranslation(JSONObject jsonObject) {
+        Iterator<String> iterator = jsonObject.keys();
+        while (iterator.hasNext()) {
+            String translationKey = iterator.next();
+            // Reached actual translation string
             try {
-                JSONObject sectionObject = sectionsObject.getJSONObject(sectionKey);
+                if (jsonObject.get(translationKey) instanceof String) {
+                    updateField(classType, translationKey, jsonObject.getString(translationKey));
+                }
+            } catch (Exception e) {
+                Logger.e("Parsing failed for key = " + translationKey);
+            }
+        }
+    }
+
+    private void parseSections(JSONObject jsonObject) {
+        Iterator<String> iterator = jsonObject.keys();
+        while (iterator.hasNext()) {
+            String sectionKey = iterator.next();
+            try {
+                JSONObject sectionObject = jsonObject.getJSONObject(sectionKey);
                 Iterator<String> translationKeys = sectionObject.keys();
                 if (sectionKey.equalsIgnoreCase("default")) {
                     sectionKey = "defaultSection";
                 }
-
                 Class<?> sectionClass = Class.forName(classType.getName() + "$" + sectionKey);
                 while (translationKeys.hasNext()) {
                     String translationKey = translationKeys.next();
-
                     // Reached actual translation string
                     if (sectionObject.get(translationKey) instanceof String) {
                         updateField(sectionClass, translationKey, sectionObject.getString(translationKey));
@@ -196,21 +194,6 @@ public class TranslationManager {
                 }
             } catch (Exception e) {
                 Logger.e("Parsing failed for section -> " + sectionKey + " | " + e.toString());
-            }
-        }
-    }
-
-    private void parseFlatTranslations(JSONObject jsonLanguage) {
-        Iterator<String> translationKeys = jsonLanguage.keys();
-        while (translationKeys.hasNext()) {
-            String translationKey = translationKeys.next();
-            // Reached actual translation string
-            try {
-                if (jsonLanguage.get(translationKey) instanceof String) {
-                    updateField(classType, translationKey, jsonLanguage.getString(translationKey));
-                }
-            } catch (Exception e) {
-                Logger.e("Parsing failed for key = " + translationKey);
             }
         }
     }
@@ -233,29 +216,10 @@ public class TranslationManager {
                 translationOptions.setPickedLanguage(translationOptions.getLanguageHeader());
                 // Save translation data into the App open cache
                 cacheManager.saveTranslations(jsonData);
-
-                // No sections
-                if (translationOptions.isFlattenKeys()) {
-                    parseFlatTranslations(data);
-                }
-                // Sections
-                else {
-                    parseSections(data);
-                }
+                parseTranslations(data);
             }
         } catch (Exception e) {
             Logger.e(e);
-        }
-    }
-
-    private void updateField(Object object, String key, String value) {
-        try {
-            Field field = object.getClass().getField(key);
-            field.setAccessible(true);
-            field.set(object, value);
-        } catch (Exception e) {
-            Logger.e(e);
-            Logger.e("TranslationManager", "Error updating field: " + key + " : " + value);
         }
     }
 

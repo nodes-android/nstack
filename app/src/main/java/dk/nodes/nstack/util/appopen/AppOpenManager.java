@@ -24,8 +24,8 @@ import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.log.Logger;
-import dk.nodes.nstack.util.translation.TranslationManager;
-import dk.nodes.nstack.util.translation.TranslationOptions;
+import dk.nodes.nstack.util.translation.manager.TranslationManager;
+import dk.nodes.nstack.util.translation.options.TranslationOptions;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -223,7 +223,7 @@ public class AppOpenManager {
             return;
         }
 
-        if (appOpen.rateRequestAvailable && cacheManager.showRateReminder()) {
+        if (appOpen.rateRequestAvailable && cacheManager.getRateReminder()) {
 
             AlertDialog.Builder builder;
 
@@ -254,7 +254,7 @@ public class AppOpenManager {
             .setNegativeButton(appOpen.rateReminder.noBtn, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    cacheManager.updateShowRateReminder(false);
+                    cacheManager.setRateReminder(false);
                 }
             });
 
@@ -272,7 +272,7 @@ public class AppOpenManager {
             return;
         }
 
-        if (appOpen.messageAvailable && cacheManager.showMessage()) {
+        if (appOpen.messageAvailable && cacheManager.getShowMessage()) {
 
             AlertDialog.Builder builder;
 
@@ -316,7 +316,7 @@ public class AppOpenManager {
             }
 
             //update showMessage bool from sharedPrefs depending on message showSettings
-            cacheManager.updateShowMessage(appOpen.message.showSetting.equals("show_always"));
+            cacheManager.setShowMessage(appOpen.message.showSetting.equals("show_always"));
         }
     }
 

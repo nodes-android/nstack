@@ -8,9 +8,11 @@ import dk.nodes.nstack.util.appopen.AppOpenManager;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.backend.ClientProvider;
 import dk.nodes.nstack.util.cache.CacheManager;
-import dk.nodes.nstack.util.translation.TranslationBackendManager;
-import dk.nodes.nstack.util.translation.TranslationManager;
-import dk.nodes.nstack.util.translation.TranslationOptions;
+import dk.nodes.nstack.util.translation.backend.OnLanguageResultListener;
+import dk.nodes.nstack.util.translation.backend.TranslationBackendManager;
+import dk.nodes.nstack.util.translation.manager.OnTranslationResultListener;
+import dk.nodes.nstack.util.translation.manager.TranslationManager;
+import dk.nodes.nstack.util.translation.options.TranslationOptions;
 import okhttp3.Callback;
 
 /**
@@ -22,8 +24,8 @@ public final class NStack {
     protected static boolean debugMode = false;
     private static NStack instance = null;
 
-    private String applicationKey;
-    private String apiKey;
+    private String applicationId;
+    private String restApiKey;
 
     private TranslationManager translationManager;
     private AppOpenManager appOpenManager;
@@ -36,17 +38,17 @@ public final class NStack {
     /**
      * Initializes the singleton
      * @param context Use the application context to avoid leaks
-     * @param applicationKey Get this from the NStack.io site in keys
-     * @param apiKey Get this from the NStack.io site in keys
+     * @param applicationId Get this from the NStack.io site in keys (Application id)
+     * @param restApiKey Get this from the NStack.io site in keys (Rest API key)
      */
-    public static void init( @NonNull Context context, @NonNull String applicationKey, @NonNull String apiKey) {
-        instance = new NStack(context, applicationKey, apiKey);
+    public static void init( @NonNull Context context, @NonNull String applicationId, @NonNull String restApiKey) {
+        instance = new NStack(context, applicationId, restApiKey);
     }
 
-    private NStack( Context context, String applicationKey, String apiKey ) {
+    private NStack(Context context, String applicationId, String restApiKey) {
         this.applicationContext = context.getApplicationContext();
-        this.applicationKey = applicationKey;
-        this.apiKey = apiKey;
+        this.applicationId = applicationId;
+        this.restApiKey = restApiKey;
         this.cacheManager = new CacheManager(applicationContext);
         this.backendManager = new BackendManager(ClientProvider.provideHttpClient(cacheManager.initCache(), false));
         this.translationOptions = new TranslationOptions(applicationContext);
@@ -59,7 +61,7 @@ public final class NStack {
             throw new IllegalStateException("init() was not called");
         }
 
-        if( instance.getApiKey() == null || instance.getApplicationKey() == null ) {
+        if( instance.getApplicationId() == null || instance.getRestApiKey() == null ) {
             throw new IllegalStateException("applicationKey or apiKey was not set");
         }
 
@@ -78,12 +80,12 @@ public final class NStack {
         return this;
     }
 
-    public String getApplicationKey() {
-        return applicationKey;
+    public String getApplicationId() {
+        return applicationId;
     }
 
-    public String getApiKey() {
-        return apiKey;
+    public String getRestApiKey() {
+        return restApiKey;
     }
 
     public boolean isDebugMode() {
@@ -123,9 +125,13 @@ public final class NStack {
         return translationOptions;
     }
 
-    public void changeLanguage(String locale, TranslationManager.OnTranslationResultListener callback) {
+    public void changeLanguage(String locale, OnTranslationResultListener callback) {
         translationOptions.locale(locale);
         translationBackendManager.updateTranslations(callback);
+    }
+
+    public void getAllLanguages(@NonNull final OnLanguageResultListener callback){
+        translationBackendManager.getAllLanguages(callback);
     }
 
     public void getContentResponse(int id, Callback callback) throws Exception {

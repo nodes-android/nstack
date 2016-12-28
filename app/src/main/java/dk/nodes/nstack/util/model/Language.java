@@ -5,14 +5,20 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 /**
- * Created by tommyjepsen on 20/10/15.
- * 
+ * Created by Mario on 28/12/16.
  */
 public class Language implements Serializable {
 
-    public int id;
-    public String name, locale, direction;
-    public boolean picked;
+    private int id;
+    private String name, locale, direction;
+    private boolean picked;
+
+    public Language(int id, String name, String locale, String direction) {
+        this.id = id;
+        this.name = name;
+        this.locale = locale;
+        this.direction = direction;
+    }
 
     public String getDirection() {
         return direction;
@@ -55,14 +61,11 @@ public class Language implements Serializable {
     }
 
     public static Language parseFrom(JSONObject object) {
-        Language l = new Language();
+        int id = object.optInt("id");
+        String name = object.optString("name");
+        String locale = object.optString("locale");
+        String direction = object.optString("direction");
 
-        l.setId(object.optInt("id"));
-        l.setName(object.optString("name"));
-        l.setLocale(object.optString("locale"));
-        l.setDirection(object.optString("direction"));
-        l.setPicked(false);
-
-        return l;
+        return new Language(id, name, locale, direction);
     }
 }

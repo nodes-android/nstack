@@ -14,7 +14,4 @@ public @interface Translate {
     enum AccessLevel { PUBLIC, PROTECTED, PACKAGE_PROTECTED, PRIVATE};
 
     String value() default "";
-
-    String toggleOn() default "";
-    String toggleOff() default "";
 }

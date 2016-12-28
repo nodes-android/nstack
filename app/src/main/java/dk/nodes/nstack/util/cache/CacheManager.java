@@ -2,7 +2,7 @@ package dk.nodes.nstack.util.cache;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
+import android.preference.PreferenceManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,140 +18,94 @@ import okhttp3.Cache;
  */
 public class CacheManager {
 
-    public static final String PREFERENCES_DEFAULT = "shared_prefs";
-
-    SharedPreferences sharedPreferences;
+    SharedPreferences prefs;
     Context context;
 
     public enum Key {
         TRANSLATIONS,
-        VERSION_INFO_KEY,
-        GUID_KEY,
-        LAST_UPDATED_KEY,
-        SHOW_MESSAGE_KEY,
-        RATE_REMINDER_KEY
+        VERSION_INFO,
+        GUID,
+        LAST_UPDATED,
+        SHOW_MESSAGE,
+        RATE_REMINDER
     }
 
     public CacheManager(Context context) {
-        this.sharedPreferences = context.getSharedPreferences(PREFERENCES_DEFAULT, Context.MODE_PRIVATE);
+        this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
         this.context = context;
     }
 
+    private void save(String key, String data) {
+        prefs.edit().putString(key, data).apply();
+    }
+
+    private String load(String key) {
+        return prefs.getString(key, null);
+    }
+
     public boolean hasTranslations() {
-        return contains(Key.TRANSLATIONS);
+        return prefs.contains(Key.TRANSLATIONS.name());
     }
 
     public String getTranslations() {
-        return getString(Key.TRANSLATIONS);
+        return prefs.getString(Key.TRANSLATIONS.name(), null);
     }
 
     public void saveTranslations(String translationsJson) {
-        putString(CacheManager.Key.TRANSLATIONS, translationsJson);
+        prefs.edit().putString(Key.TRANSLATIONS.name(), translationsJson).commit();
     }
 
-    public boolean showMessage() {
-        return getBoolean(Key.SHOW_MESSAGE_KEY);
+    public boolean getShowMessage() {
+        return prefs.getBoolean(Key.SHOW_MESSAGE.name(), true);
     }
 
-    public void updateShowMessage(boolean showMessage) {
-        putBoolean(Key.SHOW_MESSAGE_KEY, showMessage);
+    public void setShowMessage(boolean showMessage) {
+        prefs.edit().putBoolean(Key.SHOW_MESSAGE.name(), showMessage).commit();
     }
 
-    public boolean showRateReminder() {
-        return getBoolean(Key.RATE_REMINDER_KEY);
+    public boolean getRateReminder() {
+        return prefs.getBoolean(Key.RATE_REMINDER.name(), true);
     }
 
-    public void updateShowRateReminder(boolean showMessage) {
-        putBoolean(Key.RATE_REMINDER_KEY, showMessage);
+    public void setRateReminder(boolean rateReminder) {
+        prefs.edit().putBoolean(Key.RATE_REMINDER.name(), rateReminder).commit();
     }
 
     public String getLastUpdated() {
-        return getString(Key.LAST_UPDATED_KEY);
+        return prefs.getString(Key.LAST_UPDATED.name(), null);
     }
 
     public void setLastUpdated(String lastUpdated) {
-        putString(Key.LAST_UPDATED_KEY, lastUpdated);
+        prefs.edit().putString(Key.LAST_UPDATED.name(), lastUpdated).commit();
     }
 
     public void clearLastUpdated() {
-        clear(Key.LAST_UPDATED_KEY);
+        prefs.edit().remove(Key.LAST_UPDATED.name()).commit();
     }
 
     public String getGUI() {
-        return getString(Key.GUID_KEY);
+        return prefs.getString(Key.GUID.name(), null);
     }
 
     public void setGUI(String gui) {
-        putString(Key.GUID_KEY, gui);
+        prefs.edit().putString(Key.GUID.name(), gui).commit();
     }
 
     public String getVersionInfo() {
-        return getString(Key.VERSION_INFO_KEY);
+        return prefs.getString(Key.VERSION_INFO.name(), null);
     }
 
     public void setVersionInfo(String versionInfo) {
-        putString(Key.VERSION_INFO_KEY, versionInfo);
+        prefs.edit().putString(Key.VERSION_INFO.name(), versionInfo).commit();
     }
 
     // File Cache
     public static void saveObject(Context context, String key, Object object) {
-        try {
-            FileOutputStream fos = context.openFileOutput (key, Context.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(object);
-            oos.close();
-            fos.close();
-        } catch( Exception e ) {
-            Logger.e(e);
-        }
+       FileCache.saveObject(context, key, object);
     }
 
     public static Object loadObject (Context context, String key) {
-        try {
-            FileInputStream fis = context.openFileInput(key);
-            ObjectInputStream ois = new ObjectInputStream (fis);
-            Object object = ois.readObject ();
-            return object;
-        } catch( Exception e ) {
-            Logger.e(e);
-        }
-
-        return null;
-    }
-
-    // Shared Prefs handling
-
-    private boolean contains(@NonNull final CacheManager.Key data) {
-        return sharedPreferences.contains(data.name());
-    }
-
-    private String getString(@NonNull final Key data) {
-        return sharedPreferences.getString(data.name(), null);
-    }
-
-    private void putString(@NonNull final String key, @NonNull final String string) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(key, string);
-        editor.commit();
-    }
-
-    private void putString(@NonNull final Key data, @NonNull final String string) {
-        putString(data.name(), string);
-    }
-
-    // Used for rate reminder and message and should return true by default
-    private boolean getBoolean(@NonNull final Key data) {
-        return sharedPreferences.getBoolean(data.name(), true);
-    }
-
-    private void putBoolean(@NonNull final Key data, @NonNull final Boolean value) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(data.name(), value);
-        editor.commit();
-    }
-
-    private void clear(@NonNull final Key data) {
-        sharedPreferences.edit().remove(data.name()).commit();
+        return FileCache.loadObject(context, key);
     }
 
     public Cache initCache() {
