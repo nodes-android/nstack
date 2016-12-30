@@ -1,5 +1,7 @@
 package dk.nodes.nstack.util.backend;
 
+import android.support.annotation.NonNull;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,7 +31,7 @@ public class BackendManager {
         client = httpClient;
     }
 
-    public void getTranslation(String url, String acceptHeader, Callback callback) throws Exception {
+    public void getTranslation(@NonNull final String url, @NonNull final String acceptHeader, @NonNull final Callback callback) throws Exception {
         Request request = new Request.Builder()
                 .url(url)
                 .header("Accept-Language", acceptHeader)
@@ -38,7 +40,7 @@ public class BackendManager {
         client.newCall(request).enqueue(callback);
     }
 
-    public void getAllTranslations(String url, Callback callback) throws Exception {
+    public void getAllTranslations(@NonNull final String url, @NonNull final Callback callback) throws Exception {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -47,7 +49,7 @@ public class BackendManager {
     }
 
     //Should we use this?
-    public void getLanguage(Callback callback) throws Exception {
+    public void getLanguage(@NonNull final Callback callback) throws Exception {
         Request request = new Request.Builder()
                 .url("https://nstack.io/api/v1/translate/mobile/languages/best_fit")
                 .build();
@@ -56,7 +58,7 @@ public class BackendManager {
     }
 
 
-    public void getAllLanguages(Callback callback) throws Exception {
+    public void getAllLanguages(@NonNull final Callback callback) throws Exception {
         Request request = new Request.Builder()
                 .url("https://nstack.io/api/v1/translate/mobile/languages")
                 .build();

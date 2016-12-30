@@ -11,7 +11,7 @@ import dk.nodes.nstack.util.backend.ClientProvider;
 import dk.nodes.nstack.util.cache.PrefsManager;
 import dk.nodes.nstack.util.translation.backend.OnLanguageResultListener;
 import dk.nodes.nstack.util.translation.backend.TranslationBackendManager;
-import dk.nodes.nstack.util.translation.manager.OnTranslationResultListener;
+import dk.nodes.nstack.util.translation.backend.OnTranslationResultListener;
 import dk.nodes.nstack.util.translation.manager.TranslationManager;
 import dk.nodes.nstack.util.translation.options.TranslationOptions;
 import okhttp3.Callback;
@@ -58,7 +58,7 @@ public final class NStack {
         this.backendManager = new BackendManager(ClientProvider.provideHttpClient(prefsManager.initCache(), false));
         this.translationOptions = new TranslationOptions(applicationContext);
         this.translationManager = new TranslationManager(applicationContext, translationOptions);
-        this.translationBackendManager = new TranslationBackendManager(backendManager, translationManager, translationOptions);
+        this.translationBackendManager = new TranslationBackendManager(backendManager, translationManager);
     }
 
     public static NStack getStack() {
@@ -138,8 +138,8 @@ public final class NStack {
         translationBackendManager.getAllLanguages(callback);
     }
 
-    public void getAllTranslations(@NonNull final OnTranslationResultListener callback){
-        translationBackendManager.getAllTranslations(callback);
+    public void getAllTranslations(){
+        translationBackendManager.getAllTranslations();
     }
 
     public void getContentResponse(int id, Callback callback) throws Exception {

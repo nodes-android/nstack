@@ -12,84 +12,78 @@ import java.util.ArrayList;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.model.Language;
-import dk.nodes.nstack.util.translation.manager.OnTranslationResultListener;
 import dk.nodes.nstack.util.translation.manager.TranslationManager;
-import dk.nodes.nstack.util.translation.options.TranslationOptions;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 /**
  * Created by joaoalves on 13/12/2016.
+ * Edited by Mario on 30/12/2016
  */
 
 public class TranslationBackendManager {
 
     private BackendManager backendManager;
     private TranslationManager translationManager;
-    private TranslationOptions translationOptions;
 
-    public TranslationBackendManager(BackendManager backendManager, TranslationManager translationManager, TranslationOptions translationOptions) {
+    public TranslationBackendManager(BackendManager backendManager, TranslationManager translationManager) {
         this.backendManager = backendManager;
         this.translationManager = translationManager;
-        this.translationOptions = translationOptions;
     }
 
     public <T> void updateTranslations(@NonNull final OnTranslationResultListener callback) {
         try {
-            translationOptions.setAllLanguages(false);
-            backendManager.getTranslation(translationOptions.getContentUrl(), translationOptions.getLanguageHeader(), new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    if (translationManager.checkCacheLanguage(translationOptions.getLanguageHeader())){
-                        callback.onSuccess();
-                        return;
-                    }
-                    callback.onFailure();
-                }
+            translationManager.getTranslationOptions().setAllLanguages(false);
+            backendManager.getTranslation(translationManager.getTranslationOptions().getContentUrl(),
+                    translationManager.getTranslationOptions().getLanguageHeader(), new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            if (translationManager.getCacheLanguageTranslation(translationManager.getTranslationOptions().getLanguageHeader())) {
+                                translationManager.getPrefsManager().setCurrentLanguageLocale(translationManager.getTranslationOptions().getLanguageHeader());
+                                translationManager.getPrefsManager().clearLastUpdated();
+                                callback.onSuccess(true);
+                                return;
+                            }
+                            callback.onFailure();
+                        }
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    if (!response.isSuccessful()) {
-                        callback.onFailure();
-                        throw new IOException("Unexpected code " + response);
-                    }
-                    translationManager.updateTranslationClass(response.body().string());
-                    //TODO MARIO: HERE WE SHOULD DO SOMETHING LIKE TRANSLATIONMANAGER.UPDATELANGUAGEHEADER AND HAVE A KEY SAYING LANGUAGE HEADER
-                    //TODO AND WE JUST SAVE TRANSLATIONOPTIONS.GETLANGUAGEHEADER
-
-                    //TODO they are doing something similar already inside the method above
-                    //TODO reset last updated here?
-                    callback.onSuccess();
-                }
-            });
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (!response.isSuccessful()) {
+                                callback.onFailure();
+                                throw new IOException("Unexpected code " + response);
+                            }
+                            translationManager.updateTranslationClass(response.body().string());
+                            translationManager.getPrefsManager().setCurrentLanguageLocale(translationManager.getTranslationOptions().getLanguageHeader());
+                            translationManager.saveLanguageTranslation(translationManager.getTranslationOptions().getLanguageHeader(), response.body().toString());
+                            translationManager.getPrefsManager().clearLastUpdated();
+                            callback.onSuccess(false);
+                        }
+                    });
         } catch (Exception e) {
             callback.onFailure();
         }
     }
 
 
-    public <T> void getAllTranslations(@NonNull final OnTranslationResultListener callback) {
+    public <T> void getAllTranslations() {
         try {
-            translationOptions.setAllLanguages(true);
-            backendManager.getAllTranslations(translationOptions.getContentUrl(), new Callback() {
+            translationManager.getTranslationOptions().setAllLanguages(true);
+            backendManager.getAllTranslations(translationManager.getTranslationOptions().getContentUrl(), new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onFailure();
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     if (!response.isSuccessful()) {
-                        callback.onFailure();
                         throw new IOException("Unexpected code " + response);
                     }
-                    translationManager.saveLanguages(response.body().string());
-                    callback.onSuccess();
+                    translationManager.saveLanguagesTranslation(response.body().string());
                 }
             });
         } catch (Exception e) {
-            callback.onFailure();
         }
     }
 
@@ -103,44 +97,65 @@ public class TranslationBackendManager {
             backendManager.getAllLanguages(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+                    if (translationManager.getCacheLanguages() != null) {
+                        JSONObject jsonObject = translationManager.getCacheLanguages();
+                        JSONArray jsonArray = jsonObject.optJSONArray("data");
+                        if (jsonArray != null) {
+                            callback.onSuccess(parseLanguages(jsonArray), true);
+                            return;
+                        }
+                    }
                     callback.onFailure();
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    if (!response.isSuccessful()){
+                    if (!response.isSuccessful()) {
                         callback.onFailure();
                         throw new IOException("Unexpected code " + response);
                     }
                     try {
-                        JSONArray data = new JSONObject(response.body().string()).optJSONArray("data");
-                        final ArrayList<Language> languages = new ArrayList<>();
-                        for (int i = 0; i < data.length(); i++) {
-                            languages.add(Language.parseFrom(data.optJSONObject(i)));
+                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        translationManager.saveLanguages(jsonObject.toString());
+                        JSONArray jsonArray = jsonObject.optJSONArray("data");
+                        if (jsonArray != null) {
+                            callback.onSuccess(parseLanguages(jsonArray), false);
+                            return;
                         }
-                        if (!languages.isEmpty()){
-                            if (languages.size() == 1){
-                                languages.get(0).setPicked(true);
-                            } else{
-                                //TODO if language getlocale equals the shared pref one it means it is the picked one
-                                for (Language language : languages){
-                                    if (language.getLocale().equals("X")){
-                                        language.setPicked(true);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        callback.onSuccess(languages);
-                    } catch (JSONException e) {
-                        Logger.d(e.toString());
                         callback.onFailure();
+                    } catch (JSONException e) {
+                        callback.onFailure();
+                        e.printStackTrace();
                     }
+
                 }
             });
         } catch (Exception e) {
             Logger.e(e);
             callback.onFailure();
         }
+    }
+
+    private ArrayList<Language> parseLanguages(JSONArray jsonArray) {
+        final ArrayList<Language> languages = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            languages.add(Language.parseFrom(jsonArray.optJSONObject(i)));
+        }
+        if (!languages.isEmpty()) {
+            if (languages.size() == 1) {
+                languages.get(0).setPicked(true);
+            } else {
+                if (translationManager.getPrefsManager().getCurrentLanguageLocale() != null) {
+                    String currentLanguageLocale = translationManager.getPrefsManager().getCurrentLanguageLocale();
+                    for (Language language : languages) {
+                        if (language.getLocale().equals(currentLanguageLocale)) {
+                            language.setPicked(true);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return languages;
     }
 }

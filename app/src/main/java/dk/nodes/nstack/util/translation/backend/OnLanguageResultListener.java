@@ -9,7 +9,7 @@ import dk.nodes.nstack.util.model.Language;
  */
 
 public interface OnLanguageResultListener {
-    void onSuccess(ArrayList<Language> languages);
+    void onSuccess(ArrayList<Language> languages, boolean cached);
 
     void onFailure();
 }

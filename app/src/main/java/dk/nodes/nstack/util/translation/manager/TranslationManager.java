@@ -23,6 +23,7 @@ import dk.nodes.nstack.util.translation.options.TranslationOptions;
 
 /**
  * Created by joso on 25/02/15.
+ * Edited by Mario on 30/12/16
  */
 public class TranslationManager {
 
@@ -93,7 +94,6 @@ public class TranslationManager {
                 data = data.getJSONObject("data");
             }
             parseTranslations(data);
-            //TODO
         } catch (Exception e) {
             Logger.e(e);
         }
@@ -101,6 +101,7 @@ public class TranslationManager {
 
 
     private void parseTranslations(JSONObject jsonObject) {
+
         Iterator<String> iterator = jsonObject.keys();
         while (iterator.hasNext()) {
             String sectionKey = iterator.next();
@@ -135,17 +136,42 @@ public class TranslationManager {
         }
     }
 
-    public void saveLanguages(String jsonData) {
+    /**
+     * Saves 1 languages translations into prefs
+     *
+     * @param languageLocale
+     * @param jsonData
+     */
+    public void saveLanguageTranslation(String languageLocale, String jsonData) {
         try {
             JSONObject data = new JSONObject(jsonData);
             if (data.has("data")) {
-                data = data.getJSONObject("data");
-                Iterator<String> iterator = data.keys();
+                JSONObject jsonTranslation = data.optJSONObject("data");
+                if (jsonTranslation != null) {
+                    prefsManager.setJsonTranslation(languageLocale, jsonTranslation.toString());
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Saves all of the languages translations into prefs
+     *
+     * @param jsonData
+     */
+    public void saveLanguagesTranslation(String jsonData) {
+        try {
+            JSONObject data = new JSONObject(jsonData);
+            if (data.has("data")) {
+                JSONObject jsonTranslations = data.getJSONObject("data");
+                Iterator<String> iterator = jsonTranslations.keys();
                 while (iterator.hasNext()) {
                     String languageLocale = iterator.next();
-                    JSONObject languageJson = data.optJSONObject(languageLocale);
-                    if (languageJson != null) {
-                        prefsManager.saveJsonTranslation(languageLocale, languageJson.toString());
+                    JSONObject jsonTranslation = jsonTranslations.optJSONObject(languageLocale);
+                    if (jsonTranslation != null) {
+                        prefsManager.setJsonTranslation(languageLocale, jsonTranslation.toString());
                     }
                 }
             }
@@ -154,18 +180,47 @@ public class TranslationManager {
         }
     }
 
-    public boolean checkCacheLanguage(String languageLocale) {
-        if (prefsManager.loadJsonTranslation(languageLocale) != null) {
-            JSONObject jsonObject;
+    /**
+     * Gets language translations from prefs if exists
+     *
+     * @param languageLocale
+     * @return
+     */
+    public boolean getCacheLanguageTranslation(String languageLocale) {
+        if (prefsManager.getJsonTranslation(languageLocale) != null) {
+            JSONObject jsonTranslation;
             try {
-                jsonObject = new JSONObject(prefsManager.loadJsonTranslation(languageLocale));
+                jsonTranslation = new JSONObject(prefsManager.getJsonTranslation(languageLocale));
             } catch (JSONException e) {
                 return false;
             }
-            parseTranslations(jsonObject);
+            parseTranslations(jsonTranslation);
             return true;
         }
         return false;
     }
 
+
+    public void saveLanguages(String jsonData) {
+        prefsManager.setJsonLanguages(jsonData);
+    }
+
+    public JSONObject getCacheLanguages() {
+        if (prefsManager.getJsonLanguages() != null) {
+            try {
+                return new JSONObject(prefsManager.getJsonLanguages());
+            } catch (JSONException e) {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    public TranslationOptions getTranslationOptions() {
+        return translationOptions;
+    }
+
+    public PrefsManager getPrefsManager() {
+        return prefsManager;
+    }
 }

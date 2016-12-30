@@ -5,10 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 import dk.nodes.nstack.util.log.Logger;
 import okhttp3.Cache;
@@ -23,6 +19,8 @@ public class PrefsManager {
 
     public enum Key {
         TRANSLATIONS,
+        LANGUAGES,
+        LANGUAGE_LOCALE,
         VERSION_INFO,
         GUID,
         LAST_UPDATED,
@@ -55,11 +53,27 @@ public class PrefsManager {
         prefs.edit().putString(Key.TRANSLATIONS.name(), translationsJson).commit();
     }
 
-    public String loadJsonTranslation(String languageLocale) {
+    public String getCurrentLanguageLocale() {
+        return prefs.getString(Key.LANGUAGE_LOCALE.name(), null);
+    }
+
+    public void setCurrentLanguageLocale(String languageLocale) {
+        prefs.edit().putString(Key.LANGUAGE_LOCALE.name(), languageLocale);
+    }
+
+    public String getJsonLanguages() {
+        return prefs.getString(Key.LANGUAGES.name(), null);
+    }
+
+    public void setJsonLanguages(String translationsJson) {
+        prefs.edit().putString(Key.LANGUAGES.name(), translationsJson).commit();
+    }
+
+    public String getJsonTranslation(String languageLocale) {
         return prefs.getString(languageLocale, null);
     }
 
-    public void saveJsonTranslation(String languageLocale, String translationsJson) {
+    public void setJsonTranslation(String languageLocale, String translationsJson) {
         prefs.edit().putString(languageLocale, translationsJson).commit();
     }
 
@@ -109,10 +123,10 @@ public class PrefsManager {
 
     // File Cache
     public static void saveObject(Context context, String key, Object object) {
-       FileCache.saveObject(context, key, object);
+        FileCache.saveObject(context, key, object);
     }
 
-    public static Object loadObject (Context context, String key) {
+    public static Object loadObject(Context context, String key) {
         return FileCache.loadObject(context, key);
     }
 

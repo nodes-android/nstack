@@ -1,6 +1,5 @@
 package dk.nodes.nstackexampleproject;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -27,13 +26,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dk.nodes.nstack.NStack;
-import dk.nodes.nstack.util.appopen.AppOpenManager;
 import dk.nodes.nstack.util.appopen.message.MessageListener;
 import dk.nodes.nstack.util.appopen.ratereminder.RateReminderListener;
 import dk.nodes.nstack.util.appopen.versioncontrol.VersionControlListener;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.translation.Translate;
-import dk.nodes.nstack.util.translation.manager.OnTranslationResultListener;
+import dk.nodes.nstack.util.translation.backend.OnTranslationResultListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -146,18 +144,7 @@ public class MainActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.change_btn:
-//                changeLanguage();
-                NStack.getStack().getAllTranslations(new OnTranslationResultListener() {
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onFailure() {
-
-                    }
-                });
+                changeLanguage();
                 break;
             case R.id.list_btn:
                 startActivity(new Intent(MainActivity.this, LanguagesActivity.class));
@@ -172,12 +159,13 @@ public class MainActivity extends AppCompatActivity {
     public void changeLanguage(){
         NStack.getStack().changeLanguage("es-ES", new OnTranslationResultListener() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(boolean cached) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         MainActivity.this.recreate();
                         makeToast("_Changed Language Successfully");
+
                     }
                 });
             }
@@ -187,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //TODO here it should try to get it from prefs and if there isn't just fail
                         makeToast("_Error");
                     }
                 });
