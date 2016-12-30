@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import dk.nodes.nstack.util.cache.PrefsManager;
+import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.log.Logger;
 
 /**
@@ -22,12 +22,12 @@ public class AppOpenSettings {
     public String lastUpdatedString;
     SimpleDateFormat dateFormat;
 
-    private PrefsManager prefsManager;
+    private CacheManager cacheManager;
 
     public AppOpenSettings(Context context) {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         guid = UUID.randomUUID().toString();
-        prefsManager = new PrefsManager(context);
+        cacheManager = new CacheManager(context);
 
         try {
             version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
@@ -42,20 +42,20 @@ public class AppOpenSettings {
     }
 
     public void save() {
-        prefsManager.setVersionInfo(version);
-        prefsManager.setGUI(guid);
-        prefsManager.setLastUpdated(lastUpdatedString);
+        cacheManager.setVersionInfo(version);
+        cacheManager.setGUI(guid);
+        cacheManager.setLastUpdated(lastUpdatedString);
     }
 
     public void load() {
-        oldVersion = prefsManager.getVersionInfo() != null ? prefsManager.getVersionInfo() : version;
-        guid = prefsManager.getGUI() != null ? prefsManager.getGUI() : UUID.randomUUID().toString();
-        lastUpdatedString = prefsManager.getLastUpdated() != null ? prefsManager.getLastUpdated() : dateFormat.format(new Date(0));
+        oldVersion = cacheManager.getVersionInfo() != null ? cacheManager.getVersionInfo() : version;
+        guid = cacheManager.getGUI() != null ? cacheManager.getGUI() : UUID.randomUUID().toString();
+        lastUpdatedString = cacheManager.getLastUpdated() != null ? cacheManager.getLastUpdated() : dateFormat.format(new Date(0));
     }
 
     //TODO Why is this here?
     public void resetLastUpdated() {
-        prefsManager.clearLastUpdated();
+        cacheManager.clearLastUpdated();
     }
 
     @Override

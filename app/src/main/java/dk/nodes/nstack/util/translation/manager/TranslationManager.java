@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 
-import dk.nodes.nstack.util.cache.PrefsManager;
+import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.translation.Translate;
 import dk.nodes.nstack.util.translation.options.TranslationOptions;
@@ -29,10 +29,10 @@ public class TranslationManager {
 
     private static Class<?> classType;
     private TranslationOptions translationOptions;
-    private PrefsManager prefsManager;
+    private CacheManager cacheManager;
 
     public TranslationManager(Context context, TranslationOptions translationOptions) {
-        prefsManager = new PrefsManager(context);
+        cacheManager = new CacheManager(context);
         this.translationOptions = translationOptions;
     }
 
@@ -148,7 +148,7 @@ public class TranslationManager {
             if (data.has("data")) {
                 JSONObject jsonTranslation = data.optJSONObject("data");
                 if (jsonTranslation != null) {
-                    prefsManager.setJsonTranslation(languageLocale, jsonTranslation.toString());
+                    cacheManager.setJsonTranslation(languageLocale, jsonTranslation.toString());
                 }
             }
         } catch (JSONException e) {
@@ -171,7 +171,7 @@ public class TranslationManager {
                     String languageLocale = iterator.next();
                     JSONObject jsonTranslation = jsonTranslations.optJSONObject(languageLocale);
                     if (jsonTranslation != null) {
-                        prefsManager.setJsonTranslation(languageLocale, jsonTranslation.toString());
+                        cacheManager.setJsonTranslation(languageLocale, jsonTranslation.toString());
                     }
                 }
             }
@@ -187,10 +187,10 @@ public class TranslationManager {
      * @return
      */
     public boolean getCacheLanguageTranslation(String languageLocale) {
-        if (prefsManager.getJsonTranslation(languageLocale) != null) {
+        if (cacheManager.getJsonTranslation(languageLocale) != null) {
             JSONObject jsonTranslation;
             try {
-                jsonTranslation = new JSONObject(prefsManager.getJsonTranslation(languageLocale));
+                jsonTranslation = new JSONObject(cacheManager.getJsonTranslation(languageLocale));
             } catch (JSONException e) {
                 return false;
             }
@@ -202,13 +202,13 @@ public class TranslationManager {
 
 
     public void saveLanguages(String jsonData) {
-        prefsManager.setJsonLanguages(jsonData);
+        cacheManager.setJsonLanguages(jsonData);
     }
 
     public JSONObject getCacheLanguages() {
-        if (prefsManager.getJsonLanguages() != null) {
+        if (cacheManager.getJsonLanguages() != null) {
             try {
-                return new JSONObject(prefsManager.getJsonLanguages());
+                return new JSONObject(cacheManager.getJsonLanguages());
             } catch (JSONException e) {
                 return null;
             }
@@ -220,7 +220,7 @@ public class TranslationManager {
         return translationOptions;
     }
 
-    public PrefsManager getPrefsManager() {
-        return prefsManager;
+    public CacheManager getCacheManager() {
+        return cacheManager;
     }
 }

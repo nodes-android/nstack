@@ -12,7 +12,7 @@ import okhttp3.Cache;
 /**
  * Created by joso on 19/11/15.
  */
-public class PrefsManager {
+public class CacheManager {
 
     SharedPreferences prefs;
     Context context;
@@ -28,7 +28,7 @@ public class PrefsManager {
         RATE_REMINDER
     }
 
-    public PrefsManager(Context context) {
+    public CacheManager(Context context) {
         this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
         this.context = context;
     }

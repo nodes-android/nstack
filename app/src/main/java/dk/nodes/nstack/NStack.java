@@ -8,7 +8,7 @@ import dk.nodes.nstack.util.appopen.AppOpenListener;
 import dk.nodes.nstack.util.appopen.AppOpenManager;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.backend.ClientProvider;
-import dk.nodes.nstack.util.cache.PrefsManager;
+import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.translation.backend.OnLanguageResultListener;
 import dk.nodes.nstack.util.translation.backend.TranslationBackendManager;
 import dk.nodes.nstack.util.translation.backend.OnTranslationResultListener;
@@ -36,7 +36,7 @@ public final class NStack {
     private AppOpenManager appOpenManager;
 
     private TranslationOptions translationOptions;
-    private PrefsManager prefsManager;
+    private CacheManager cacheManager;
     private BackendManager backendManager;
     private TranslationBackendManager translationBackendManager;
 
@@ -54,8 +54,8 @@ public final class NStack {
         this.applicationContext = context.getApplicationContext();
         this.applicationId = applicationId;
         this.restApiKey = restApiKey;
-        this.prefsManager = new PrefsManager(applicationContext);
-        this.backendManager = new BackendManager(ClientProvider.provideHttpClient(prefsManager.initCache(), false));
+        this.cacheManager = new CacheManager(applicationContext);
+        this.backendManager = new BackendManager(ClientProvider.provideHttpClient(cacheManager.initCache(), false));
         this.translationOptions = new TranslationOptions(applicationContext);
         this.translationManager = new TranslationManager(applicationContext, translationOptions);
         this.translationBackendManager = new TranslationBackendManager(backendManager, translationManager);
@@ -75,13 +75,13 @@ public final class NStack {
 
     public NStack enableDebug() {
         debugMode = true;
-        backendManager.updateHttpClient(ClientProvider.provideHttpClient(prefsManager.initCache(), true));
+        backendManager.updateHttpClient(ClientProvider.provideHttpClient(cacheManager.initCache(), true));
         return this;
     }
 
     public NStack disableDebug() {
         debugMode = false;
-        backendManager.updateHttpClient(ClientProvider.provideHttpClient(prefsManager.initCache(), false));
+        backendManager.updateHttpClient(ClientProvider.provideHttpClient(cacheManager.initCache(), false));
         return this;
     }
 
@@ -103,7 +103,7 @@ public final class NStack {
 
     public AppOpenManager getAppOpenManager() {
         if( appOpenManager == null ) {
-            appOpenManager = new AppOpenManager(applicationContext, backendManager, translationManager, prefsManager, translationOptions);
+            appOpenManager = new AppOpenManager(applicationContext, backendManager, translationManager, cacheManager, translationOptions);
         }
         return appOpenManager;
     }
@@ -151,7 +151,7 @@ public final class NStack {
     }
 
     public void clearLastUpdated(){
-        prefsManager.clearLastUpdated();
+        cacheManager.clearLastUpdated();
     }
 
 }

@@ -40,8 +40,8 @@ public class TranslationBackendManager {
                         @Override
                         public void onFailure(Call call, IOException e) {
                             if (translationManager.getCacheLanguageTranslation(translationManager.getTranslationOptions().getLanguageHeader())) {
-                                translationManager.getPrefsManager().setCurrentLanguageLocale(translationManager.getTranslationOptions().getLanguageHeader());
-                                translationManager.getPrefsManager().clearLastUpdated();
+                                translationManager.getCacheManager().setCurrentLanguageLocale(translationManager.getTranslationOptions().getLanguageHeader());
+                                translationManager.getCacheManager().clearLastUpdated();
                                 callback.onSuccess(true);
                                 return;
                             }
@@ -55,9 +55,9 @@ public class TranslationBackendManager {
                                 throw new IOException("Unexpected code " + response);
                             }
                             translationManager.updateTranslationClass(response.body().string());
-                            translationManager.getPrefsManager().setCurrentLanguageLocale(translationManager.getTranslationOptions().getLanguageHeader());
+                            translationManager.getCacheManager().setCurrentLanguageLocale(translationManager.getTranslationOptions().getLanguageHeader());
                             translationManager.saveLanguageTranslation(translationManager.getTranslationOptions().getLanguageHeader(), response.body().toString());
-                            translationManager.getPrefsManager().clearLastUpdated();
+                            translationManager.getCacheManager().clearLastUpdated();
                             callback.onSuccess(false);
                         }
                     });
@@ -145,8 +145,8 @@ public class TranslationBackendManager {
             if (languages.size() == 1) {
                 languages.get(0).setPicked(true);
             } else {
-                if (translationManager.getPrefsManager().getCurrentLanguageLocale() != null) {
-                    String currentLanguageLocale = translationManager.getPrefsManager().getCurrentLanguageLocale();
+                if (translationManager.getCacheManager().getCurrentLanguageLocale() != null) {
+                    String currentLanguageLocale = translationManager.getCacheManager().getCurrentLanguageLocale();
                     for (Language language : languages) {
                         if (language.getLocale().equals(currentLanguageLocale)) {
                             language.setPicked(true);
