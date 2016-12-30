@@ -37,18 +37,29 @@ public class TranslationBackendManager {
 
     public <T> void updateTranslations(@NonNull final OnTranslationResultListener callback) {
         try {
-            backendManager.getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
+            translationOptions.setAllLanguages(false);
+            backendManager.getTranslation(translationOptions.getContentUrl(), translationOptions.getLanguageHeader(), new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    if (translationManager.checkCacheLanguage(translationOptions.getLanguageHeader())){
+                        callback.onSuccess();
+                        return;
+                    }
+                    callback.onFailure();
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     if (!response.isSuccessful()) {
+                        callback.onFailure();
                         throw new IOException("Unexpected code " + response);
                     }
                     translationManager.updateTranslationClass(response.body().string());
+                    //TODO MARIO: HERE WE SHOULD DO SOMETHING LIKE TRANSLATIONMANAGER.UPDATELANGUAGEHEADER AND HAVE A KEY SAYING LANGUAGE HEADER
+                    //TODO AND WE JUST SAVE TRANSLATIONOPTIONS.GETLANGUAGEHEADER
+
+                    //TODO they are doing something similar already inside the method above
+                    //TODO reset last updated here?
                     callback.onSuccess();
                 }
             });
@@ -58,25 +69,27 @@ public class TranslationBackendManager {
     }
 
 
-    public void updateTranslationsSilently() {
+    public <T> void getAllTranslations(@NonNull final OnTranslationResultListener callback) {
         try {
-
-            backendManager.getTranslation(translationOptions.getContentURL(), translationOptions.getLanguageHeader(), new Callback() {
+            translationOptions.setAllLanguages(true);
+            backendManager.getAllTranslations(translationOptions.getContentUrl(), new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    callback.onFailure();
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    if (!response.isSuccessful())
+                    if (!response.isSuccessful()) {
+                        callback.onFailure();
                         throw new IOException("Unexpected code " + response);
-
-                    translationManager.updateTranslationClass(response.body().string());
+                    }
+                    translationManager.saveLanguages(response.body().string());
+                    callback.onSuccess();
                 }
             });
         } catch (Exception e) {
-            Logger.e(e);
+            callback.onFailure();
         }
     }
 
@@ -90,18 +103,33 @@ public class TranslationBackendManager {
             backendManager.getAllLanguages(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    callback.onFailure();
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    if (!response.isSuccessful())
+                    if (!response.isSuccessful()){
+                        callback.onFailure();
                         throw new IOException("Unexpected code " + response);
+                    }
                     try {
                         JSONArray data = new JSONObject(response.body().string()).optJSONArray("data");
                         final ArrayList<Language> languages = new ArrayList<>();
                         for (int i = 0; i < data.length(); i++) {
                             languages.add(Language.parseFrom(data.optJSONObject(i)));
+                        }
+                        if (!languages.isEmpty()){
+                            if (languages.size() == 1){
+                                languages.get(0).setPicked(true);
+                            } else{
+                                //TODO if language getlocale equals the shared pref one it means it is the picked one
+                                for (Language language : languages){
+                                    if (language.getLocale().equals("X")){
+                                        language.setPicked(true);
+                                        break;
+                                    }
+                                }
+                            }
                         }
                         callback.onSuccess(languages);
                     } catch (JSONException e) {

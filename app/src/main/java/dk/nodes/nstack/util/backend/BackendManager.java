@@ -29,28 +29,6 @@ public class BackendManager {
         client = httpClient;
     }
 
-    private static String bodyToString(final Request request) {
-
-        try {
-            final Request copy = request.newBuilder().build();
-            final Buffer buffer = new Buffer();
-            copy.body().writeTo(buffer);
-            return buffer.readUtf8();
-        } catch (final IOException e) {
-            return "did not work";
-        }
-    }
-
-    public Response getTranslation(String url, String acceptHeader) throws Exception {
-        Request request = new Request.Builder()
-                .url(url)
-                .header("Accept-Language", acceptHeader)
-                .build();
-
-        Response response = client.newCall(request).execute();
-        return response;
-    }
-
     public void getTranslation(String url, String acceptHeader, Callback callback) throws Exception {
         Request request = new Request.Builder()
                 .url(url)
@@ -60,6 +38,15 @@ public class BackendManager {
         client.newCall(request).enqueue(callback);
     }
 
+    public void getAllTranslations(String url, Callback callback) throws Exception {
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+    }
+
+    //Should we use this?
     public void getLanguage(Callback callback) throws Exception {
         Request request = new Request.Builder()
                 .url("https://nstack.io/api/v1/translate/mobile/languages/best_fit")

@@ -9,14 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 
-import dk.nodes.nstack.NStack;
-import dk.nodes.nstack.util.cache.CacheManager;
+import dk.nodes.nstack.util.cache.PrefsManager;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.translation.Translate;
 import dk.nodes.nstack.util.translation.options.TranslationOptions;
@@ -29,10 +28,10 @@ public class TranslationManager {
 
     private static Class<?> classType;
     private TranslationOptions translationOptions;
-    private CacheManager cacheManager;
+    private PrefsManager prefsManager;
 
     public TranslationManager(Context context, TranslationOptions translationOptions) {
-        cacheManager = new CacheManager(context);
+        prefsManager = new PrefsManager(context);
         this.translationOptions = translationOptions;
     }
 
@@ -71,47 +70,15 @@ public class TranslationManager {
     }
 
     private String findValue(String key) throws IllegalArgumentException {
-        // Flat / No sections
-        if (translationOptions.isFlattenKeys()) {
-            try {
-                return String.valueOf(classType.getField(key).get(null));
-            } catch (Exception e) {
-                Logger.e("findValue failed on key: " + key + ". Exception -> " + e.toString());
-                throw new IllegalArgumentException();
-            }
-        }
-        // Sections
-        else {
-            try {
-                String innerClassName = key.split("\\.")[0];
-                String sectionKey = key.split("\\.")[1];
-                Class<?> sectionClass = Class.forName(classType.getName() + "$" + innerClassName);
-                Field field = sectionClass.getField(sectionKey);
-                return String.valueOf(field.get(null));
-            } catch (Exception e) {
-                Logger.e("findValue failed on key: " + key + ". Exception -> " + e.toString());
-                throw new IllegalArgumentException();
-            }
-        }
-    }
-
-
-    public void switchFallbackLanguage(@NonNull String languageHeader, @NonNull final OnTranslationResultListener callback) {
         try {
-            InputStream stream = NStack.getStack().getApplicationContext().getAssets().open(translationOptions.getFallbackFile());
-            int size = stream.available();
-            byte[] buffer = new byte[size];
-            stream.read(buffer);
-            stream.close();
-            String fallbackContents = new String(buffer);
-            // Work around for something we should fix
-            String oldLanguageHeader = translationOptions.getLanguageHeader();
-            translationOptions.locale(languageHeader);
-            updateTranslationClass(fallbackContents);
-            translationOptions.locale(oldLanguageHeader);
-            callback.onSuccess();
+            String innerClassName = key.split("\\.")[0];
+            String sectionKey = key.split("\\.")[1];
+            Class<?> sectionClass = Class.forName(classType.getName() + "$" + innerClassName);
+            Field field = sectionClass.getField(sectionKey);
+            return String.valueOf(field.get(null));
         } catch (Exception e) {
-            callback.onFailure();
+            Logger.e("findValue failed on key: " + key + ". Exception -> " + e.toString());
+            throw new IllegalArgumentException();
         }
     }
 
@@ -119,62 +86,21 @@ public class TranslationManager {
         parseTranslations(root);
     }
 
-    private void updateTranslationLanguageKeys(JSONObject data) {
+    public void updateTranslationClass(String jsonData) {
         try {
-            Iterator<String> languageKeys = data.keys();
-            boolean localeExists = data.has(translationOptions.getLanguageHeader());
-            boolean fallbackLocaleExists = data.has(translationOptions.getFallbackLocale());
-
-            while (languageKeys.hasNext()) {
-                String languageName = languageKeys.next();
-                // Only update current language, if we have more than one language
-                if (localeExists && !languageName.equalsIgnoreCase(translationOptions.getLanguageHeader())) {
-                    continue;
-                }
-                // Selected locale doesnt exist, continue to fallback
-                if (!localeExists && fallbackLocaleExists && !languageName.equalsIgnoreCase(translationOptions.getFallbackLocale())) {
-                    continue;
-                }
-                // fallback doesnt exist either, continue until we find something that matches fallbacks, ie: en-**
-                if (!localeExists && !fallbackLocaleExists && !translationOptions.getFallbackLocale().startsWith(languageName.substring(0, 2))) {
-                    continue;
-                }
-                Logger.d("updateTranslationLanguageKeys on: " + languageName);
-                JSONObject translationObject = data.getJSONObject(languageName);
-                // Save translation data into the App open cache, now that we have the correct language
-                cacheManager.saveTranslations(translationObject.toString());
-                translationOptions.setPickedLanguage(languageName);
-                parseTranslations(translationObject);
+            JSONObject data = new JSONObject(jsonData);
+            if (data.has("data")) {
+                data = data.getJSONObject("data");
             }
+            parseTranslations(data);
+            //TODO
         } catch (Exception e) {
             Logger.e(e);
         }
     }
 
+
     private void parseTranslations(JSONObject jsonObject) {
-        if (translationOptions.isFlattenKeys()) {
-            parseFlatTranslation(jsonObject);
-        } else {
-            parseSections(jsonObject);
-        }
-    }
-
-    private void parseFlatTranslation(JSONObject jsonObject) {
-        Iterator<String> iterator = jsonObject.keys();
-        while (iterator.hasNext()) {
-            String translationKey = iterator.next();
-            // Reached actual translation string
-            try {
-                if (jsonObject.get(translationKey) instanceof String) {
-                    updateField(classType, translationKey, jsonObject.getString(translationKey));
-                }
-            } catch (Exception e) {
-                Logger.e("Parsing failed for key = " + translationKey);
-            }
-        }
-    }
-
-    private void parseSections(JSONObject jsonObject) {
         Iterator<String> iterator = jsonObject.keys();
         while (iterator.hasNext()) {
             String sectionKey = iterator.next();
@@ -198,31 +124,6 @@ public class TranslationManager {
         }
     }
 
-    public void updateTranslationClass(String jsonData) {
-        try {
-            JSONObject data = new JSONObject(jsonData);
-            if (data.has("data")) {
-                data = data.getJSONObject("data");
-            }
-            // Fetched more than one language
-            if (translationOptions.allLanguages()) {
-                // We have our locale in the response
-                if (data.has(translationOptions.getLanguageHeader())) {
-
-                }
-                updateTranslationLanguageKeys(data);
-                // Only one language
-            } else {
-                translationOptions.setPickedLanguage(translationOptions.getLanguageHeader());
-                // Save translation data into the App open cache
-                cacheManager.saveTranslations(jsonData);
-                parseTranslations(data);
-            }
-        } catch (Exception e) {
-            Logger.e(e);
-        }
-    }
-
     private void updateField(Class<?> classType, String key, String value) {
         try {
             Field field = classType.getField(key);
@@ -232,6 +133,39 @@ public class TranslationManager {
             Logger.e(e);
             Logger.e("TranslationManager", "Error updating field: " + key + " : " + value);
         }
+    }
+
+    public void saveLanguages(String jsonData) {
+        try {
+            JSONObject data = new JSONObject(jsonData);
+            if (data.has("data")) {
+                data = data.getJSONObject("data");
+                Iterator<String> iterator = data.keys();
+                while (iterator.hasNext()) {
+                    String languageLocale = iterator.next();
+                    JSONObject languageJson = data.optJSONObject(languageLocale);
+                    if (languageJson != null) {
+                        prefsManager.saveJsonTranslation(languageLocale, languageJson.toString());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Logger.e(e);
+        }
+    }
+
+    public boolean checkCacheLanguage(String languageLocale) {
+        if (prefsManager.loadJsonTranslation(languageLocale) != null) {
+            JSONObject jsonObject;
+            try {
+                jsonObject = new JSONObject(prefsManager.loadJsonTranslation(languageLocale));
+            } catch (JSONException e) {
+                return false;
+            }
+            parseTranslations(jsonObject);
+            return true;
+        }
+        return false;
     }
 
 }

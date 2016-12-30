@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
@@ -20,11 +21,16 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.appopen.AppOpenManager;
+import dk.nodes.nstack.util.appopen.message.MessageListener;
+import dk.nodes.nstack.util.appopen.ratereminder.RateReminderListener;
+import dk.nodes.nstack.util.appopen.versioncontrol.VersionControlListener;
 import dk.nodes.nstack.util.log.Logger;
 import dk.nodes.nstack.util.translation.Translate;
 import dk.nodes.nstack.util.translation.manager.OnTranslationResultListener;
@@ -80,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
     Button changeBtn;
     @BindView(R.id.list_btn)
     Button listBtn;
+    @BindView(R.id.clear_btn)
+    Button clearBtn;
+
+    Toast toast;
 
 
     @Override
@@ -88,66 +98,36 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        changeBtn.setOnClickListener(new View.OnClickListener() {
+        NStack.getStack().getAppOpenManager().checkVersionControl(this, new VersionControlListener() {
             @Override
-            public void onClick(View view) {
-                NStack.getStack().changeLanguage("es-ES", new OnTranslationResultListener() {
-                    @Override
-                    public void onSuccess() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                MainActivity.this.recreate();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFailure() {
-
-                    }
-                });
-            }
-        });
-
-        listBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, LanguagesActivity.class));
-            }
-        });
-
-
-        NStack.getStack().getAppOpenManager().checkVersionControl(this, new AppOpenManager.VersionControlCallbacks() {
-            @Override
-            public void onForcedUpdate(Dialog dialog) {
+            public void onForcedUpdate(AlertDialog dialog) {
                 Logger.d("", "dialog: " + dialog);
                 //dialog.show();
             }
 
             @Override
-            public void onUpdate(Dialog dialog) {
+            public void onUpdate(AlertDialog dialog) {
                 Logger.d("", "dialog: " + dialog);
                 //dialog.show();
             }
 
             @Override
-            public void onChangelog(Dialog dialog) {
+            public void onChangelog(AlertDialog dialog) {
                 Logger.d("", "dialog: " + dialog);
                 dialog.show();
             }
         });
 
-        NStack.getStack().getAppOpenManager().checkRateReminder(this, new AppOpenManager.RateCallbacks() {
+        NStack.getStack().getAppOpenManager().checkRateReminder(this, new RateReminderListener() {
             @Override
-            public void onRateReminder(Dialog dialog) {
+            public void onRateReminder(AlertDialog dialog) {
 
             }
         });
 
-        NStack.getStack().getAppOpenManager().checkMessages(this, new AppOpenManager.MessagesCallbacks() {
+        NStack.getStack().getAppOpenManager().checkMessages(this, new MessageListener() {
             @Override
-            public void onMessage(Dialog dialog) {
+            public void onMessage(AlertDialog dialog) {
                 Log.d(MainActivity.class.getSimpleName(), "message received");
                 dialog.show();
             }
@@ -160,5 +140,66 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         NStack.getStack().translate(this);
+    }
+
+    @OnClick({R.id.change_btn, R.id.list_btn, R.id.clear_btn})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.change_btn:
+//                changeLanguage();
+                NStack.getStack().getAllTranslations(new OnTranslationResultListener() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                    }
+                });
+                break;
+            case R.id.list_btn:
+                startActivity(new Intent(MainActivity.this, LanguagesActivity.class));
+                break;
+            case R.id.clear_btn:
+                NStack.getStack().clearLastUpdated();
+                makeToast("_Last Updated Cleared");
+                break;
+        }
+    }
+
+    public void changeLanguage(){
+        NStack.getStack().changeLanguage("es-ES", new OnTranslationResultListener() {
+            @Override
+            public void onSuccess() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MainActivity.this.recreate();
+                        makeToast("_Changed Language Successfully");
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //TODO here it should try to get it from prefs and if there isn't just fail
+                        makeToast("_Error");
+                    }
+                });
+            }
+        });
+    }
+
+    public void makeToast(String message){
+        if (toast!= null){
+            toast.cancel();
+        }
+        toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

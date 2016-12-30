@@ -13,6 +13,10 @@ public class Language implements Serializable {
     private String name, locale, direction;
     private boolean picked;
 
+    public Language(){
+
+    }
+
     public Language(int id, String name, String locale, String direction) {
         this.id = id;
         this.name = name;

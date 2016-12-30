@@ -16,7 +16,7 @@ import okhttp3.Cache;
 /**
  * Created by joso on 19/11/15.
  */
-public class CacheManager {
+public class PrefsManager {
 
     SharedPreferences prefs;
     Context context;
@@ -30,7 +30,7 @@ public class CacheManager {
         RATE_REMINDER
     }
 
-    public CacheManager(Context context) {
+    public PrefsManager(Context context) {
         this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
         this.context = context;
     }
@@ -53,6 +53,14 @@ public class CacheManager {
 
     public void saveTranslations(String translationsJson) {
         prefs.edit().putString(Key.TRANSLATIONS.name(), translationsJson).commit();
+    }
+
+    public String loadJsonTranslation(String languageLocale) {
+        return prefs.getString(languageLocale, null);
+    }
+
+    public void saveJsonTranslation(String languageLocale, String translationsJson) {
+        prefs.edit().putString(languageLocale, translationsJson).commit();
     }
 
     public boolean getShowMessage() {

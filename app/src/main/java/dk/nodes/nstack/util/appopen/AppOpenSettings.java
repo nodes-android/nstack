@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import dk.nodes.nstack.util.cache.CacheManager;
+import dk.nodes.nstack.util.cache.PrefsManager;
 import dk.nodes.nstack.util.log.Logger;
 
 /**
@@ -22,12 +22,12 @@ public class AppOpenSettings {
     public String lastUpdatedString;
     SimpleDateFormat dateFormat;
 
-    private CacheManager cacheManager;
+    private PrefsManager prefsManager;
 
     public AppOpenSettings(Context context) {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         guid = UUID.randomUUID().toString();
-        cacheManager = new CacheManager(context);
+        prefsManager = new PrefsManager(context);
 
         try {
             version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
@@ -35,26 +35,27 @@ public class AppOpenSettings {
         } catch (Exception e) {
             Logger.e(e);
         }
-
+        //TODO this line below isn't needed
         lastUpdated = new Date();
         lastUpdatedString = dateFormat.format(lastUpdated);
         load();
     }
 
     public void save() {
-        cacheManager.setVersionInfo(version);
-        cacheManager.setGUI(guid);
-        cacheManager.setLastUpdated(lastUpdatedString);
+        prefsManager.setVersionInfo(version);
+        prefsManager.setGUI(guid);
+        prefsManager.setLastUpdated(lastUpdatedString);
     }
 
     public void load() {
-        oldVersion = cacheManager.getVersionInfo() != null ? cacheManager.getVersionInfo() : version;
-        guid = cacheManager.getGUI() != null ? cacheManager.getGUI() : UUID.randomUUID().toString();
-        lastUpdatedString = cacheManager.getLastUpdated() != null ? cacheManager.getLastUpdated() : dateFormat.format(new Date(0));
+        oldVersion = prefsManager.getVersionInfo() != null ? prefsManager.getVersionInfo() : version;
+        guid = prefsManager.getGUI() != null ? prefsManager.getGUI() : UUID.randomUUID().toString();
+        lastUpdatedString = prefsManager.getLastUpdated() != null ? prefsManager.getLastUpdated() : dateFormat.format(new Date(0));
     }
 
+    //TODO Why is this here?
     public void resetLastUpdated() {
-        cacheManager.clearLastUpdated();
+        prefsManager.clearLastUpdated();
     }
 
     @Override
