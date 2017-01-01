@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -16,8 +14,6 @@ import android.text.Html;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 import dk.nodes.nstack.NStack;
@@ -101,10 +97,10 @@ public class AppOpenManager {
 
     public void openApp(@NonNull final AppOpenListener appOpenListener) {
         updateTranslationsFromCache();
-        String languageLocale;
-        if (cacheManager.getCurrentLanguageLocale() != null){
+        final String languageLocale;
+        if (cacheManager.getCurrentLanguageLocale() != null) {
             languageLocale = cacheManager.getCurrentLanguageLocale();
-        }else{
+        } else {
             languageLocale = translationOptions.getLanguageHeader();
         }
 
@@ -121,14 +117,27 @@ public class AppOpenManager {
                     JSONObject root = new JSONObject(json);
                     appOpen = AppOpen.parseFromJson(root);
                     JSONObject jo = root.getJSONObject("data");
-                    if (jo != null) {
-                        if (jo.has("last_updated") && jo.optString("last_updated") != null) {
-                            settings.lastUpdated = new Date();
-                            cacheManager.setLastUpdated(new Date().toString());
-                            settings.save();
-                            appOpenListener.onUpdated(false);
+                    String responseLanguageLocale = root.getJSONObject("meta").getJSONObject("language").getString("locale");
+                    if (!responseLanguageLocale.equals(languageLocale)){
+                        //app doesn't have the language or backend is not working
+                        appOpenListener.onFailure();
+                        return;
+                    }
+                    if (jo != null && jo.has("translate")) {
+//                            settings.lastUpdated = new Date();
+//                            cacheManager.setLastUpdated(new Date().toString());
+                        JSONObject translateJson = jo.optJSONObject("translate");
+                        if (translateJson == null){
+                            appOpenListener.onFailure();
                             return;
                         }
+                        translationManager.updateTranslationClass(translateJson.toString());
+                        translationManager.getCacheManager().setCurrentLanguageLocale(languageLocale);
+                        translationManager.saveLanguageTranslation(languageLocale, translateJson.toString());
+                        translationManager.getCacheManager().clearLastUpdated();
+                        settings.save();
+                        appOpenListener.onUpdated(false);
+                        return;
                     }
                     appOpenListener.onUpdated(true);
                 } catch (Exception e) {
