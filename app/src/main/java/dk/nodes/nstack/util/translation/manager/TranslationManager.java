@@ -83,10 +83,6 @@ public class TranslationManager {
         }
     }
 
-    public void updateTranslationsFromAppOpen(JSONObject root) {
-        parseTranslations(root);
-    }
-
     public void updateTranslationClass(String jsonData) {
         try {
             JSONObject data = new JSONObject(jsonData);

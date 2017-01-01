@@ -1,0 +1,151 @@
+<resources>
+  <string name='brandHomeAllLevelsCompletedLabel' formatted='false'>All levels completed!</string>
+  <string name='brandHomeBrandsButtonTitle' formatted='false'>Brands</string>
+  <string name='brandHomeChangeButton' formatted='false'>Change</string>
+  <string name='brandHomeDownloadLevelsError' formatted='false'>Failed to download levels</string>
+  <string name='brandHomeInfoBank' formatted='false'>Info bank</string>
+  <string name='brandHomeInfoBankDescription' formatted='false'>Read and learn everything you need to know.</string>
+  <string name='brandHomeNextLevel' formatted='false'>Next level</string>
+  <string name='brandHomePlayRandomModeLabel' formatted='false'>Play random mode to reach the top tier</string>
+  <string name='brandHomeProgressLabel' formatted='false'>[completed] of [total] levels completed</string>
+  <string name='brandHomeProgressStage1' formatted='false'>You have made no progress</string>
+  <string name='brandHomeProgressStage2' formatted='false'>Getting there!\r\nYou\'re making good progress, keep it up!</string>
+  <string name='brandHomeProgressStage3' formatted='false'>Getting there!\r\nYou are now a [brand] Pro Salesman</string>
+  <string name='brandHomeProgressStage4' formatted='false'>You are now a [brand] knowledge master</string>
+  <string name='brandHomeProgressStageTrophy' formatted='false'>Congratulation! With 1000 points earned,you\u2018re now a [brand] knowledge master.</string>
+  <string name='brandHomeRandomMode' formatted='false'>Random mode</string>
+  <string name='brandHomeRandomModeDescription' formatted='false'>Questions from completed levels</string>
+  <string name='brandHomeTitleTraining' formatted='false'>Training</string>
+  <string name='brandHomeTryAgainButton' formatted='false'>Try again</string>
+  <string name='default reminderAlertTitle' formatted='false'>Did you forget about us?</string>
+  <string name='defaultBackButton' formatted='false'>Back</string>
+  <string name='defaultCancelButton' formatted='false'>Cancel</string>
+  <string name='defaultConnectionError' formatted='false'>You\'re offline. Please be online to complete quizzes.</string>
+  <string name='defaultOk' formatted='false'>Ok</string>
+  <string name='defaultReminderAlertBody' formatted='false'>You will gradually lose your points if you don\'t take the quiz regularly</string>
+  <string name='defaultSessionExpired' formatted='false'>You session has expired. You will need to log in again. All your progress has been lost.</string>
+  <string name='defaultUnknownError' formatted='false'>Looks like something went wrong. Please try again in a minute.</string>
+  <string name='defaultWelcomeDialogMessage' formatted='false'>Welcome to the Tempur Training App</string>
+  <string name='defaultWelcomeDialogTitle' formatted='false'>Welcome</string>
+  <string name='editProfileConnectionErrorText' formatted='false'>Please check your internet connection.</string>
+  <string name='editProfileConnectionErrorTitle' formatted='false'>Could not update you data.</string>
+  <string name='editProfileCurrentPassword' formatted='false'>Current password</string>
+  <string name='editProfileEditProfileTitle' formatted='false'>Edit Profile</string>
+  <string name='editProfileEmail' formatted='false'>Email</string>
+  <string name='editProfileEmailTakenText' formatted='false'>The email you typed is in use by someone else</string>
+  <string name='editProfileEmailTakenTitle' formatted='false'>Email taken</string>
+  <string name='editProfileInvalidEmailAddress' formatted='false'>Please enter a valid email address</string>
+  <string name='editProfileName' formatted='false'>Username</string>
+  <string name='editProfileNameAndEmail' formatted='false'>Username &amp; Email</string>
+  <string name='editProfileNewPassword' formatted='false'>New password</string>
+  <string name='editProfileNewPasswordConfirmation' formatted='false'>Confirm new password</string>
+  <string name='editProfilePasswordInvalid' formatted='false'>Please input a valid password (min. 6 characters)</string>
+  <string name='editProfilePasswordsDontMatchText' formatted='false'>The new passwords you typed do not match</string>
+  <string name='editProfilePasswordsDontMatchTitle' formatted='false'>Password error</string>
+  <string name='editProfilePasswordsNotMatching' formatted='false'>The passwords entered don\'t match</string>
+  <string name='editProfileProfileUpdateSuccess' formatted='false'>Your profile was updated successfully</string>
+  <string name='editProfileUpdateBtn' formatted='false'>Update</string>
+  <string name='editProfileUpdatePassword' formatted='false'>Update Password</string>
+  <string name='editProfileUsernameTakenText' formatted='false'>The username you typed is in use by someone else</string>
+  <string name='editProfileUsernameTakenTitle' formatted='false'>Username Taken</string>
+  <string name='editProfileWrongCurrentPasswordText' formatted='false'>Current password is incorrect</string>
+  <string name='editProfileWrongCurrentPasswordTitle' formatted='false'>Wrong password</string>
+  <string name='factFinderAnswerLabel' formatted='false'>Answer</string>
+  <string name='factFinderFactFinderLabel' formatted='false'>Fact Finder</string>
+  <string name='factFinderSearchHint' formatted='false'>Type to search</string>
+  <string name='feedbackFeedbackMessage' formatted='false'>Do you want to rate the app? Take a quick 2 minute survey!</string>
+  <string name='feedbackFeedbackWebsiteUrl' formatted='false'>https://www.surveymonkey.co.uk/r/YSNTXVL</string>
+  <string name='feedbackOkLabel' formatted='false'>Ok</string>
+  <string name='feedbackRemindLaterLabel' formatted='false'>Remind me later</string>
+  <string name='forgotPasswordEmailFieldPlacholder' formatted='false'>Email</string>
+  <string name='forgotPasswordEmailNotFoundAlertText' formatted='false'>Sorry, we couldn\'t find a user with that email</string>
+  <string name='forgotPasswordInfoText' formatted='false'>Enter your registered e-mail to receive a link and reset passwords</string>
+  <string name='forgotPasswordInvalidEmailAddress' formatted='false'>Please use a valid email address</string>
+  <string name='forgotPasswordSubmitButton' formatted='false'>Submit</string>
+  <string name='forgotPasswordSuccessAlertButton' formatted='false'>Back to login</string>
+  <string name='forgotPasswordSuccessAlertText' formatted='false'>A password reset link has been sent to the registered email address you provided</string>
+  <string name='forgotPasswordTitle' formatted='false'>Forgot Password</string>
+  <string name='infoBankCompletedLabel' formatted='false'>Completed</string>
+  <string name='infoBankFactFinderButton' formatted='false'>Go to Fact Finder</string>
+  <string name='infoBankInfoBankLabel' formatted='false'>Info Bank</string>
+  <string name='infoBankLevelName' formatted='false'>level #[number]</string>
+  <string name='infoSheetLevelContentLabel' formatted='false'>Level info</string>
+  <string name='infoSheetStartQuizButton' formatted='false'>Start Quiz</string>
+  <string name='loginEmailPlaceholder' formatted='false'>Email</string>
+  <string name='loginForgotPasswordButton' formatted='false'>Forgot your password?</string>
+  <string name='loginInvalidCredentialsLabel' formatted='false'>Username or password incorrect</string>
+  <string name='loginInvalidEmailAddress' formatted='false'>Please use a valid email address</string>
+  <string name='loginLoginButton' formatted='false'>Sign in</string>
+  <string name='loginPasswordPlaceholder' formatted='false'>Password</string>
+  <string name='loginTitle' formatted='false'>Login</string>
+  <string name='quizCorrectAnswerLabel' formatted='false'>Correct answer!</string>
+  <string name='quizDialogNoBtn' formatted='false'>Cancel</string>
+  <string name='quizDialogYesBtn' formatted='false'>Quit</string>
+  <string name='quizExitConfirmation' formatted='false'>Are you sure you want to exit the level? All progress will be lost.</string>
+  <string name='quizIncorrectAnswerLabel' formatted='false'>Incorrect answer!</string>
+  <string name='quizIncorrectAnswerResult' formatted='false'>The correct answer was [answer]</string>
+  <string name='quizQuestionNumberLabel' formatted='false'>[number] of [total]</string>
+  <string name='quizQuestionsLabel' formatted='false'>questions to answer</string>
+  <string name='quizRandomModeLabel' formatted='false'>Random mode</string>
+  <string name='quizResultsCorrect' formatted='false'>Correct</string>
+  <string name='quizSwipeLabel' formatted='false'>Swipe </string>
+  <string name='quizTimeLeftLabel' formatted='false'>Time left</string>
+  <string name='resultBackToStatsButton' formatted='false'>Back to my stats</string>
+  <string name='resultCorrectLabel' formatted='false'>Correct</string>
+  <string name='resultFailedMessage' formatted='false'>You need at least [number] correct answers to clear this level.</string>
+  <string name='resultLevelCompleteLabel' formatted='false'>Level Complete</string>
+  <string name='resultLevelFailedLabel' formatted='false'>Level failed</string>
+  <string name='resultNextLevelButton' formatted='false'>Next level</string>
+  <string name='resultRoundCompleteLabel' formatted='false'>Round complete</string>
+  <string name='resultRoundFailedLabel' formatted='false'>Round failed</string>
+  <string name='resultScoreLabel' formatted='false'>[number] of [total]</string>
+  <string name='resultStartNewRoundButton' formatted='false'>Start new round</string>
+  <string name='resultSubmitErrorDescription' formatted='false'>You need to be online to submit your quiz results. Please check your internet connection and then press \'retry\' to try sending the results again.</string>
+  <string name='resultSubmitErrorDiscardButton' formatted='false'>Discard results</string>
+  <string name='resultSubmitErrorRetryButton' formatted='false'>Retry</string>
+  <string name='resultSubmitErrorTitle' formatted='false'>Cannot submit results</string>
+  <string name='resultSuccessMessage' formatted='false'>Good job, you passed!</string>
+  <string name='resultTimeExpiredLabel' formatted='false'>You ran out of time.</string>
+  <string name='resultTryAgainButton' formatted='false'>Try again</string>
+  <string name='resultZeroesLabel' formatted='false'>00:00</string>
+  <string name='selectBrandChooseButton' formatted='false'>Choose</string>
+  <string name='selectBrandCurrentlyActive' formatted='false'>Active</string>
+  <string name='selectBrandSelectBrand' formatted='false'>Select brand</string>
+  <string name='settingsAboutLabel' formatted='false'>About</string>
+  <string name='settingsAboutText' formatted='false'>Coming Soon</string>
+  <string name='settingsAppRestart' formatted='false'>The app will now restart</string>
+  <string name='settingsEditProfile' formatted='false'>Edit Profile</string>
+  <string name='settingsFetchLanguagesFailed' formatted='false'>Couldn\'t load languages. Tap to retry.</string>
+  <string name='settingsInformationLabel' formatted='false'>Information</string>
+  <string name='settingsLanguageLabel' formatted='false'>Language</string>
+  <string name='settingsLogoutBtn' formatted='false'>Sign out</string>
+  <string name='settingsLogoutConfirmation' formatted='false'>Are you sure you want to sign out?</string>
+  <string name='settingsLogoutConfirmationLogoutButton' formatted='false'>Sign out</string>
+  <string name='settingsNotificationsLabel' formatted='false'>Notifications</string>
+  <string name='settingsPleaseEnableNotificationsInSettings' formatted='false'>Please go to Phone Settings -&gt; Tempur and enable notifications</string>
+  <string name='settingsProfile' formatted='false'>Profile</string>
+  <string name='settingsPushNotificationsSwitch' formatted='false'>Push Notifications</string>
+  <string name='settingsSettingsLabel' formatted='false'>Settings</string>
+  <string name='settingsTermsConditionsLabel' formatted='false'>Terms &amp; Conditions</string>
+  <string name='settingsTermsText' formatted='false'>The results of a government-funded study show that very high doses of an avian influenza vaccine, supplied by Sanofi-Aventis, are needed to produce an immune response that should guard against the virus. 54% of the volunteers received two shots of 90 micrograms each, 28 days apart. A typical flu shot is 15 micrograms. Based on the requirements seen in the study, the U.S. government\u2019s current stockpile of vaccines would provide enough for only about four million people, according to Dr. Anthony Fauci, director of the National Institute of Allergy &amp; Infectious Diseases.  The problem isn\u2019t just a matter of dosage. It is also a matter of production. Flu vaccines are produced using hen\u2019s eggs,a 50-year old technology, if it can be called that. Automated machines inject hundreds of thousands of eggs, then an 11-day waiting period begins while the eggs incubate, brewing viruses that are then killed and bottled. To produce millions of the the final product takes about six months.  Then there\u2019s the question no one seems to be asking: if we plan to rely upon chicken eggs to incubate an H5N1 virus, how do we know the H5N1 virus won\u2019t kill the eggs? H5N1 already kills chickens. Shouldn\u2019t we assume it also kills a high percentage of chicken eggs? Sanofi-Aventis is spending $150 million of its own money building a new vaccine-making plant based on the theory that H5N1 won\u2019t kill the eggs. By the way, eggs have to be ordered many months in advance for this antiquated process.  And where does Sanofi-Aventis plan to get all these egg-laying chickens anyway? Millions of chickens have been slaughtered worldwide already and a pre-pandemic scenario could kill off whole U.S. chicken farms at once.  However, there is a new vaccine technology on the horizon. It\u2019s called cell-based vaccine. Giant vats of living cells, such as dog kidney cells, multiply and then are inoculated with the virus. There are two companies already in the marketplace, one in Holland, one in Germany, but the technology won\u2019t be widely available for years. The FDA must review the entire method before any equipment can be imported to the U.S.  Clearly, the U.S. has waited for a new virus to come along to spur vaccine research. We may have waited too long. H5N1 isn\u2019t waiting. It\u2019s figuring out how to mutate into human-to-human transmission. In fact, the rate of mutation is alarming. Dr. Robert Webster, Ph.D., Member, St. Jude Faculty Rose Marie Thomas Chair, calls H5N1 \u201Cthe most frightening virus I\u2019ve ever seen in 40 years of research.\u201D  If you and your family are counting on a vaccine to protect you against H5N1 (Avian Influenza), don\u2019t bet on it. There are still too many unanswered questions and too many risks.</string>
+  <string name='settingsVersionNumber' formatted='false'>Version number: </string>
+  <string name='signupConfirmPasswordPlaceholder' formatted='false'>Confirm password</string>
+  <string name='signupEmailAlreadyInUseAlertTitle' formatted='false'>The email you entered is already in use</string>
+  <string name='signupEmailPlaceholder' formatted='false'>Email</string>
+  <string name='signupInvalidEmailAddress' formatted='false'>Please use a valid email address</string>
+  <string name='signupInvalidPassword' formatted='false'>Please enter a valid password (min. 6 characters) </string>
+  <string name='signupPasswordPlaceholder' formatted='false'>Password (min. 6 characters)</string>
+  <string name='signupPasswordsNotMatching' formatted='false'>The passwords entered don\'t match</string>
+  <string name='signupSignupButton' formatted='false'>Sign up</string>
+  <string name='signupTitle' formatted='false'>Sign up</string>
+  <string name='signupUsernameInUseAlertTitle' formatted='false'>The username you entered is already taken</string>
+  <string name='signupUsernamePlaceholder' formatted='false'>Username</string>
+  <string name='storeCodeGoToSignupButton' formatted='false'>Go to signup</string>
+  <string name='storeCodeGotoLoginButton' formatted='false'>I already have a login</string>
+  <string name='storeCodeInvalidStoreCodeAlertButton' formatted='false'>OK</string>
+  <string name='storeCodeInvalidStoreCodeAlertTitle' formatted='false'>The Store Code you entered is invalid</string>
+  <string name='storeCodeStoreCodePlaceholder' formatted='false'>Store Code</string>
+  <string name='storeCodeWhatIsThisButton' formatted='false'>What is this?</string>
+  <string name='storeCodeWhatIsThisPopupCloseButton' formatted='false'>Close</string>
+  <string name='storeCodeWhatIsThisPopupDescription' formatted='false'>An access code has been distributed to all store managers. Ask your manager for the code  to proceed.</string>
+</resources>

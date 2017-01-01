@@ -32,9 +32,10 @@ public class TranslationBackendManager {
         this.translationManager = translationManager;
     }
 
-    public <T> void updateTranslations(@NonNull final OnTranslationResultListener callback) {
+    public <T> void updateTranslations(@NonNull String locale, @NonNull final OnTranslationResultListener callback) {
         try {
             translationManager.getTranslationOptions().setAllLanguages(false);
+            translationManager.getTranslationOptions().setLanguageHeader(locale);
             backendManager.getTranslation(translationManager.getTranslationOptions().getContentUrl(),
                     translationManager.getTranslationOptions().getLanguageHeader(), new Callback() {
                         @Override
@@ -94,17 +95,17 @@ public class TranslationBackendManager {
      */
     public void getAllLanguages(@NonNull final OnLanguageResultListener callback) {
         try {
+            //Cached languages straight away instead of waiting to onFailure
+            if (translationManager.getCacheManager().getJsonLanguages() != null){
+                JSONObject jsonObject = translationManager.getCacheLanguages();
+                JSONArray jsonArray = jsonObject.optJSONArray("data");
+                if (jsonArray != null) {
+                    callback.onSuccess(parseLanguages(jsonArray), true);
+                }
+            }
             backendManager.getAllLanguages(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    if (translationManager.getCacheLanguages() != null) {
-                        JSONObject jsonObject = translationManager.getCacheLanguages();
-                        JSONArray jsonArray = jsonObject.optJSONArray("data");
-                        if (jsonArray != null) {
-                            callback.onSuccess(parseLanguages(jsonArray), true);
-                            return;
-                        }
-                    }
                     callback.onFailure();
                 }
 

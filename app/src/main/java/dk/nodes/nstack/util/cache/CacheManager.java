@@ -58,7 +58,7 @@ public class CacheManager {
     }
 
     public void setCurrentLanguageLocale(String languageLocale) {
-        prefs.edit().putString(Key.LANGUAGE_LOCALE.name(), languageLocale);
+        prefs.edit().putString(Key.LANGUAGE_LOCALE.name(), languageLocale).commit();
     }
 
     public String getJsonLanguages() {

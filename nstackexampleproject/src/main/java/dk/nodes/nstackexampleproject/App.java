@@ -23,23 +23,6 @@ public class App extends Application {
 
         // Translation
         NStack.getStack().translationClass(Translation.class);
-        NStack.getStack().getTranslationOptions().setLanguageHeader("es-ES");
-        NStack.getStack().getTranslationOptions().setFallbackLanguageHeader("es-ES");
-
-//        To test changing the language on the phone
-//        String transLocale = Locale.getDefault().toString().replace('_', '-');
-//
-//        NStack.getStack().changeLanguage(transLocale, new OnTranslationResultListener() {
-//            @Override
-//            public void onSuccess() {
-//
-//            }
-//
-//            @Override
-//            public void onFailure() {
-//
-//            }
-//        });
 
         // NStack content download
         try {

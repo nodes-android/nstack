@@ -53,11 +53,6 @@ public class AppOpenSettings {
         lastUpdatedString = cacheManager.getLastUpdated() != null ? cacheManager.getLastUpdated() : dateFormat.format(new Date(0));
     }
 
-    //TODO Why is this here?
-    public void resetLastUpdated() {
-        cacheManager.clearLastUpdated();
-    }
-
     @Override
     public String toString() {
         return "AppOpenSettings{" +

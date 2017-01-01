@@ -10,8 +10,7 @@ import java.util.Locale;
  * Created by joso on 05/10/15.
  */
 public class TranslationOptions {
-    private String languageHeader = "en-UK";
-    private String fallbackLanguageHeader = "da-DK";
+    private String languageHeader;
     private boolean allLanguages;
     private String contentUrl;
 
@@ -34,18 +33,6 @@ public class TranslationOptions {
      */
     public void setLanguageHeader(String languageHeader) {
         this.languageHeader = languageHeader;
-    }
-
-    public String getFallbackLanguageHeader() {
-        return fallbackLanguageHeader;
-    }
-
-    /**
-     * In the format: en-GB, en-US, da-DK etc.
-     * Decides what language to choose if primary locale isn't present
-     */
-    public void setFallbackLanguageHeader(String fallbackLanguageHeader) {
-        this.fallbackLanguageHeader = fallbackLanguageHeader;
     }
 
     public boolean isAllLanguages() {

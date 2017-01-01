@@ -130,8 +130,7 @@ public final class NStack {
     }
 
     public void changeLanguage(String locale, OnTranslationResultListener callback) {
-        translationOptions.setLanguageHeader(locale);
-        translationBackendManager.updateTranslations(callback);
+        translationBackendManager.updateTranslations(locale, callback);
     }
 
     public void getAllLanguages(@NonNull final OnLanguageResultListener callback){
