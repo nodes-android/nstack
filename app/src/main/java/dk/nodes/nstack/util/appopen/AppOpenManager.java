@@ -91,10 +91,6 @@ public class AppOpenManager {
         handleMessages(activity);
     }
 
-    public void openApp() {
-        openApp(null);
-    }
-
     public void openApp(@NonNull final AppOpenListener appOpenListener) {
         updateTranslationsFromCache();
         final String languageLocale;

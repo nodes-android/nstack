@@ -115,12 +115,12 @@ public final class NStack {
     /**
      * Delegates calls to managers
      */
-
-    public void openApp() {
-        getAppOpenManager().openApp();
-    }
-
+    
     public void openApp(@Nullable AppOpenListener appOpenListener) {
+        if (cacheManager.getJsonLanguages() == null){
+            translationBackendManager.getAllLanguages();
+            translationBackendManager.getAllTranslations();
+        }
         getAppOpenManager().openApp(appOpenListener);
     }
 

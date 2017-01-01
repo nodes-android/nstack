@@ -32,7 +32,7 @@ public class TranslationBackendManager {
         this.translationManager = translationManager;
     }
 
-    public <T> void updateTranslations(@NonNull String locale, @NonNull final OnTranslationResultListener callback) {
+    public void updateTranslations(@NonNull String locale, @NonNull final OnTranslationResultListener callback) {
         try {
             translationManager.getTranslationOptions().setAllLanguages(false);
             translationManager.getTranslationOptions().setLanguageHeader(locale);
@@ -84,7 +84,7 @@ public class TranslationBackendManager {
     }
 
 
-    public <T> void getAllTranslations() {
+    public void getAllTranslations() {
         try {
             translationManager.getTranslationOptions().setAllLanguages(true);
             backendManager.getAllTranslations(translationManager.getTranslationOptions().getContentUrl(), new Callback() {
@@ -158,6 +158,33 @@ public class TranslationBackendManager {
         } catch (Exception e) {
             Logger.e(e);
             callback.onFailure();
+        }
+    }
+
+    //Used only on app open
+    public void getAllLanguages() {
+        try {
+            backendManager.getAllLanguages(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (!response.isSuccessful()) {
+                        throw new IOException("Unexpected code " + response);
+                    }
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        translationManager.saveLanguages(jsonObject.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+        } catch (Exception e) {
+            Logger.e(e);
         }
     }
 
