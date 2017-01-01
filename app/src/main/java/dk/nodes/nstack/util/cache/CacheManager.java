@@ -18,6 +18,7 @@ public class CacheManager {
     Context context;
 
     public enum Key {
+        ONCE,
         TRANSLATIONS,
         LANGUAGES,
         LANGUAGE_LOCALE,
@@ -41,16 +42,12 @@ public class CacheManager {
         return prefs.getString(key, null);
     }
 
-    public boolean hasTranslations() {
-        return prefs.contains(Key.TRANSLATIONS.name());
+    public boolean getOnce() {
+        return prefs.getBoolean(Key.ONCE.name(), false);
     }
 
-    public String getTranslations() {
-        return prefs.getString(Key.TRANSLATIONS.name(), null);
-    }
-
-    public void saveTranslations(String translationsJson) {
-        prefs.edit().putString(Key.TRANSLATIONS.name(), translationsJson).commit();
+    public void setOnce() {
+        prefs.edit().putBoolean(Key.ONCE.name(), true).commit();
     }
 
     public String getCurrentLanguageLocale() {

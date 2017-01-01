@@ -34,7 +34,7 @@ public class App extends Application {
 
                 @Override
                 public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                    Log.d("Example project", "downloaded content " + response.body().toString());
+                    Log.d("Example project", "downloaded content " + response.body().string());
                 }
             });
         } catch (Exception e) {

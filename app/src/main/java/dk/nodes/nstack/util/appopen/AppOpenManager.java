@@ -113,8 +113,7 @@ public class AppOpenManager {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    String json = response.body().string();
-                    JSONObject root = new JSONObject(json);
+                    JSONObject root = new JSONObject(response.body().string());
                     appOpen = AppOpen.parseFromJson(root);
                     JSONObject jo = root.getJSONObject("data");
                     String responseLanguageLocale = root.getJSONObject("meta").getJSONObject("language").getString("locale");
