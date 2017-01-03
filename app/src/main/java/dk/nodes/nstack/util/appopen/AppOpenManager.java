@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import dk.nodes.nstack.NStack;
+import dk.nodes.nstack.R;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.log.Logger;
@@ -363,13 +364,14 @@ public class AppOpenManager {
             if(activity instanceof  AppCompatActivity) {
                 if(((AppCompatActivity) activity).getSupportActionBar() != null) {
                     builder = new AlertDialog.Builder(
-                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext()
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                            R.style.znstack_DialogStyle
                     );
                 } else{
-                    builder = new AlertDialog.Builder(activity);
+                    builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
                 }
             } else{
-                builder = new AlertDialog.Builder(activity);
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
             }
 
             builder
@@ -400,13 +402,14 @@ public class AppOpenManager {
             if(activity instanceof  AppCompatActivity) {
                 if(((AppCompatActivity) activity).getSupportActionBar() != null) {
                     builder = new AlertDialog.Builder(
-                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext()
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                            R.style.znstack_DialogStyle
                     );
                 } else{
-                    builder = new AlertDialog.Builder(activity);
+                    builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
                 }
             } else{
-                builder = new AlertDialog.Builder(activity);
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
             }
 
             builder .setMessage(appOpen.update.title)
@@ -440,13 +443,14 @@ public class AppOpenManager {
             if(activity instanceof  AppCompatActivity) {
                 if(((AppCompatActivity) activity).getSupportActionBar() != null) {
                     builder = new AlertDialog.Builder(
-                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext()
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                            R.style.znstack_DialogStyle
                     );
                 } else{
-                    builder = new AlertDialog.Builder(activity);
+                    builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
                 }
             } else{
-                builder = new AlertDialog.Builder(activity);
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
             }
 
             builder .setTitle(appOpen.update.title)
@@ -464,12 +468,17 @@ public class AppOpenManager {
                 builder.create().show();
             }
         }
+
+        else if(versionControlListener != null) {
+            versionControlListener.onNothing();
+        }
     }
 
     public interface VersionControlCallbacks {
         void onForcedUpdate(Dialog dialog);
         void onUpdate(Dialog dialog);
         void onChangelog(Dialog dialog);
+        void onNothing();
     }
 
     public interface RateCallbacks {
