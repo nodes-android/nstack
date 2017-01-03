@@ -11,4 +11,11 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <!-- Named weird so we dont expose DialogStyle to every consuming app -->
+    <style name="znstack_DialogStyle" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">#000000</item>
+        <item name="colorPrimary">#000000</item>
+        <item name="android:windowSoftInputMode">adjustPan</item>
+    </style>
+
 </resources>

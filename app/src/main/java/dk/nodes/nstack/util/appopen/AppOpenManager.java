@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import dk.nodes.nstack.NStack;
+import dk.nodes.nstack.R;
 import dk.nodes.nstack.util.appopen.message.MessageListener;
 import dk.nodes.nstack.util.appopen.ratereminder.RateReminderListener;
 import dk.nodes.nstack.util.appopen.versioncontrol.VersionControlListener;
@@ -113,7 +114,7 @@ public class AppOpenManager {
                     appOpen = AppOpen.parseFromJson(root);
                     JSONObject jo = root.getJSONObject("data");
                     String responseLanguageLocale = root.getJSONObject("meta").getJSONObject("language").getString("locale");
-                    if (!responseLanguageLocale.equals(languageLocale)){
+                    if (!responseLanguageLocale.equals(languageLocale)) {
                         //app doesn't have the language or backend is not working
                         appOpenListener.onFailure();
                         return;
@@ -122,7 +123,7 @@ public class AppOpenManager {
 //                            settings.lastUpdated = new Date();
 //                            cacheManager.setLastUpdated(new Date().toString());
                         JSONObject translateJson = jo.optJSONObject("translate");
-                        if (translateJson == null){
+                        if (translateJson == null) {
                             appOpenListener.onFailure();
                             return;
                         }
@@ -293,13 +294,14 @@ public class AppOpenManager {
             if (activity instanceof AppCompatActivity) {
                 if (((AppCompatActivity) activity).getSupportActionBar() != null) {
                     builder = new AlertDialog.Builder(
-                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext()
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                            R.style.znstack_DialogStyle
                     );
                 } else {
-                    builder = new AlertDialog.Builder(activity);
+                    builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
                 }
             } else {
-                builder = new AlertDialog.Builder(activity);
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
             }
 
             builder
@@ -324,18 +326,21 @@ public class AppOpenManager {
             }
         }
         // Normal update
-        else if (appOpen.updateAvailable) {
+        else if (appOpen.updateAvailable)
+
+        {
             AlertDialog.Builder builder;
             if (activity instanceof AppCompatActivity) {
                 if (((AppCompatActivity) activity).getSupportActionBar() != null) {
                     builder = new AlertDialog.Builder(
-                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext()
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                            R.style.znstack_DialogStyle
                     );
                 } else {
-                    builder = new AlertDialog.Builder(activity);
+                    builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
                 }
             } else {
-                builder = new AlertDialog.Builder(activity);
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
             }
 
             builder.setMessage(appOpen.update.getTitle())
@@ -363,18 +368,21 @@ public class AppOpenManager {
             }
         }
         // Updated, show change log
-        else if (appOpen.changelogAvailable) {
+        else if (appOpen.changelogAvailable)
+
+        {
             AlertDialog.Builder builder;
             if (activity instanceof AppCompatActivity) {
                 if (((AppCompatActivity) activity).getSupportActionBar() != null) {
                     builder = new AlertDialog.Builder(
-                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext()
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                            R.style.znstack_DialogStyle
                     );
                 } else {
-                    builder = new AlertDialog.Builder(activity);
+                    builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
                 }
             } else {
-                builder = new AlertDialog.Builder(activity);
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
             }
 
             builder.setTitle(appOpen.update.getTitle())
@@ -391,7 +399,8 @@ public class AppOpenManager {
             } else {
                 builder.create().show();
             }
+        } else if (versionControlListener != null) {
+            versionControlListener.onNothing();
         }
     }
-
 }

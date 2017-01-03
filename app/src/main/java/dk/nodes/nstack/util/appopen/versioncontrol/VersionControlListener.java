@@ -13,4 +13,6 @@ public interface VersionControlListener {
     void onUpdate(AlertDialog dialog);
 
     void onChangelog(AlertDialog dialog);
+
+    void onNothing();
 }

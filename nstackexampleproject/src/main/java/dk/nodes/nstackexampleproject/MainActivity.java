@@ -114,6 +114,11 @@ public class MainActivity extends AppCompatActivity {
                 Logger.d("", "dialog: " + dialog);
                 dialog.show();
             }
+
+            @Override
+            public void onNothing() {
+
+            }
         });
 
         NStack.getStack().getAppOpenManager().checkRateReminder(this, new RateReminderListener() {
