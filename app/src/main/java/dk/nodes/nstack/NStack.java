@@ -25,7 +25,7 @@ public final class NStack {
     private static NStack instance = null;
 
     private String applicationId;
-    private String restApiKey;a
+    private String restApiKey;
 
     private TranslationManager translationManager;
     private AppOpenManager appOpenManager;

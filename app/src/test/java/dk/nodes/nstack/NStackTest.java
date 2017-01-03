@@ -99,6 +99,11 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
             public void onChangelog(Dialog dialog) {
                 versionControl = true;
             }
+
+            @Override
+            public void onNothing() {
+                versionControl = true;
+            }
         });
 
         signal.await(1, TimeUnit.SECONDS);
