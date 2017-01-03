@@ -51,17 +51,21 @@ public class TranslationManager {
                     if (f.getType() == Toolbar.class || f.getType() == android.widget.Toolbar.class) {
                         Toolbar toolbar = (Toolbar) f.get(view);
                         toolbar.setTitle(translation);
+                        toolbar.setContentDescription(translation);
                     } else if (f.getType() == EditText.class ||
                             f.getType() == AppCompatEditText.class ||
                             f.getType() == TextInputEditText.class) {
                         EditText editText = (EditText) f.get(view);
                         editText.setHint(translation);
+                        editText.setContentDescription(translation);
                     } else if (f.getType() == TextInputLayout.class) {
                         TextInputLayout til = (TextInputLayout) f.get(view);
                         til.setHint(translation);
+                        til.setContentDescription(translation);
                     } else {
                         TextView textView = (TextView) f.get(view);
                         textView.setText(translation);
+                        textView.setContentDescription(translation);
                     }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
