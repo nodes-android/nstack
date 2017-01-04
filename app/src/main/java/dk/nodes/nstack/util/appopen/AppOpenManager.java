@@ -368,9 +368,7 @@ public class AppOpenManager {
             }
         }
         // Updated, show change log
-        else if (appOpen.changelogAvailable)
-
-        {
+        else if (appOpen.changelogAvailable) {
             AlertDialog.Builder builder;
             if (activity instanceof AppCompatActivity) {
                 if (((AppCompatActivity) activity).getSupportActionBar() != null) {
