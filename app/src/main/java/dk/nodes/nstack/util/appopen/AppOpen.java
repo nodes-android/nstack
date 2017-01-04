@@ -104,7 +104,6 @@ public class AppOpen {
         }
 
         // Use versionControl translations if none are provided by update object
-        //TODO WUT?
         if (appopen.update.getTitle() == null) {
             appopen.update.setTitle(appopen.forcedUpdate ? appopen.versionControl.getForceHeader() :
                     appopen.updateAvailable ? appopen.versionControl.getUpdateHeader() :

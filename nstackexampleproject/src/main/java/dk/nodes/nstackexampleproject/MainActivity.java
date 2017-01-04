@@ -36,46 +36,46 @@ import dk.nodes.nstack.util.translation.backend.OnTranslationResultListener;
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
-    @Translate("defaultSection.ok")
+    @Translate("versionControl.positiveBtn")
     Toolbar toolbar;
     @BindView(R.id.text_view)
-    @Translate("defaultSection.ok")
+    @Translate("versionControl.positiveBtn")
     TextView textView;
     @BindView(R.id.app_compat_text_view)
-    @Translate("defaultSection.ok")
+    @Translate("versionControl.positiveBtn")
     AppCompatTextView appCompatTextView;
     @BindView(R.id.button)
-    @Translate("defaultSection.ok")
+    @Translate("versionControl.positiveBtn")
     Button button;
     @BindView(R.id.app_compat_button)
-    @Translate("defaultSection.ok")
+    @Translate("versionControl.positiveBtn")
     AppCompatButton appCompatButton;
     @BindView(R.id.switch_x)
-    @Translate("defaultSection.ok")
+    @Translate("versionControl.positiveBtn")
     Switch switchX;
     @BindView(R.id.switch_compat)
-    @Translate("defaultSection.ok")
+    @Translate("versionControl.positiveBtn")
     SwitchCompat switchCompat;
     @BindView(R.id.edit_text)
-    @Translate("defaultSection.ok")
+    @Translate("versionControl.positiveBtn")
     EditText editText;
     @BindView(R.id.text_input_layout)
-    @Translate("defaultSection.ok")
+    @Translate("versionControl.positiveBtn")
     TextInputLayout textInputLayout;
     @BindView(R.id.app_compat_edit_text)
-    @Translate("defaultSection.ok")
+    @Translate("versionControl.positiveBtn")
     AppCompatEditText appCompatEditText;
     @BindView(R.id.text_input_edit_text)
-    @Translate("defaultSection.ok")
+    @Translate("versionControl.positiveBtn")
     TextInputEditText textInputEditText;
     @BindView(R.id.radio_button)
-    @Translate("defaultSection.ok")
+    @Translate("versionControl.positiveBtn")
     RadioButton radioButton;
     @BindView(R.id.checked_text_view)
-    @Translate("defaultSection.ok")
+    @Translate("versionControl.positiveBtn")
     CheckedTextView checkedTextView;
     @BindView(R.id.check_box)
-    @Translate("defaultSection.ok")
+    @Translate("versionControl.positiveBtn")
     CheckBox checkBox;
 
     @BindView(R.id.focus_thief)

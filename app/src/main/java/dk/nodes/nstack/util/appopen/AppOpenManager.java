@@ -146,7 +146,8 @@ public class AppOpenManager {
     private void updateTranslationsFromCache() {
         if (cacheManager.getCurrentLanguageLocale() != null && cacheManager.getJsonTranslation(cacheManager.getCurrentLanguageLocale()) != null) {
             translationManager.updateTranslationClass(cacheManager.getJsonTranslation(cacheManager.getCurrentLanguageLocale()));
-            Logger.d("Updated translations from cache...");
+            Logger.d("Updated translations from cache... " + cacheManager.getCurrentLanguageLocale() + " "
+                    + cacheManager.getJsonTranslation(cacheManager.getCurrentLanguageLocale()));
         }
     }
 
