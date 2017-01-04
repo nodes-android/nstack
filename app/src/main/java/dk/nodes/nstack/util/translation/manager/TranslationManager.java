@@ -2,10 +2,11 @@ package dk.nodes.nstack.util.translation.manager;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
+//import android.support.design.widget.TextInputEditText;
+//import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -13,6 +14,8 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 
 import dk.nodes.nstack.NStack;
@@ -47,27 +50,43 @@ public class TranslationManager {
             if (annotation != null) {
                 String translation = findValue(annotation.value());
                 f.setAccessible(true);
+                String view_class = f.getType().getSimpleName();
+                Class<?> cls = f.getType();
                 try {
                     if (f.getType() == Toolbar.class || f.getType() == android.widget.Toolbar.class) {
                         Toolbar toolbar = (Toolbar) f.get(view);
                         toolbar.setTitle(translation);
                         toolbar.setContentDescription(translation);
                     } else if (f.getType() == EditText.class ||
-                            f.getType() == AppCompatEditText.class ||
-                            f.getType() == TextInputEditText.class) {
+                            f.getType() == AppCompatEditText.class) {
                         EditText editText = (EditText) f.get(view);
                         editText.setHint(translation);
                         editText.setContentDescription(translation);
-                    } else if (f.getType() == TextInputLayout.class) {
-                        TextInputLayout til = (TextInputLayout) f.get(view);
-                        til.setHint(translation);
-                        til.setContentDescription(translation);
+                    } else if(view_class.contentEquals("TextInputEditText")) {
+                        EditText editText = (EditText) f.get(view);
+                        editText.setHint(translation);
+                        editText.setContentDescription(translation);
+                    } else if (view_class.contentEquals("TextInputLayout")) {
+                        try {
+                            Class[] cArg = new Class[1];
+                            cArg[0] = CharSequence.class;
+                            Method set_hint = cls.getMethod("setHint", cArg);
+                            set_hint.invoke(f.get(view), translation);
+
+                            Method set_content_description = cls.getMethod("setContentDescription", cArg);
+                            set_content_description.invoke(f.get(view), translation);
+                        } catch (NoSuchMethodException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+
                     } else {
                         TextView textView = (TextView) f.get(view);
                         textView.setText(translation);
                         textView.setContentDescription(translation);
                     }
-                } catch (IllegalAccessException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
