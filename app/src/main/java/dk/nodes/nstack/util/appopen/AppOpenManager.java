@@ -157,7 +157,7 @@ public class AppOpenManager {
             return;
         }
 
-        if (appOpen.rateRequestAvailable && cacheManager.getRateReminder()) {
+        if (appOpen.isRateRequestAvailable() && cacheManager.getRateReminder()) {
 
             AlertDialog.Builder builder;
 
@@ -178,7 +178,7 @@ public class AppOpenManager {
                     .setPositiveButton(appOpen.rateReminder.getYesBtn(), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             try {
-                                NStack.getStack().getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.storeLink)));
+                                NStack.getStack().getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.getStoreLink())));
                             } catch (Exception e) {
                                 Logger.e(e);
                             }
@@ -206,7 +206,7 @@ public class AppOpenManager {
             return;
         }
 
-        if (appOpen.messageAvailable && cacheManager.getShowMessage()) {
+        if (appOpen.isMessageAvailable() && cacheManager.getShowMessage()) {
 
             AlertDialog.Builder builder;
 
@@ -289,7 +289,7 @@ public class AppOpenManager {
             }
         }
         // Forced update
-        if (appOpen.updateAvailable && appOpen.forcedUpdate) {
+        if (appOpen.isUpdateAvailable() && appOpen.isForcedUpdate()) {
 
             AlertDialog.Builder builder;
             if (activity instanceof AppCompatActivity) {
@@ -310,7 +310,7 @@ public class AppOpenManager {
                     .setPositiveButton(appOpen.update.getPositiveBtn(), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             try {
-                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.storeLink));
+                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.getStoreLink()));
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 NStack.getStack().getApplicationContext().startActivity(i);
                             } catch (Exception e) {
@@ -327,7 +327,7 @@ public class AppOpenManager {
             }
         }
         // Normal update
-        else if (appOpen.updateAvailable)
+        else if (appOpen.isUpdateAvailable())
 
         {
             AlertDialog.Builder builder;
@@ -348,7 +348,7 @@ public class AppOpenManager {
                     .setPositiveButton(appOpen.update.getPositiveBtn(), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             try {
-                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.storeLink));
+                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.getStoreLink()));
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 NStack.getStack().getApplicationContext().startActivity(i);
                             } catch (Exception e) {
@@ -369,7 +369,7 @@ public class AppOpenManager {
             }
         }
         // Updated, show change log
-        else if (appOpen.changelogAvailable) {
+        else if (appOpen.isChangelogAvailable()) {
             AlertDialog.Builder builder;
             if (activity instanceof AppCompatActivity) {
                 if (((AppCompatActivity) activity).getSupportActionBar() != null) {

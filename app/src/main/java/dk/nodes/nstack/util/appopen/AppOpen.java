@@ -17,17 +17,16 @@ public class AppOpen {
     public final VersionControl versionControl = new VersionControl();
     public final RateReminder rateReminder = new RateReminder();
     public final Message message = new Message();
-
-    public boolean rateRequestAvailable;
-    public boolean updateAvailable;
-    public boolean forcedUpdate;
-    public boolean changelogAvailable;
-    public boolean messageAvailable;
+    private boolean rateRequestAvailable;
+    private boolean updateAvailable;
+    private boolean forcedUpdate;
+    private boolean changelogAvailable;
+    private boolean messageAvailable;
 
     JSONObject translationRoot;
 
-    public String versionDescription;
-    public String storeLink;
+    private String versionDescription;
+    private String storeLink;
 
     private AppOpen() {
 
@@ -140,5 +139,38 @@ public class AppOpen {
 
         return appopen;
     }
+
+    public boolean isRateRequestAvailable() {
+        return rateRequestAvailable;
+    }
+
+    public boolean isUpdateAvailable() {
+        return updateAvailable;
+    }
+
+    public boolean isForcedUpdate() {
+        return forcedUpdate;
+    }
+
+    public boolean isChangelogAvailable() {
+        return changelogAvailable;
+    }
+
+    public boolean isMessageAvailable() {
+        return messageAvailable;
+    }
+
+    public JSONObject getTranslationRoot() {
+        return translationRoot;
+    }
+
+    public String getVersionDescription() {
+        return versionDescription;
+    }
+
+    public String getStoreLink() {
+        return storeLink;
+    }
+
 
 }
