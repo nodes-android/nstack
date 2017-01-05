@@ -35,7 +35,7 @@ public class AppOpenSettings {
         } catch (Exception e) {
             Logger.e(e);
         }
-
+        //TODO this line below isn't needed
         lastUpdated = new Date();
         lastUpdatedString = dateFormat.format(lastUpdated);
         load();
@@ -51,10 +51,6 @@ public class AppOpenSettings {
         oldVersion = cacheManager.getVersionInfo() != null ? cacheManager.getVersionInfo() : version;
         guid = cacheManager.getGUI() != null ? cacheManager.getGUI() : UUID.randomUUID().toString();
         lastUpdatedString = cacheManager.getLastUpdated() != null ? cacheManager.getLastUpdated() : dateFormat.format(new Date(0));
-    }
-
-    public void resetLastUpdated() {
-        cacheManager.clearLastUpdated();
     }
 
     @Override

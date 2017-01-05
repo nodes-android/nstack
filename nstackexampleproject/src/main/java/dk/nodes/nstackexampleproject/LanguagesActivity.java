@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.model.Language;
 import dk.nodes.nstack.util.translation.backend.OnLanguageResultListener;
-import dk.nodes.nstack.util.translation.manager.OnTranslationResultListener;
+import dk.nodes.nstack.util.translation.backend.OnTranslationResultListener;
 
 /**
  * Created by Mario on 28/12/2016.
@@ -46,7 +46,7 @@ public class LanguagesActivity extends AppCompatActivity {
                 dialog = ProgressDialog.show(LanguagesActivity.this, "NStackExampleProject", "_Changing Language to " + language.getName());
                 NStack.getStack().changeLanguage(language.getLocale(), new OnTranslationResultListener() {
                     @Override
-                    public void onSuccess() {
+                    public void onSuccess(boolean cached) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -68,11 +68,12 @@ public class LanguagesActivity extends AppCompatActivity {
 
         NStack.getStack().getAllLanguages(new OnLanguageResultListener() {
             @Override
-            public void onSuccess(final ArrayList<Language> languages) {
+            public void onSuccess(final ArrayList<Language> languages, boolean cached) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         dialog.dismiss();
+                        arrayList.clear();
                         arrayList.addAll(languages);
                         adapter.notifyDataSetChanged();
                     }
@@ -116,6 +117,11 @@ public class LanguagesActivity extends AppCompatActivity {
             final ViewHolder viewHolder = (ViewHolder) holder;
             final Language language = languageArrayList.get(position);
             viewHolder.button.setText(language.getName());
+            if (language.isPicked()){
+                viewHolder.button.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_check_black_24dp, 0);
+            }else{
+                viewHolder.button.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+            }
         }
 
         @Override

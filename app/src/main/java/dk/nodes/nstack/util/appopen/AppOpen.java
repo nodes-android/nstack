@@ -2,7 +2,12 @@ package dk.nodes.nstack.util.appopen;
 
 import org.json.JSONObject;
 
+import dk.nodes.nstack.util.appopen.message.Message;
+import dk.nodes.nstack.util.appopen.ratereminder.RateReminder;
+import dk.nodes.nstack.util.appopen.update.Update;
+import dk.nodes.nstack.util.appopen.versioncontrol.VersionControl;
 import dk.nodes.nstack.util.log.Logger;
+
 /**
  * Created by joso on 17/11/15.
  */
@@ -12,17 +17,16 @@ public class AppOpen {
     public final VersionControl versionControl = new VersionControl();
     public final RateReminder rateReminder = new RateReminder();
     public final Message message = new Message();
+    private boolean rateRequestAvailable;
+    private boolean updateAvailable;
+    private boolean forcedUpdate;
+    private boolean changelogAvailable;
+    private boolean messageAvailable;
 
-    public boolean rateRequestAvailable = false;
-    public boolean updateAvailable = false;
-    public boolean forcedUpdate = false;
-    public boolean changelogAvailable = false;
-    public boolean messageAvailable = false;
+    JSONObject translationRoot;
 
-    public JSONObject translationRoot;
-
-    public String versionDescription;
-    public String storeLink;
+    private String versionDescription;
+    private String storeLink;
 
     private AppOpen() {
 
@@ -35,7 +39,7 @@ public class AppOpen {
             JSONObject updateObject = json.getJSONObject("data").getJSONObject("update");
             JSONObject translateObject = null;
 
-            if( updateObject.has("newer_version") ) {
+            if (updateObject.has("newer_version")) {
                 JSONObject newerVersion = updateObject.getJSONObject("newer_version");
                 translateObject = newerVersion.getJSONObject("translate");
 
@@ -43,17 +47,13 @@ public class AppOpen {
                 appopen.storeLink = newerVersion.optString("link");
                 appopen.versionDescription = newerVersion.optString("version");
 
-                if( state.equalsIgnoreCase("force") ) {
+                if (state.equalsIgnoreCase("force")) {
                     appopen.updateAvailable = true;
                     appopen.forcedUpdate = true;
-                }
-
-                else if( state.equalsIgnoreCase("yes") ) {
+                } else if (state.equalsIgnoreCase("yes")) {
                     appopen.updateAvailable = true;
                 }
-            }
-
-            else if( updateObject.has("new_in_version") ) {
+            } else if (updateObject.has("new_in_version")) {
                 JSONObject newInVersion = updateObject.getJSONObject("new_in_version");
                 translateObject = newInVersion.getJSONObject("translate");
                 boolean state = newInVersion.optBoolean("state", false);
@@ -61,13 +61,13 @@ public class AppOpen {
                 appopen.changelogAvailable = state;
             }
 
-            if( translateObject != null ) {
-                appopen.update.title = translateObject.optString("title");
-                appopen.update.message = translateObject.optString("message");
-                appopen.update.positiveBtn = translateObject.optString("positiveBtn");
-                appopen.update.negativeBtn = translateObject.optString("negativeBtn");
+            if (translateObject != null) {
+                appopen.update.setTitle(translateObject.optString("title"));
+                appopen.update.setMessage(translateObject.optString("message"));
+                appopen.update.setPositiveBtn(translateObject.optString("positiveBtn"));
+                appopen.update.setNegativeBtn(translateObject.optString("negativeBtn"));
             }
-        } catch( Exception e ) {
+        } catch (Exception e) {
             Logger.e(e);
         }
 
@@ -76,13 +76,13 @@ public class AppOpen {
             JSONObject translateObject = json.getJSONObject("data").getJSONObject("translate");
             JSONObject versionControlObject = translateObject.getJSONObject("versionControl");
 
-            appopen.versionControl.forceHeader = versionControlObject.optString("forceHeader");
-            appopen.versionControl.negativeBtn = versionControlObject.optString("negativeBtn");
-            appopen.versionControl.newInVersionHeader = versionControlObject.optString("newInVersionHeader");
-            appopen.versionControl.okBtn = versionControlObject.optString("okBtn");
-            appopen.versionControl.updateHeader = versionControlObject.optString("updateHeader");
-            appopen.versionControl.positiveBtn = versionControlObject.optString("positiveBtn");
-        } catch( Exception e ) {
+            appopen.versionControl.setForceHeader(versionControlObject.optString("forceHeader"));
+            appopen.versionControl.setNegativeBtn(versionControlObject.optString("negativeBtn"));
+            appopen.versionControl.setNewInVersionHeader(versionControlObject.optString("newInVersionHeader"));
+            appopen.versionControl.setOkBtn(versionControlObject.optString("okBtn"));
+            appopen.versionControl.setUpdateHeader(versionControlObject.optString("updateHeader"));
+            appopen.versionControl.setPositiveBtn(versionControlObject.optString("positiveBtn"));
+        } catch (Exception e) {
             Logger.e(e);
         }
 
@@ -91,33 +91,32 @@ public class AppOpen {
             JSONObject translateObject = json.getJSONObject("data").getJSONObject("translate");
             JSONObject versionControlObject = translateObject.getJSONObject("rateReminder");
 
-            appopen.rateReminder.body = versionControlObject.optString("body");
-            appopen.rateReminder.laterBtn = versionControlObject.optString("laterBtn");
-            appopen.rateReminder.noBtn = versionControlObject.optString("noBtn");
-            appopen.rateReminder.title = versionControlObject.optString("title");
-            appopen.rateReminder.yesBtn = versionControlObject.optString("yesBtn");
+            appopen.rateReminder.setBody(versionControlObject.optString("body"));
+            appopen.rateReminder.setLaterBtn(versionControlObject.optString("laterBtn"));
+            appopen.rateReminder.setNoBtn(versionControlObject.optString("noBtn"));
+            appopen.rateReminder.setTitle(versionControlObject.optString("title"));
+            appopen.rateReminder.setYesBtn(versionControlObject.optString("yesBtn"));
 
             appopen.rateRequestAvailable = true;
-        } catch( Exception e ) {
+        } catch (Exception e) {
             Logger.e(e);
         }
 
         // Use versionControl translations if none are provided by update object
-        if (appopen.update.title == null) {
-            appopen.update.title =  appopen.forcedUpdate ? appopen.versionControl.forceHeader :
-                                    appopen.updateAvailable ? appopen.versionControl.updateHeader :
-                                    appopen.changelogAvailable ? appopen.versionControl.newInVersionHeader :
-                                    "";
+        if (appopen.update.getTitle() == null) {
+            appopen.update.setTitle(appopen.forcedUpdate ? appopen.versionControl.getForceHeader() :
+                    appopen.updateAvailable ? appopen.versionControl.getUpdateHeader() :
+                            appopen.changelogAvailable ? appopen.versionControl.getNewInVersionHeader() : "");
         }
 
         // General Translations
         try {
             JSONObject translateObject = json.getJSONObject("data").getJSONObject("translate");
 
-            if( translateObject.has("default") || translateObject.has("defaultSection") ) {
+            if (translateObject.has("default") || translateObject.has("defaultSection")) {
                 appopen.translationRoot = translateObject;
             }
-        } catch( Exception e ) {
+        } catch (Exception e) {
             Logger.e(e);
         }
 
@@ -125,53 +124,53 @@ public class AppOpen {
         try {
             JSONObject messageObject = json.getJSONObject("data").getJSONObject("message");
 
-            appopen.message.id = messageObject.optInt("id");
-            appopen.message.projectId = messageObject.optInt("project_id");
-            appopen.message.platform = messageObject.optString("platform");
-            appopen.message.showSetting = messageObject.optString("show_setting");
-            appopen.message.viewCount = messageObject.optInt("view_count");
-            appopen.message.message = messageObject.optString("message");
+            appopen.message.setId(messageObject.optInt("id"));
+            appopen.message.setProjectId(messageObject.optInt("project_id"));
+            appopen.message.setPlatform(messageObject.optString("platform"));
+            appopen.message.setShowSetting(messageObject.optString("show_setting"));
+            appopen.message.setViewCount(messageObject.optInt("view_count"));
+            appopen.message.setMessage(messageObject.optString("message"));
 
             appopen.messageAvailable = true;
 
-        } catch( Exception e ) {
+        } catch (Exception e) {
             Logger.e(e);
         }
 
         return appopen;
     }
 
-    class Update {
-        public String title;
-        public String message;
-        public String positiveBtn;
-        public String negativeBtn;
+    public boolean isRateRequestAvailable() {
+        return rateRequestAvailable;
     }
 
-    class VersionControl {
-        public String updateHeader;
-        public String forceHeader;
-        public String negativeBtn;
-        public String positiveBtn;
-        public String newInVersionHeader;
-        public String okBtn;
+    public boolean isUpdateAvailable() {
+        return updateAvailable;
     }
 
-    class RateReminder {
-        public String title;
-        public String body;
-        public String yesBtn;
-        public String laterBtn;
-        public String noBtn;
+    public boolean isForcedUpdate() {
+        return forcedUpdate;
     }
 
-    class Message {
-        public int id;
-        public int projectId;
-        public String platform;
-        public String showSetting;
-        public int viewCount;
-        public String message;
+    public boolean isChangelogAvailable() {
+        return changelogAvailable;
     }
+
+    public boolean isMessageAvailable() {
+        return messageAvailable;
+    }
+
+    public JSONObject getTranslationRoot() {
+        return translationRoot;
+    }
+
+    public String getVersionDescription() {
+        return versionDescription;
+    }
+
+    public String getStoreLink() {
+        return storeLink;
+    }
+
 
 }

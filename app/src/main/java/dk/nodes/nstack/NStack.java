@@ -4,13 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import dk.nodes.nstack.util.appopen.AppOpenListener;
 import dk.nodes.nstack.util.appopen.AppOpenManager;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.backend.ClientProvider;
 import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.translation.backend.OnLanguageResultListener;
 import dk.nodes.nstack.util.translation.backend.TranslationBackendManager;
-import dk.nodes.nstack.util.translation.manager.OnTranslationResultListener;
+import dk.nodes.nstack.util.translation.backend.OnTranslationResultListener;
 import dk.nodes.nstack.util.translation.manager.TranslationManager;
 import dk.nodes.nstack.util.translation.options.TranslationOptions;
 import okhttp3.Callback;
@@ -19,6 +20,10 @@ import okhttp3.Callback;
  * Created by joso on 02/10/2015.
  */
 public final class NStack {
+
+    //TODO GET RID OF THE INSTANCE, INIT COULD JUST BE A METHOD THAT SAVES THOSE KEYS TO SHARED PREFS
+    //AND WHENEVER YOU WANT TO USE IT YOU HAVE TO DO NSTACK NSTACK = NEW NSTACK(CONTEXT);
+    //NSTACK.WHATEVER
 
     private Context applicationContext = null;
     protected static boolean debugMode = false;
@@ -53,7 +58,7 @@ public final class NStack {
         this.backendManager = new BackendManager(ClientProvider.provideHttpClient(cacheManager.initCache(), false));
         this.translationOptions = new TranslationOptions(applicationContext);
         this.translationManager = new TranslationManager(applicationContext, translationOptions);
-        this.translationBackendManager = new TranslationBackendManager(backendManager, translationManager, translationOptions);
+        this.translationBackendManager = new TranslationBackendManager(backendManager, translationManager);
     }
 
     public static NStack getStack() {
@@ -100,7 +105,6 @@ public final class NStack {
         if( appOpenManager == null ) {
             appOpenManager = new AppOpenManager(applicationContext, backendManager, translationManager, cacheManager, translationOptions);
         }
-
         return appOpenManager;
     }
 
@@ -111,13 +115,13 @@ public final class NStack {
     /**
      * Delegates calls to managers
      */
-
-    public void openApp() {
-        getAppOpenManager().openApp();
-    }
-
-    public void openApp(@Nullable AppOpenManager.AppOpenCallbacks translationsListener) {
-        getAppOpenManager().openApp(translationsListener);
+    
+    public void openApp(@Nullable AppOpenListener appOpenListener) {
+        if (cacheManager.getJsonLanguages() == null){
+            translationBackendManager.getAllLanguages();
+            translationBackendManager.getAllTranslations();
+        }
+        getAppOpenManager().openApp(appOpenListener);
     }
 
     public TranslationOptions translationClass(Class<?> translationClass) {
@@ -126,12 +130,15 @@ public final class NStack {
     }
 
     public void changeLanguage(String locale, OnTranslationResultListener callback) {
-        translationOptions.locale(locale);
-        translationBackendManager.updateTranslations(callback);
+        translationBackendManager.updateTranslations(locale, callback);
     }
 
     public void getAllLanguages(@NonNull final OnLanguageResultListener callback){
         translationBackendManager.getAllLanguages(callback);
+    }
+
+    public void getAllTranslations(){
+        translationBackendManager.getAllTranslations();
     }
 
     public void getContentResponse(int id, Callback callback) throws Exception {
@@ -140,6 +147,10 @@ public final class NStack {
 
     public void translate(Object view){
         translationManager.translate(view);
+    }
+
+    public void clearLastUpdated(){
+        cacheManager.clearLastUpdated();
     }
 
 }

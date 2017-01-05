@@ -4,11 +4,8 @@ import android.app.Application;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.Locale;
 
 import dk.nodes.nstack.NStack;
-import dk.nodes.nstack.util.translation.manager.OnTranslationResultListener;
-import dk.nodes.nstack.util.translation.manager.TranslationManager;
 import dk.nodes.nstackexampleproject.util.model.Translation;
 import okhttp3.Call;
 /**
@@ -25,25 +22,7 @@ public class App extends Application {
         NStack.getStack().enableDebug();
 
         // Translation
-        NStack.getStack()
-                .translationClass(Translation.class)
-                .locale("en-GB")
-                .fallbackLocale("en-US");
-
-//        To test changing the language on the phone
-        String transLocale = Locale.getDefault().toString().replace('_', '-');
-
-        NStack.getStack().changeLanguage(transLocale, new OnTranslationResultListener() {
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onFailure() {
-
-            }
-        });
+        NStack.getStack().translationClass(Translation.class);
 
         // NStack content download
         try {
@@ -55,7 +34,7 @@ public class App extends Application {
 
                 @Override
                 public void onResponse(Call call, okhttp3.Response response) throws IOException {
-                    Log.d("Example project", "downloaded content " + response.body().toString());
+                    Log.d("Example project", "downloaded content " + response.body().string());
                 }
             });
         } catch (Exception e) {
