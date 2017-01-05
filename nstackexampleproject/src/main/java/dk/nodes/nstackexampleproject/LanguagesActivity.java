@@ -44,7 +44,7 @@ public class LanguagesActivity extends AppCompatActivity {
             @Override
             public void onClick(final Language language) {
                 dialog = ProgressDialog.show(LanguagesActivity.this, "NStackExampleProject", "_Changing Language to " + language.getName());
-                NStack.getStack().changeLanguage(language.getLocale(), new OnTranslationResultListener() {
+                NStack.getStack().updateTranlations(language.getLocale(), new OnTranslationResultListener() {
                     @Override
                     public void onSuccess(boolean cached) {
                         runOnUiThread(new Runnable() {

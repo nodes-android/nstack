@@ -22,10 +22,16 @@
             android:layout_height="wrap_content" />
 
         <Button
+            android:id="@+id/current_language_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="_CURRENT LANGUAGE"/>
+
+        <Button
             android:id="@+id/change_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="_CHANGE LANGUAGE"/>
+            android:text="_CHANGE LANGUAGE TO SPANISH"/>
 
         <Button
             android:id="@+id/list_btn"

@@ -4,11 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.Locale;
+
 import dk.nodes.nstack.util.appopen.AppOpenListener;
 import dk.nodes.nstack.util.appopen.AppOpenManager;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.backend.ClientProvider;
 import dk.nodes.nstack.util.cache.CacheManager;
+import dk.nodes.nstack.util.model.Language;
 import dk.nodes.nstack.util.translation.backend.OnLanguageResultListener;
 import dk.nodes.nstack.util.translation.backend.TranslationBackendManager;
 import dk.nodes.nstack.util.translation.backend.OnTranslationResultListener;
@@ -129,7 +132,7 @@ public final class NStack {
         return translationOptions;
     }
 
-    public void changeLanguage(String locale, OnTranslationResultListener callback) {
+    public void updateTranlations(String locale, OnTranslationResultListener callback) {
         translationBackendManager.updateTranslations(locale, callback);
     }
 
@@ -151,6 +154,14 @@ public final class NStack {
 
     public void clearLastUpdated(){
         cacheManager.clearLastUpdated();
+    }
+
+    public Locale getSelectedLanguageLocale(){
+        String languageLocale =  cacheManager.getCurrentLanguageLocale();
+        if (languageLocale == null){
+            return null;
+        }
+        return new Locale(languageLocale.substring(0,2));
     }
 
 }

@@ -22,6 +22,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -80,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.focus_thief)
     View focusThief;
+    @BindView(R.id.current_language_btn)
+    Button currentLanguageBtn;
     @BindView(R.id.change_btn)
     Button changeBtn;
     @BindView(R.id.list_btn)
@@ -95,6 +99,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        Locale locale = NStack.getStack().getSelectedLanguageLocale();
+        if (locale != null){
+            currentLanguageBtn.setText(locale.getDisplayLanguage());
+        }
 
         NStack.getStack().getAppOpenManager().checkVersionControl(this, new VersionControlListener() {
             @Override
@@ -162,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void changeLanguage(){
-        NStack.getStack().changeLanguage("es-ES", new OnTranslationResultListener() {
+        NStack.getStack().updateTranlations("es-ES", new OnTranslationResultListener() {
             @Override
             public void onSuccess(boolean cached) {
                 runOnUiThread(new Runnable() {
