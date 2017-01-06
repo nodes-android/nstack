@@ -100,11 +100,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        Locale locale = NStack.getStack().getSelectedLanguageLocale();
-        if (locale != null){
-            currentLanguageBtn.setText(locale.getDisplayLanguage());
-        }
-
         NStack.getStack().getAppOpenManager().checkVersionControl(this, new VersionControlListener() {
             @Override
             public void onForcedUpdate(AlertDialog dialog) {
@@ -152,6 +147,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         NStack.getStack().translate(this);
+        Locale locale = NStack.getStack().getSelectedLanguageLocale();
+        if (locale != null){
+            currentLanguageBtn.setText(locale.getDisplayLanguage());
+        }
     }
 
     @OnClick({R.id.change_btn, R.id.list_btn, R.id.clear_btn})
