@@ -306,7 +306,8 @@ public class AppOpenManager {
             }
 
             builder
-                    .setMessage(appOpen.update.getTitle())
+                    .setTitle(appOpen.update.getTitle())
+                    .setMessage(appOpen.update.getMessage())
                     .setPositiveButton(appOpen.update.getPositiveBtn(), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             try {
@@ -344,7 +345,8 @@ public class AppOpenManager {
                 builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
             }
 
-            builder.setMessage(appOpen.update.getTitle())
+            builder.setMessage(appOpen.update.getMessage())
+                    .setTitle(appOpen.update.getTitle())
                     .setPositiveButton(appOpen.update.getPositiveBtn(), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             try {

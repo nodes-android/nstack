@@ -50,6 +50,6 @@ task installArchives(type: Upload) {
         configuration = configurations.default
         pom.groupId = 'dk.nodes.nstack'
         pom.artifactId = 'v1'
-        pom.version = 'SPECIAL'
+        pom.version = '0.60-LOCAL'
     }
 }
