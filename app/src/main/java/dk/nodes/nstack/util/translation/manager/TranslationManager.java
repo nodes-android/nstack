@@ -83,6 +83,17 @@ public class TranslationManager {
     }
 
     private String findValue(String key) throws IllegalArgumentException {
+        // Flat / No sections
+        if (translationOptions.isFlattenKeys()) {
+            try {
+                return String.valueOf(classType.getField(key).get(null));
+            } catch (Exception e) {
+                Logger.e("findValue failed on key: " + key + ". Exception -> " + e.toString());
+                throw new IllegalArgumentException();
+            }
+        }
+
+        // Sections
         try {
             String innerClassName = key.split("\\.")[0];
             String sectionKey = key.split("\\.")[1];
