@@ -13,6 +13,7 @@ public class TranslationOptions {
     private String languageHeader;
     private boolean allLanguages;
     private String contentUrl;
+    private boolean flattenKeys;
 
     public TranslationOptions(Context context) {
         Locale locale;
@@ -53,7 +54,7 @@ public class TranslationOptions {
         if(contentUrl != null) {
             return contentUrl;
         }
-        return Constants.NSTACK_CONTENT_URL + "?all=" + Boolean.toString(allLanguages);
+        return Constants.NSTACK_CONTENT_URL + "?all=" + Boolean.toString(allLanguages) + "&flat=" + Boolean.toString(flattenKeys);
     }
 
     /**
@@ -61,5 +62,13 @@ public class TranslationOptions {
      */
     public void setContentUrl(String contentUrl) {
         this.contentUrl = contentUrl;
+    }
+
+    public boolean isFlattenKeys() {
+        return flattenKeys;
+    }
+
+    public void setFlattenKeys(boolean flattenKeys) {
+        this.flattenKeys = flattenKeys;
     }
 }

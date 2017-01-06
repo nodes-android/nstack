@@ -109,7 +109,10 @@ public class TranslationManager {
 
 
     private void parseTranslations(JSONObject jsonObject) {
-
+        if (translationOptions.isFlattenKeys()) {
+            parseFlatTranslations(jsonObject);
+            return;
+        }
         Iterator<String> iterator = jsonObject.keys();
         while (iterator.hasNext()) {
             String sectionKey = iterator.next();
@@ -129,6 +132,23 @@ public class TranslationManager {
                 }
             } catch (Exception e) {
                 Logger.e("Parsing failed for section -> " + sectionKey + " | " + e.toString());
+            }
+        }
+    }
+
+    private void parseFlatTranslations(JSONObject jsonObject) {
+        Iterator<String> translationKeys = jsonObject.keys();
+
+        while (translationKeys.hasNext()) {
+            String translationKey = translationKeys.next();
+
+            // Reached actual translation string
+            try {
+                if (jsonObject.get(translationKey) instanceof String) {
+                    updateField(classType, translationKey, jsonObject.getString(translationKey));
+                }
+            } catch (Exception e) {
+                Logger.e("Parsing failed for key = " + translationKey);
             }
         }
     }
