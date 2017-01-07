@@ -5,23 +5,17 @@ Add explanation here
 ## Usage
 
 in Application Class:
-
-```NStack.init(context, applicationId, restApiKey);
-
-   NStack.getStack().enableDebug();
-   
-   NStack.getStack().translationClass(Translation.class);```
+NStack.init(context, applicationId, restApiKey);
+NStack.getStack().enableDebug();
+NStack.getStack().translationClass(Translation.class);
         
 In Activity, Fragment or ViewGroup (or any class with views as fields/children)
 
 @BindView(R.id.text_view)
-
 @Translate("section.key")
-
 TextView textView;
 
-and in onCreate/onStart or onResume
-
+and in onCreate/onStart or onResume:
 NStack.getStack().translate(this);
 
 <h2>Download</h2>
