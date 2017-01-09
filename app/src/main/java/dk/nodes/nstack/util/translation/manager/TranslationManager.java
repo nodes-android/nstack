@@ -1,6 +1,7 @@
 package dk.nodes.nstack.util.translation.manager;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
@@ -52,7 +53,8 @@ public class TranslationManager {
                 String view_class = f.getType().getSimpleName();
                 Class<?> cls = f.getType();
                 try {
-                    if (f.getType() == Toolbar.class || f.getType() == android.widget.Toolbar.class) {
+                    if (f.getType() == Toolbar.class
+                            || (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP && f.getType() == android.widget.Toolbar.class)) {
                         Toolbar toolbar = (Toolbar) f.get(view);
                         toolbar.setTitle(translation);
                         toolbar.setContentDescription(translation);

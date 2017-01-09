@@ -36,7 +36,7 @@ public class TranslationBackendManager {
         try {
             translationManager.getTranslationOptions().setAllLanguages(false);
             translationManager.getTranslationOptions().setLanguageHeader(locale);
-            
+
             backendManager.getTranslation(translationManager.getTranslationOptions().getContentUrl(),
                     translationManager.getTranslationOptions().getLanguageHeader(), new Callback() {
                         @Override
