@@ -46,23 +46,16 @@ public class TranslationManager {
                 String viewClass = f.getType().getSimpleName();
                 try {
                     if (viewClass.contentEquals("Toolbar")) {
-                        Toolbar toolbar = (Toolbar) f.get(view);
-                        toolbar.setTitle(translation);
-                        toolbar.setContentDescription(translation);
+                        f.getType().getMethod("setTitle", CharSequence.class).invoke(f.get(view), translation);
                     } else if (viewClass.contentEquals("EditText") ||
                             viewClass.contentEquals("AppCompatEditText")
-                            || viewClass.contentEquals("TextInputEditText")) {
-                        EditText editText = (EditText) f.get(view);
-                        editText.setHint(translation);
-                        editText.setContentDescription(translation);
-                    } else if (viewClass.contentEquals("TextInputLayout")) {
+                            || viewClass.contentEquals("TextInputEditText")
+                            || viewClass.contentEquals("TextInputLayout")) {
                         f.getType().getMethod("setHint", CharSequence.class).invoke(f.get(view), translation);
-                        f.getType().getMethod("setContentDescription", CharSequence.class).invoke(f.get(view), translation);
                     } else {
-                        TextView textView = (TextView) f.get(view);
-                        textView.setText(translation);
-                        textView.setContentDescription(translation);
+                        f.getType().getMethod("setText", CharSequence.class).invoke(f.get(view), translation);
                     }
+                    f.getType().getMethod("setContentDescription", CharSequence.class).invoke(f.get(view), translation);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
