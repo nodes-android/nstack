@@ -14,10 +14,10 @@ import dk.nodes.nstack.util.log.Logger;
  */
 public class AppOpenSettings {
 
+    public final String platform = "android";
     public String guid;
     public String version;
     public String oldVersion;
-    public final String platform = "android";
     public Date lastUpdated;
     public String lastUpdatedString;
     SimpleDateFormat dateFormat;
@@ -35,7 +35,6 @@ public class AppOpenSettings {
         } catch (Exception e) {
             Logger.e(e);
         }
-        //TODO this line below isn't needed
         lastUpdated = new Date();
         lastUpdatedString = dateFormat.format(lastUpdated);
         load();

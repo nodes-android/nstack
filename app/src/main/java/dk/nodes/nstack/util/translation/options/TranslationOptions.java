@@ -22,7 +22,7 @@ public class TranslationOptions {
         } else {
             locale = context.getResources().getConfiguration().locale;
         }
-        this.languageHeader = locale.toString().replace("_","-");
+        this.languageHeader = locale.toString().replace("_", "-");
     }
 
     public String getLanguageHeader() {
@@ -51,7 +51,7 @@ public class TranslationOptions {
      * @return returns contentUrl if set, else NStack default + settings
      */
     public String getContentUrl() {
-        if(contentUrl != null) {
+        if (contentUrl != null) {
             return contentUrl;
         }
         return Constants.NSTACK_CONTENT_URL + "?all=" + Boolean.toString(allLanguages) + "&flat=" + Boolean.toString(flattenKeys);

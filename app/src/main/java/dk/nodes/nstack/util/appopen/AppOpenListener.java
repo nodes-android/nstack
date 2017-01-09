@@ -6,5 +6,6 @@ package dk.nodes.nstack.util.appopen;
 
 public interface AppOpenListener {
     void onUpdated(boolean cached);
+
     void onFailure();
 }

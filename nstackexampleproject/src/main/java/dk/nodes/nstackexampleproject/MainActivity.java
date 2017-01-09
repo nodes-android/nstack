@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         NStack.getStack().translate(this);
         Locale locale = NStack.getStack().getSelectedLanguageLocale();
-        if (locale != null){
+        if (locale != null) {
             currentLanguageBtn.setText(locale.getDisplayLanguage());
         }
     }
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void changeLanguage(){
+    public void changeLanguage() {
         NStack.getStack().updateTranlations("es-ES", new OnTranslationResultListener() {
             @Override
             public void onSuccess(boolean cached) {
@@ -195,8 +195,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void makeToast(String message){
-        if (toast!= null){
+    public void makeToast(String message) {
+        if (toast != null) {
             toast.cancel();
         }
         toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);

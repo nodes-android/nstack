@@ -2,7 +2,6 @@ package dk.nodes.nstack.util.backend;
 
 import android.support.annotation.NonNull;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -13,8 +12,6 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
-import okio.Buffer;
 
 /**
  * Created by joso on 29/09/15.
@@ -92,7 +89,7 @@ public class BackendManager {
                         RequestBody.create(null, settings.platform))
                 .addPart(
                         Headers.of("Content-Disposition", "form-data; name=\"last_updated\""),
-                        RequestBody.create(null, settings.lastUpdatedString != null ? settings.lastUpdatedString : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format( new Date(0))))
+                        RequestBody.create(null, settings.lastUpdatedString != null ? settings.lastUpdatedString : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date(0))))
                 .build();
 
         Request request = new Request.Builder()

@@ -17,21 +17,18 @@ public class CacheManager {
     SharedPreferences prefs;
     Context context;
 
-    public enum Key {
-        ONCE,
-        TRANSLATIONS,
-        LANGUAGES,
-        LANGUAGE_LOCALE,
-        VERSION_INFO,
-        GUID,
-        LAST_UPDATED,
-        SHOW_MESSAGE,
-        RATE_REMINDER
-    }
-
     public CacheManager(Context context) {
         this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
         this.context = context;
+    }
+
+    // File Cache
+    public static void saveObject(Context context, String key, Object object) {
+        FileCache.saveObject(context, key, object);
+    }
+
+    public static Object loadObject(Context context, String key) {
+        return FileCache.loadObject(context, key);
     }
 
     private void save(String key, String data) {
@@ -118,15 +115,6 @@ public class CacheManager {
         prefs.edit().putString(Key.VERSION_INFO.name(), versionInfo).commit();
     }
 
-    // File Cache
-    public static void saveObject(Context context, String key, Object object) {
-        FileCache.saveObject(context, key, object);
-    }
-
-    public static Object loadObject(Context context, String key) {
-        return FileCache.loadObject(context, key);
-    }
-
     public Cache initCache() {
         try {
             File cacheDirectory = context.getCacheDir();
@@ -140,6 +128,18 @@ public class CacheManager {
         }
 
         return null;
+    }
+
+    public enum Key {
+        ONCE,
+        TRANSLATIONS,
+        LANGUAGES,
+        LANGUAGE_LOCALE,
+        VERSION_INFO,
+        GUID,
+        LAST_UPDATED,
+        SHOW_MESSAGE,
+        RATE_REMINDER
     }
 
 }

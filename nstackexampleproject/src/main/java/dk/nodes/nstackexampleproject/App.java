@@ -8,6 +8,7 @@ import java.io.IOException;
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstackexampleproject.util.model.Translation;
 import okhttp3.Call;
+
 /**
  * Created by joso on 18/11/15.
  */

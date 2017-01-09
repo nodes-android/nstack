@@ -117,10 +117,10 @@ public class LanguagesActivity extends AppCompatActivity {
             final ViewHolder viewHolder = (ViewHolder) holder;
             final Language language = languageArrayList.get(position);
             viewHolder.button.setText(language.getName());
-            if (language.isPicked()){
-                viewHolder.button.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_check_black_24dp, 0);
-            }else{
-                viewHolder.button.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+            if (language.isPicked()) {
+                viewHolder.button.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_check_black_24dp, 0);
+            } else {
+                viewHolder.button.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
 

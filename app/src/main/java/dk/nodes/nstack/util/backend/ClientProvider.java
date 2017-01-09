@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+
 /**
  * Created by joso on 09/08/16.
  */
@@ -21,7 +22,7 @@ public class ClientProvider {
 
         client.addInterceptor(new NStackInterceptor());
 
-        if(debug) {
+        if (debug) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             client.addInterceptor(logging);

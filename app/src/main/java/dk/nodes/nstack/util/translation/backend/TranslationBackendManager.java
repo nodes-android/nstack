@@ -60,7 +60,7 @@ public class TranslationBackendManager {
                             try {
                                 jsonObject = new JSONObject(response.body().string());
                             } catch (JSONException e) {
-                                if (translationManager.getCacheLanguageTranslation(translationManager.getTranslationOptions().getLanguageHeader())){
+                                if (translationManager.getCacheLanguageTranslation(translationManager.getTranslationOptions().getLanguageHeader())) {
                                     translationManager.getCacheManager().setCurrentLanguageLocale(translationManager.getTranslationOptions().getLanguageHeader());
                                     translationManager.getCacheManager().clearLastUpdated();
                                     callback.onSuccess(true);
@@ -68,7 +68,7 @@ public class TranslationBackendManager {
                                 }
                                 callback.onFailure();
                             }
-                            if (jsonObject == null){
+                            if (jsonObject == null) {
                                 callback.onFailure();
                                 return;
                             }
@@ -104,7 +104,7 @@ public class TranslationBackendManager {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    if (jsonObject != null){
+                    if (jsonObject != null) {
                         translationManager.saveLanguagesTranslation(jsonObject.toString());
                     }
                 }
@@ -121,7 +121,7 @@ public class TranslationBackendManager {
     public void getAllLanguages(@NonNull final OnLanguageResultListener callback) {
         try {
             //Cached languages straight away instead of waiting to onFailure
-            if (translationManager.getCacheManager().getJsonLanguages() != null){
+            if (translationManager.getCacheManager().getJsonLanguages() != null) {
                 JSONObject jsonObject = translationManager.getCacheLanguages();
                 JSONArray jsonArray = jsonObject.optJSONArray("data");
                 if (jsonArray != null) {

@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.appopen.AppOpenListener;
-import dk.nodes.nstack.util.appopen.AppOpenManager;
+
 /**
  * Created by joso on 09/08/16.
  */

@@ -17,14 +17,12 @@ public class AppOpen {
     public final VersionControl versionControl = new VersionControl();
     public final RateReminder rateReminder = new RateReminder();
     public final Message message = new Message();
+    JSONObject translationRoot;
     private boolean rateRequestAvailable;
     private boolean updateAvailable;
     private boolean forcedUpdate;
     private boolean changelogAvailable;
     private boolean messageAvailable;
-
-    JSONObject translationRoot;
-
     private String versionDescription;
     private String storeLink;
 

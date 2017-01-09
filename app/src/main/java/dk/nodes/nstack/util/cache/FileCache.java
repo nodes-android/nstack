@@ -18,24 +18,24 @@ public class FileCache {
     // File Cache
     public static void saveObject(Context context, String key, Object object) {
         try {
-            FileOutputStream fos = context.openFileOutput (key, Context.MODE_PRIVATE);
+            FileOutputStream fos = context.openFileOutput(key, Context.MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(object);
             oos.close();
             fos.close();
-        } catch( Exception e ) {
+        } catch (Exception e) {
             Logger.e(e);
         }
     }
 
-    public static Object loadObject (Context context, String key) {
+    public static Object loadObject(Context context, String key) {
         try {
             FileInputStream fis = context.openFileInput(key);
-            ObjectInputStream ois = new ObjectInputStream (fis);
+            ObjectInputStream ois = new ObjectInputStream(fis);
             Object object = ois.readObject();
             ois.close();
             return object;
-        } catch( Exception e ) {
+        } catch (Exception e) {
             Logger.e(e);
         }
 

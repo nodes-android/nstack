@@ -11,10 +11,9 @@ import dk.nodes.nstack.util.appopen.AppOpenManager;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.backend.ClientProvider;
 import dk.nodes.nstack.util.cache.CacheManager;
-import dk.nodes.nstack.util.model.Language;
 import dk.nodes.nstack.util.translation.backend.OnLanguageResultListener;
-import dk.nodes.nstack.util.translation.backend.TranslationBackendManager;
 import dk.nodes.nstack.util.translation.backend.OnTranslationResultListener;
+import dk.nodes.nstack.util.translation.backend.TranslationBackendManager;
 import dk.nodes.nstack.util.translation.manager.TranslationManager;
 import dk.nodes.nstack.util.translation.options.TranslationOptions;
 import okhttp3.Callback;
@@ -28,10 +27,9 @@ public final class NStack {
     //AND WHENEVER YOU WANT TO USE IT YOU HAVE TO DO NSTACK NSTACK = NEW NSTACK(CONTEXT);
     //NSTACK.WHATEVER
 
-    private Context applicationContext = null;
     protected static boolean debugMode = false;
     private static NStack instance = null;
-
+    private Context applicationContext = null;
     private String applicationId;
     private String restApiKey;
 
@@ -42,16 +40,6 @@ public final class NStack {
     private CacheManager cacheManager;
     private BackendManager backendManager;
     private TranslationBackendManager translationBackendManager;
-
-    /**
-     * Initializes the singleton
-     * @param context Use the application context to avoid leaks
-     * @param applicationId Get this from the NStack.io site in keys (Application id)
-     * @param restApiKey Get this from the NStack.io site in keys (Rest API key)
-     */
-    public static void init( @NonNull Context context, @NonNull String applicationId, @NonNull String restApiKey) {
-        instance = new NStack(context, applicationId, restApiKey);
-    }
 
     private NStack(Context context, String applicationId, String restApiKey) {
         this.applicationContext = context.getApplicationContext();
@@ -64,12 +52,23 @@ public final class NStack {
         this.translationBackendManager = new TranslationBackendManager(backendManager, translationManager);
     }
 
+    /**
+     * Initializes the singleton
+     *
+     * @param context       Use the application context to avoid leaks
+     * @param applicationId Get this from the NStack.io site in keys (Application id)
+     * @param restApiKey    Get this from the NStack.io site in keys (Rest API key)
+     */
+    public static void init(@NonNull Context context, @NonNull String applicationId, @NonNull String restApiKey) {
+        instance = new NStack(context, applicationId, restApiKey);
+    }
+
     public static NStack getStack() {
-        if( instance == null ) {
+        if (instance == null) {
             throw new IllegalStateException("init() was not called");
         }
 
-        if( instance.getApplicationId() == null || instance.getRestApiKey() == null ) {
+        if (instance.getApplicationId() == null || instance.getRestApiKey() == null) {
             throw new IllegalStateException("applicationKey or apiKey was not set");
         }
 
@@ -105,7 +104,7 @@ public final class NStack {
     }
 
     public AppOpenManager getAppOpenManager() {
-        if( appOpenManager == null ) {
+        if (appOpenManager == null) {
             appOpenManager = new AppOpenManager(applicationContext, backendManager, translationManager, cacheManager, translationOptions);
         }
         return appOpenManager;
@@ -118,9 +117,9 @@ public final class NStack {
     /**
      * Delegates calls to managers
      */
-    
+
     public void openApp(@Nullable AppOpenListener appOpenListener) {
-        if (cacheManager.getJsonLanguages() == null){
+        if (cacheManager.getJsonLanguages() == null) {
             translationBackendManager.getAllLanguages();
             translationBackendManager.getAllTranslations();
         }
@@ -136,11 +135,11 @@ public final class NStack {
         translationBackendManager.updateTranslations(locale, callback);
     }
 
-    public void getAllLanguages(@NonNull final OnLanguageResultListener callback){
+    public void getAllLanguages(@NonNull final OnLanguageResultListener callback) {
         translationBackendManager.getAllLanguages(callback);
     }
 
-    public void getAllTranslations(){
+    public void getAllTranslations() {
         translationBackendManager.getAllTranslations();
     }
 
@@ -148,20 +147,20 @@ public final class NStack {
         backendManager.getContentResponse(id, callback);
     }
 
-    public void translate(Object view){
+    public void translate(Object view) {
         translationManager.translate(view);
     }
 
-    public void clearLastUpdated(){
+    public void clearLastUpdated() {
         cacheManager.clearLastUpdated();
     }
 
-    public Locale getSelectedLanguageLocale(){
-        String languageLocale =  cacheManager.getCurrentLanguageLocale();
-        if (languageLocale == null){
+    public Locale getSelectedLanguageLocale() {
+        String languageLocale = cacheManager.getCurrentLanguageLocale();
+        if (languageLocale == null) {
             return null;
         }
-        return new Locale(languageLocale.substring(0,2));
+        return new Locale(languageLocale.substring(0, 2));
     }
 
 }

@@ -13,7 +13,7 @@ public class Language implements Serializable {
     private String name, locale, direction;
     private boolean picked;
 
-    public Language(){
+    public Language() {
 
     }
 
@@ -22,6 +22,15 @@ public class Language implements Serializable {
         this.name = name;
         this.locale = locale;
         this.direction = direction;
+    }
+
+    public static Language parseFrom(JSONObject object) {
+        int id = object.optInt("id");
+        String name = object.optString("name");
+        String locale = object.optString("locale");
+        String direction = object.optString("direction");
+
+        return new Language(id, name, locale, direction);
     }
 
     public String getDirection() {
@@ -62,14 +71,5 @@ public class Language implements Serializable {
 
     public void setPicked(boolean picked) {
         this.picked = picked;
-    }
-
-    public static Language parseFrom(JSONObject object) {
-        int id = object.optInt("id");
-        String name = object.optString("name");
-        String locale = object.optString("locale");
-        String direction = object.optString("direction");
-
-        return new Language(id, name, locale, direction);
     }
 }
