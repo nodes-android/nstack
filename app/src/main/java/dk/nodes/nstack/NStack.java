@@ -155,6 +155,12 @@ public final class NStack {
         cacheManager.clearLastUpdated();
     }
 
+    //String used in the headers (en-GB format for ex.)
+    public String getSelectedLanguageHeader(){
+        return cacheManager.getCurrentLanguageLocale();
+    }
+
+    //The whole locale, use it to display language name in the settings view for ex. with .getDisplayLanguage();
     public Locale getSelectedLanguageLocale() {
         String languageLocale = cacheManager.getCurrentLanguageLocale();
         if (languageLocale == null) {
@@ -162,5 +168,4 @@ public final class NStack {
         }
         return new Locale(languageLocale.substring(0, 2));
     }
-
 }
