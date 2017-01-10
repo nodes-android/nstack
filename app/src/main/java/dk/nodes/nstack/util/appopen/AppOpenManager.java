@@ -93,9 +93,9 @@ public class AppOpenManager {
     }
 
     public void openApp(@NonNull final AppOpenListener appOpenListener) {
-        updateTranslationsFromCache();
         final String languageLocale;
         if (cacheManager.getCurrentLanguageLocale() != null) {
+            updateTranslationsFromCache();
             languageLocale = cacheManager.getCurrentLanguageLocale();
         } else {
             languageLocale = translationOptions.getLanguageHeader();
@@ -114,22 +114,15 @@ public class AppOpenManager {
                     appOpen = AppOpen.parseFromJson(root);
                     JSONObject jo = root.getJSONObject("data");
                     String responseLanguageLocale = root.getJSONObject("meta").getJSONObject("language").getString("locale");
-                    if (!responseLanguageLocale.equals(languageLocale)) {
-                        //app doesn't have the language or backend is not working
-                        appOpenListener.onFailure();
-                        return;
-                    }
                     if (jo != null && jo.has("translate")) {
-//                            settings.lastUpdated = new Date();
-//                            cacheManager.setLastUpdated(new Date().toString());
                         JSONObject translateJson = jo.optJSONObject("translate");
                         if (translateJson == null) {
                             appOpenListener.onFailure();
                             return;
                         }
                         translationManager.updateTranslationClass(translateJson.toString());
-                        translationManager.getCacheManager().setCurrentLanguageLocale(languageLocale);
-                        translationManager.saveLanguageTranslation(languageLocale, translateJson.toString());
+                        translationManager.getCacheManager().setCurrentLanguageLocale(responseLanguageLocale);
+                        translationManager.saveLanguageTranslation(responseLanguageLocale, translateJson.toString());
                         translationManager.getCacheManager().clearLastUpdated();
                         settings.save();
                         appOpenListener.onUpdated(false);
@@ -144,7 +137,7 @@ public class AppOpenManager {
     }
 
     private void updateTranslationsFromCache() {
-        if (cacheManager.getCurrentLanguageLocale() != null && cacheManager.getJsonTranslation(cacheManager.getCurrentLanguageLocale()) != null) {
+        if (cacheManager.getJsonTranslation(cacheManager.getCurrentLanguageLocale()) != null) {
             translationManager.updateTranslationClass(cacheManager.getJsonTranslation(cacheManager.getCurrentLanguageLocale()));
             Logger.d("Updated translations from cache... " + cacheManager.getCurrentLanguageLocale() + " "
                     + cacheManager.getJsonTranslation(cacheManager.getCurrentLanguageLocale()));

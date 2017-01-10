@@ -53,22 +53,21 @@ public class TranslationBackendManager {
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             if (!response.isSuccessful()) {
-                                callback.onFailure();
-                                throw new IOException("Unexpected code " + response);
-                            }
-                            JSONObject jsonObject = null;
-                            try {
-                                jsonObject = new JSONObject(response.body().string());
-                            } catch (JSONException e) {
-                                if (translationManager.getCacheLanguageTranslation(translationManager.getTranslationOptions().getLanguageHeader())) {
-                                    translationManager.getCacheManager().setCurrentLanguageLocale(translationManager.getTranslationOptions().getLanguageHeader());
-                                    translationManager.getCacheManager().clearLastUpdated();
+                                if (onFailureGetTranslation()){
                                     callback.onSuccess(true);
                                     return;
                                 }
                                 callback.onFailure();
+                                throw new IOException("Unexpected code " + response);
                             }
-                            if (jsonObject == null) {
+                            JSONObject jsonObject;
+                            try {
+                                jsonObject = new JSONObject(response.body().string());
+                            } catch (JSONException e) {
+                                if (onFailureGetTranslation()) {
+                                    callback.onSuccess(true);
+                                    return;
+                                }
                                 callback.onFailure();
                                 return;
                             }
@@ -82,6 +81,15 @@ public class TranslationBackendManager {
         } catch (Exception e) {
             callback.onFailure();
         }
+    }
+
+    public boolean onFailureGetTranslation(){
+        if (translationManager.getCacheLanguageTranslation(translationManager.getTranslationOptions().getLanguageHeader())) {
+            translationManager.getCacheManager().setCurrentLanguageLocale(translationManager.getTranslationOptions().getLanguageHeader());
+            translationManager.getCacheManager().clearLastUpdated();
+            return true;
+        }
+        return false;
     }
 
 
