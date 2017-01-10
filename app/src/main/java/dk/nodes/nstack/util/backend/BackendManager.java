@@ -5,8 +5,10 @@ import android.support.annotation.NonNull;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.util.appopen.AppOpenSettings;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -45,15 +47,6 @@ public class BackendManager {
         client.newCall(request).enqueue(callback);
     }
 
-    //Should we use this?
-    public void getLanguage(@NonNull final Callback callback) throws Exception {
-        Request request = new Request.Builder()
-                .url("https://nstack.io/api/v1/translate/mobile/languages/best_fit")
-                .build();
-
-        client.newCall(request).enqueue(callback);
-    }
-
 
     public void getAllLanguages(@NonNull final Callback callback) throws Exception {
         Request request = new Request.Builder()
@@ -73,49 +66,29 @@ public class BackendManager {
     }
 
     public void getAppOpen(String url, AppOpenSettings settings, String acceptHeader, Callback callback) {
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addPart(
-                        Headers.of("Content-Disposition", "form-data; name=\"guid\""),
-                        RequestBody.create(null, settings.guid))
-                .addPart(
-                        Headers.of("Content-Disposition", "form-data; name=\"version\""),
-                        RequestBody.create(null, settings.version))
-                .addPart(
-                        Headers.of("Content-Disposition", "form-data; name=\"old_version\""),
-                        RequestBody.create(null, settings.oldVersion))
-                .addPart(
-                        Headers.of("Content-Disposition", "form-data; name=\"platform\""),
-                        RequestBody.create(null, settings.platform))
-//                .addPart(
-//                        Headers.of("Content-Disposition", "form-data; name=\"last_updated\""),
-//                        RequestBody.create(null, new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date(0))))
-//        RequestBody.create(null, settings.lastUpdatedString != null ? settings.lastUpdatedString : new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(new Date(0))))
-        .build();
+        FormBody.Builder formBuilder = new FormBody.Builder()
+                .add("guid", settings.guid)
+                .add("version", settings.version)
+                .add("old_version", settings.oldVersion)
+                .add("platform", settings.platform);
 
         Request request = new Request.Builder()
                 .url(url)
                 .header("Accept-Language", acceptHeader)
-                .post(requestBody)
+                .post(formBuilder.build())
                 .build();
 
         client.newCall(request).enqueue(callback);
     }
 
     public void viewMessage(AppOpenSettings settings, int messageId, Callback callback) {
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addPart(
-                        Headers.of("Content-Disposition", "form-data; name=\"guid\""),
-                        RequestBody.create(null, settings.guid))
-                .addPart(
-                        Headers.of("Content-Disposition", "form-data; name=\"message_id\""),
-                        RequestBody.create(null, String.valueOf(messageId)))
-                .build();
+        FormBody.Builder formBuilder = new FormBody.Builder()
+                .add("guid", settings.guid)
+                .add("message_id", String.valueOf(messageId));
 
         Request request = new Request.Builder()
                 .url("https://nstack.io/api/v1/notify/messages/views")
-                .post(requestBody)
+                .post(formBuilder.build())
                 .build();
 
         client.newCall(request).enqueue(callback);

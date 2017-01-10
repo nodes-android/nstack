@@ -41,9 +41,7 @@ public class TranslationBackendManager {
                     translationManager.getTranslationOptions().getLanguageHeader(), new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
-                            if (translationManager.getCacheLanguageTranslation(translationManager.getTranslationOptions().getLanguageHeader())) {
-                                translationManager.getCacheManager().setCurrentLanguageLocale(translationManager.getTranslationOptions().getLanguageHeader());
-                                translationManager.getCacheManager().clearLastUpdated();
+                            if (onFailureGetTranslation()){
                                 callback.onSuccess(true);
                                 return;
                             }
@@ -53,7 +51,7 @@ public class TranslationBackendManager {
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             if (!response.isSuccessful()) {
-                                if (onFailureGetTranslation()){
+                                if (onFailureGetTranslation()) {
                                     callback.onSuccess(true);
                                     return;
                                 }
@@ -83,7 +81,7 @@ public class TranslationBackendManager {
         }
     }
 
-    public boolean onFailureGetTranslation(){
+    public boolean onFailureGetTranslation() {
         if (translationManager.getCacheLanguageTranslation(translationManager.getTranslationOptions().getLanguageHeader())) {
             translationManager.getCacheManager().setCurrentLanguageLocale(translationManager.getTranslationOptions().getLanguageHeader());
             translationManager.getCacheManager().clearLastUpdated();

@@ -21,7 +21,8 @@ public class NStackInterceptor implements Interceptor {
         Request originalRequest = chain.request();
 
         Request newRequest = originalRequest.newBuilder()
-                .header("Accept-Language", NStack.getStack().getTranslationOptions().getLanguageHeader())
+                //Commented this out because it was causing issues with the cached languageHeader
+                //.header("Accept-Language", NStack.getStack().getSelectedLanguageHeader())
                 .header("X-Application-Id", NStack.getStack().getApplicationId())
                 .header("X-Rest-Api-Key", NStack.getStack().getRestApiKey())
                 .build();

@@ -23,10 +23,6 @@ import okhttp3.Callback;
  */
 public final class NStack {
 
-    //TODO GET RID OF THE INSTANCE, INIT COULD JUST BE A METHOD THAT SAVES THOSE KEYS TO SHARED PREFS
-    //AND WHENEVER YOU WANT TO USE IT YOU HAVE TO DO NSTACK NSTACK = NEW NSTACK(CONTEXT);
-    //NSTACK.WHATEVER
-
     protected static boolean debugMode = false;
     private static NStack instance = null;
     private Context applicationContext = null;
@@ -137,10 +133,6 @@ public final class NStack {
 
     public void getAllLanguages(@NonNull final OnLanguageResultListener callback) {
         translationBackendManager.getAllLanguages(callback);
-    }
-
-    public void getAllTranslations() {
-        translationBackendManager.getAllTranslations();
     }
 
     public void getContentResponse(int id, Callback callback) throws Exception {
