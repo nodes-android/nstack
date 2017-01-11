@@ -1,6 +1,7 @@
 package dk.nodes.nstack;
 
 import android.app.Dialog;
+import android.support.v7.app.AlertDialog;
 import android.test.ActivityInstrumentationTestCase2;
 
 import java.util.concurrent.CountDownLatch;
@@ -8,7 +9,11 @@ import java.util.concurrent.TimeUnit;
 
 import dk.nodes.nstack.mock.MockActivity;
 import dk.nodes.nstack.mock.ResponseInterceptor;
+import dk.nodes.nstack.util.appopen.AppOpenListener;
 import dk.nodes.nstack.util.appopen.AppOpenManager;
+import dk.nodes.nstack.util.appopen.message.MessageListener;
+import dk.nodes.nstack.util.appopen.versioncontrol.VersionControlListener;
+
 /**
  * Created by joso on 09/08/16.
  */
@@ -38,7 +43,7 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
     public void test_nstackNotInitialized() throws Exception {
         final CountDownLatch signal = new CountDownLatch(1);
 
-        NStack.getStack().openApp(new AppOpenManager.AppOpenCallbacks() {
+        NStack.getStack().openApp(new AppOpenListener() {
             @Override
             public void onUpdated(boolean cached) {
                 initializedNStack = true;
@@ -61,7 +66,7 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
         ResponseInterceptor.mockResponse = ResponseInterceptor.mockValidTranslationResponse;
         NStack.init(getInstrumentation().getContext(), "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
 
-        NStack.getStack().openApp(new AppOpenManager.AppOpenCallbacks() {
+        NStack.getStack().openApp(new AppOpenListener() {
             @Override
             public void onUpdated(boolean cached) {
                 openedApp = true;
@@ -75,6 +80,7 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
             }
         });
 
+
         signal.await(1, TimeUnit.SECONDS);
         assertTrue(openedApp);
     }
@@ -84,19 +90,19 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
         ResponseInterceptor.mockResponse = ResponseInterceptor.mockValidVersionControlResponse;
         NStack.init(getInstrumentation().getContext(), "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
 
-        NStack.getStack().getAppOpenManager().checkVersionControl(getActivity(), new AppOpenManager.VersionControlCallbacks() {
+        NStack.getStack().getAppOpenManager().checkVersionControl(getActivity(), new VersionControlListener() {
             @Override
-            public void onForcedUpdate(Dialog dialog) {
+            public void onForcedUpdate(AlertDialog dialog) {
                 versionControl = true;
             }
 
             @Override
-            public void onUpdate(Dialog dialog) {
+            public void onUpdate(AlertDialog dialog) {
                 versionControl = true;
             }
 
             @Override
-            public void onChangelog(Dialog dialog) {
+            public void onChangelog(AlertDialog dialog) {
                 versionControl = true;
             }
 
@@ -105,6 +111,7 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
                 versionControl = true;
             }
         });
+
 
         signal.await(1, TimeUnit.SECONDS);
         assertTrue(versionControl);
@@ -115,9 +122,9 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
         ResponseInterceptor.mockResponse = ResponseInterceptor.mockValidMessageShowOnceResponse;
         NStack.init(getInstrumentation().getContext(), "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
 
-        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new AppOpenManager.MessagesCallbacks() {
+        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new MessageListener() {
             @Override
-            public void onMessage(Dialog dialog) {
+            public void onMessage(AlertDialog dialog) {
                 message = true;
             }
         });
@@ -131,9 +138,9 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
         ResponseInterceptor.mockResponse = ResponseInterceptor.mockValidMessageShowOnceResponse;
         NStack.init(getInstrumentation().getContext(), "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
 
-        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new AppOpenManager.MessagesCallbacks() {
+        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new MessageListener() {
             @Override
-            public void onMessage(Dialog dialog) {
+            public void onMessage(AlertDialog dialog) {
                 message = true;
             }
         });
@@ -148,9 +155,9 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
 
         //Since previous call had a show-once message the callback will never be called,
         //even if the payload still brings a message
-        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new AppOpenManager.MessagesCallbacks() {
+        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new MessageListener() {
             @Override
-            public void onMessage(Dialog dialog) {
+            public void onMessage(AlertDialog dialog) {
                 message = true;
             }
         });
@@ -164,9 +171,9 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
         ResponseInterceptor.mockResponse = ResponseInterceptor.mockValidMessageShowOnceResponse;
         NStack.init(getInstrumentation().getContext(), "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
 
-        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new AppOpenManager.MessagesCallbacks() {
+        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new MessageListener() {
             @Override
-            public void onMessage(Dialog dialog) {
+            public void onMessage(AlertDialog dialog) {
                 message = true;
             }
         });
@@ -180,9 +187,9 @@ public class NStackTest extends ActivityInstrumentationTestCase2<MockActivity> {
         NStack.init(getInstrumentation().getContext(), "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
 
         //Since previous call had a show-always message the callback will still be called
-        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new AppOpenManager.MessagesCallbacks() {
+        NStack.getStack().getAppOpenManager().checkMessages(getActivity(), new MessageListener() {
             @Override
-            public void onMessage(Dialog dialog) {
+            public void onMessage(AlertDialog dialog) {
                 message = true;
             }
         });
