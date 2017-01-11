@@ -69,7 +69,7 @@ public class TranslationManager {
             try {
                 return String.valueOf(classType.getField(key).get(null));
             } catch (Exception e) {
-                Logger.e("findValue failed on key: " + key + ". Exception -> " + e.toString());
+                Logger.e("flat findValue failed on key: " + key + ". Exception -> " + e.toString());
                 throw new IllegalArgumentException();
             }
         }
@@ -82,7 +82,7 @@ public class TranslationManager {
             Field field = sectionClass.getField(sectionKey);
             return String.valueOf(field.get(null));
         } catch (Exception e) {
-            Logger.e("findValue failed on key: " + key + ". Exception -> " + e.toString());
+            Logger.e("sections findValue failed on key: " + key + ". Exception -> " + e.toString());
             throw new IllegalArgumentException();
         }
     }
