@@ -285,6 +285,8 @@ public class AppOpenManager {
                 }
             }
         }
+
+
         // Forced update
         if (appOpen.isUpdateAvailable() && appOpen.isForcedUpdate()) {
 
@@ -350,6 +352,7 @@ public class AppOpenManager {
                                 Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.getStoreLink()));
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 NStack.getStack().getApplicationContext().startActivity(i);
+
                             } catch (Exception e) {
                                 Logger.e(e);
                             }
@@ -384,7 +387,7 @@ public class AppOpenManager {
             }
 
             builder.setTitle(appOpen.update.getTitle())
-                    .setMessage(Html.fromHtml(appOpen.update.getMessage()))
+                    .setMessage(appOpen.update.getMessage())
                     .setPositiveButton(appOpen.update.getNegativeBtn(), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 

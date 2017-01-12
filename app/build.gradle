@@ -49,7 +49,7 @@ task installArchives(type: Upload) {
     repositories.mavenInstaller {
         configuration = configurations.default
         pom.groupId = 'dk.nodes.nstack'
-        pom.artifactId = 'v1'
-        pom.version = '0.67-LOCAL'
+        pom.artifactId = 'nstack'
+        pom.version = '0.69-LOCAL'
     }
 }

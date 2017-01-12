@@ -20,6 +20,7 @@ public class Update {
     }
 
     public String getMessage() {
+        message = message.replace("\\n", "\n");
         return message;
     }
 
