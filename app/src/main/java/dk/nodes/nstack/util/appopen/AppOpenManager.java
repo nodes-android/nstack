@@ -109,6 +109,10 @@ public class AppOpenManager {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    appOpenListener.onFailure();
+                    return;
+                }
                 try {
                     JSONObject root = new JSONObject(response.body().string());
                     appOpen = AppOpen.parseFromJson(root);
