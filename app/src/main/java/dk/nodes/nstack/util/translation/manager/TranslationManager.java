@@ -166,10 +166,10 @@ public class TranslationManager {
         try {
             JSONObject data = new JSONObject(jsonData);
             if (data.has("data")) {
-                JSONObject jsonTranslation = data.optJSONObject("data");
-                if (jsonTranslation != null) {
-                    cacheManager.setJsonTranslation(languageLocale, jsonTranslation.toString());
-                }
+                data = data.optJSONObject("data");
+            }
+            if (data != null) {
+                cacheManager.setJsonTranslation(languageLocale, data.toString());
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -184,15 +184,17 @@ public class TranslationManager {
     public void saveLanguagesTranslation(String jsonData) {
         try {
             JSONObject data = new JSONObject(jsonData);
+
             if (data.has("data")) {
-                JSONObject jsonTranslations = data.getJSONObject("data");
-                Iterator<String> iterator = jsonTranslations.keys();
-                while (iterator.hasNext()) {
-                    String languageLocale = iterator.next();
-                    JSONObject jsonTranslation = jsonTranslations.optJSONObject(languageLocale);
-                    if (jsonTranslation != null) {
-                        cacheManager.setJsonTranslation(languageLocale, jsonTranslation.toString());
-                    }
+                data = data.optJSONObject("data");
+            }
+
+            Iterator<String> iterator = data.keys();
+            while (iterator.hasNext()) {
+                String languageLocale = iterator.next();
+                JSONObject jsonTranslation = data.optJSONObject(languageLocale);
+                if (jsonTranslation != null) {
+                    cacheManager.setJsonTranslation(languageLocale, jsonTranslation.toString());
                 }
             }
         } catch (Exception e) {
