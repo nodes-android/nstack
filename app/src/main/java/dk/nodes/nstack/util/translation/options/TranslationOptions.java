@@ -14,6 +14,7 @@ public class TranslationOptions {
     private boolean allLanguages;
     private String contentUrl;
     private boolean flattenKeys;
+    private boolean forceRefreshLocale;
 
     public TranslationOptions(Context context) {
         Locale locale;
@@ -70,5 +71,13 @@ public class TranslationOptions {
 
     public void setFlattenKeys(boolean flattenKeys) {
         this.flattenKeys = flattenKeys;
+    }
+
+    public boolean isForceRefreshLocale() {
+        return forceRefreshLocale;
+    }
+
+    public void setForceRefreshLocale(boolean forceRefreshLocale) {
+        this.forceRefreshLocale = forceRefreshLocale;
     }
 }

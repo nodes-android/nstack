@@ -147,6 +147,10 @@ public final class NStack {
         cacheManager.clearLastUpdated();
     }
 
+    public void forceRefreshLocale() {
+        translationOptions.setForceRefreshLocale(true);
+    }
+
     //String used in the headers (en-GB format for ex.)
     public String getSelectedLanguageHeader(){
         return cacheManager.getCurrentLanguageLocale();

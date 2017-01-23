@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 
 import org.json.JSONObject;
 
@@ -94,7 +93,7 @@ public class AppOpenManager {
 
     public void openApp(@NonNull final AppOpenListener appOpenListener) {
         final String languageLocale;
-        if (cacheManager.getCurrentLanguageLocale() != null) {
+        if (cacheManager.getCurrentLanguageLocale() != null && !translationOptions.isForceRefreshLocale()) {
             updateTranslationsFromCache();
             languageLocale = cacheManager.getCurrentLanguageLocale();
         } else {

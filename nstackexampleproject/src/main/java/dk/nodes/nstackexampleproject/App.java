@@ -22,6 +22,10 @@ public class App extends Application {
         NStack.init(this, "BmZHmoKuU99A5ZnOByOiRxMVSmAWC2yBz3OW", "yw9go00oCWt6zPhfbdjRYXiHRWmkQZQSuRke");
         NStack.getStack().enableDebug();
 
+        //If we want to force a locale refresh every time - should only be used in apps without select
+        // language screen that want to use phone locale as default always
+        //NStack.getStack().forceRefreshLocale();
+
         // Translation
         NStack.getStack().translationClass(Translation.class);
 
