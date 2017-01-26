@@ -23,7 +23,7 @@ NStack.getStack().translate(this);
 Gradle: 
 
     dependencies {
-      compile 'dk.nodes.nstack:nstack:0.71'
+      compile 'dk.nodes.nstack:nstack:0.72'
     }
 
 ## Check Example project to see all of the uses

@@ -104,13 +104,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onForcedUpdate(AlertDialog dialog) {
                 Logger.d("", "dialog: " + dialog);
-                //dialog.show();
+                dialog.show();
             }
 
             @Override
             public void onUpdate(AlertDialog dialog) {
                 Logger.d("", "dialog: " + dialog);
-                //dialog.show();
+                dialog.show();
             }
 
             @Override
