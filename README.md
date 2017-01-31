@@ -12,7 +12,9 @@ NStack.getStack().translationClass(Translation.class);
 In Activity, Fragment or ViewGroup (or any class with views as fields/children)
 
 @BindView(R.id.text_view)
+
 @Translate("section.key")
+
 TextView textView;
 
 and in onCreate/onStart or onResume:
