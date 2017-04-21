@@ -19,6 +19,7 @@ import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.R;
 import dk.nodes.nstack.util.appopen.message.MessageListener;
 import dk.nodes.nstack.util.appopen.ratereminder.RateReminderListener;
+import dk.nodes.nstack.util.appopen.versioncontrol.VersionControlExListener;
 import dk.nodes.nstack.util.appopen.versioncontrol.VersionControlListener;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.cache.CacheManager;
@@ -40,6 +41,7 @@ public class AppOpenManager {
     private MessageListener messageListener;
 
     private VersionControlListener versionControlListener;
+    private VersionControlExListener versionControlExListener;
     private AppOpen appOpen;
     private AppOpenSettings settings;
 
@@ -79,6 +81,12 @@ public class AppOpenManager {
                                     @Nullable VersionControlListener versionControlListener) {
         this.versionControlListener = versionControlListener;
         handleVersionControl(activity);
+    }
+
+    public void checkVersionControl(final Activity activity,
+                                    @Nullable VersionControlExListener versionControlListener) {
+        this.versionControlExListener = versionControlListener;
+        handleVersionControlEx(activity);
     }
 
     public void checkRateReminder(final Activity activity, @Nullable RateReminderListener rateReminderListener) {
@@ -270,6 +278,7 @@ public class AppOpenManager {
         }
     }
 
+    @Deprecated
     private void handleVersionControl(Activity activity) {
         if (appOpen == null) {
             Logger.e("HandleVersionControl", "App open object is null, parsing failed or response timed out.");
@@ -401,6 +410,140 @@ public class AppOpenManager {
             }
         } else if (versionControlListener != null) {
             versionControlListener.onNothing();
+        }
+    }
+
+    private void handleVersionControlEx(Activity activity) {
+        if (appOpen == null) {
+            Logger.e("HandleVersionControl", "App open object is null, parsing failed or response timed out.");
+            return;
+        }
+
+        // Smallish naming hack
+        if (appOpen.update != null) {
+            if (appOpen.update.getPositiveBtn() != null) {
+                if (appOpen.update.getPositiveBtn().contains("AppStore")) {
+                    appOpen.update.setPositiveBtn(appOpen.update.getPositiveBtn().replace("AppStore", "Play Store"));
+                }
+            }
+        }
+
+
+        // Forced update
+        if (appOpen.isUpdateAvailable() && appOpen.isForcedUpdate()) {
+
+            AlertDialog.Builder builder;
+            if (activity instanceof AppCompatActivity) {
+                if (((AppCompatActivity) activity).getSupportActionBar() != null) {
+                    builder = new AlertDialog.Builder(
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                            R.style.znstack_DialogStyle
+                    );
+                } else {
+                    builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+                }
+            } else {
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+            }
+
+            builder
+                    .setTitle(appOpen.update.getTitle())
+                    .setMessage(appOpen.update.getMessage())
+                    .setPositiveButton(appOpen.update.getPositiveBtn(), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            try {
+                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.getStoreLink()));
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                NStack.getStack().getApplicationContext().startActivity(i);
+                            } catch (Exception e) {
+                                Logger.e(e);
+                            }
+                        }
+                    })
+                    .setCancelable(false);
+
+            if (versionControlExListener != null) {
+                versionControlExListener.onForcedUpdate(builder);
+            } else {
+                builder.create().show();
+            }
+        }
+        // Normal update
+        else if (appOpen.isUpdateAvailable())
+
+        {
+            AlertDialog.Builder builder;
+            if (activity instanceof AppCompatActivity) {
+                if (((AppCompatActivity) activity).getSupportActionBar() != null) {
+                    builder = new AlertDialog.Builder(
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                            R.style.znstack_DialogStyle
+                    );
+                } else {
+                    builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+                }
+            } else {
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+            }
+
+            builder.setMessage(appOpen.update.getMessage())
+                    .setTitle(appOpen.update.getTitle())
+                    .setPositiveButton(appOpen.update.getPositiveBtn(), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            try {
+                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.getStoreLink()));
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                NStack.getStack().getApplicationContext().startActivity(i);
+
+                            } catch (Exception e) {
+                                Logger.e(e);
+                            }
+                        }
+                    })
+                    .setNegativeButton(appOpen.update.getNegativeBtn(), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    })
+                    .setCancelable(true);
+
+            if (versionControlExListener != null) {
+                versionControlExListener.onUpdate(builder);
+            } else {
+                builder.create().show();
+            }
+        }
+        // Updated, show change log
+        else if (appOpen.isChangelogAvailable()) {
+            AlertDialog.Builder builder;
+            if (activity instanceof AppCompatActivity) {
+                if (((AppCompatActivity) activity).getSupportActionBar() != null) {
+                    builder = new AlertDialog.Builder(
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                            R.style.znstack_DialogStyle
+                    );
+                } else {
+                    builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+                }
+            } else {
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+            }
+
+            builder.setTitle(appOpen.update.getTitle())
+                    .setMessage(appOpen.update.getMessage())
+                    .setPositiveButton(appOpen.update.getNegativeBtn(), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    })
+                    .setCancelable(true);
+
+            if (versionControlExListener != null) {
+                versionControlExListener.onChangelog(builder);
+            } else {
+                builder.create().show();
+            }
+        } else if (versionControlExListener != null) {
+            versionControlExListener.onNothing();
         }
     }
 }
