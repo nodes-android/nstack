@@ -23,5 +23,4 @@
         <item name="android:windowSoftInputMode">adjustPan</item>
         <item name="android:windowTitleStyle">@style/znstack_DialogTitleStyle</item>
     </style>
-
 </resources>
