@@ -280,6 +280,41 @@ public class AppOpenManager {
 
     @Deprecated
     private void handleVersionControl(Activity activity) {
+        AlertDialog.Builder builder;
+        if (activity instanceof AppCompatActivity) {
+            if (((AppCompatActivity) activity).getSupportActionBar() != null) {
+                builder = new AlertDialog.Builder(
+                        ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                        R.style.znstack_DialogStyle
+                );
+            } else {
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+            }
+        } else {
+            builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+        }
+
+        builder.setMessage("Message")
+                .setTitle("Title")
+                .setPositiveButton("positiveButton", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                })
+                .setNegativeButton("negativeButton", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                })
+                .setCancelable(true);
+
+        if (versionControlListener != null) {
+            versionControlListener.onUpdate(builder.create());
+        } else {
+            builder.create().show();
+        }
+    }
+
+    @Deprecated
+    private void handleVersionControlOLD(Activity activity) {
         if (appOpen == null) {
             Logger.e("HandleVersionControl", "App open object is null, parsing failed or response timed out.");
             return;
