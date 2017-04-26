@@ -7,7 +7,7 @@ def _ossrhPassword = this.properties['NEXUS_PASSWORD']
 
 // Artifact settings
 def _group = 'dk.nodes.nstack'
-def _version = '0.74'
+def _version = '0.75'
 def _archivesBaseName = 'nstack'
 
 def _name = 'NStack Library'

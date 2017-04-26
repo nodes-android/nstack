@@ -278,6 +278,7 @@ public class AppOpenManager {
         }
     }
 
+    /*              This is used for always retuned on update, aka testing
     @Deprecated
     private void handleVersionControl(Activity activity) {
         AlertDialog.Builder builder;
@@ -312,9 +313,10 @@ public class AppOpenManager {
             builder.create().show();
         }
     }
+    */
 
     @Deprecated
-    private void handleVersionControlOLD(Activity activity) {
+    private void handleVersionControl(Activity activity) {
         if (appOpen == null) {
             Logger.e("HandleVersionControl", "App open object is null, parsing failed or response timed out.");
             return;
