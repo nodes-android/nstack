@@ -19,6 +19,7 @@ import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.R;
 import dk.nodes.nstack.util.appopen.message.MessageListener;
 import dk.nodes.nstack.util.appopen.ratereminder.RateReminderListener;
+import dk.nodes.nstack.util.appopen.versioncontrol.VersionControlDebug;
 import dk.nodes.nstack.util.appopen.versioncontrol.VersionControlExListener;
 import dk.nodes.nstack.util.appopen.versioncontrol.VersionControlListener;
 import dk.nodes.nstack.util.backend.BackendManager;
@@ -315,8 +316,57 @@ public class AppOpenManager {
     }
     */
 
+    private void simulateVersionUpdate(Activity activity)
+    {
+        AlertDialog.Builder builder;
+        if (activity instanceof AppCompatActivity) {
+            if (((AppCompatActivity) activity).getSupportActionBar() != null) {
+                builder = new AlertDialog.Builder(
+                        ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                        R.style.znstack_DialogStyle
+                );
+            } else {
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+            }
+        } else {
+            builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+        }
+
+        builder.setMessage("This is a locally simulated version update meant for testing app behavior")
+                .setTitle("Simulated update")
+                .setPositiveButton("positiveButton", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                })
+                .setNegativeButton("negativeButton", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                })
+                .setCancelable(true);
+
+        if(versionControlListener == null && versionControlExListener == null)
+        {
+            builder.create().show();
+        }
+        else if(versionControlListener != null)
+        {
+            versionControlListener.onUpdate(builder.create());
+        }
+        else if(versionControlExListener != null)
+        {
+            versionControlExListener.onUpdate(builder);
+        }
+    }
+
     @Deprecated
-    private void handleVersionControl(Activity activity) {
+    private void handleVersionControl(Activity activity)
+    {
+        if(VersionControlDebug.simulateUpdate)
+        {
+            simulateVersionUpdate(activity);
+            return;
+        }
+
         if (appOpen == null) {
             Logger.e("HandleVersionControl", "App open object is null, parsing failed or response timed out.");
             return;
@@ -451,6 +501,12 @@ public class AppOpenManager {
     }
 
     private void handleVersionControlEx(Activity activity) {
+        if(VersionControlDebug.simulateUpdate)
+        {
+            simulateVersionUpdate(activity);
+            return;
+        }
+
         if (appOpen == null) {
             Logger.e("HandleVersionControl", "App open object is null, parsing failed or response timed out.");
             return;
