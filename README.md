@@ -31,8 +31,10 @@ Gradle:
 ### Setup from AndroidManifest.xml
 If using version >= 0.76 NStack can also be configured from the manifest. Simply add meta values to the application object like this:
 
+```
 <meta-data android:name="dk.nodes.nstack.appId" android:value="appid" />
         <meta-data android:name="dk.nodes.nstack.apiKey" android:value="apikey" />
+```
 
 ## Version control simulator
 Inorder to test version control easily version 0.76 and above makes it possible to enable a version control simulator.
