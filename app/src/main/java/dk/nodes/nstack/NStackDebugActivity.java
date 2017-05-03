@@ -13,13 +13,13 @@ import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import dk.nodes.nstack.util.appopen.versioncontrol.VersionControlDebug;
-import dk.nodes.nstack.util.log.Logger;
 
 public class NStackDebugActivity extends AppCompatActivity {
     public static final String TAG = NStackDebugActivity.class.getSimpleName();
 
     Button launchBtn;
     ToggleButton simulateUpdateBtn;
+    ToggleButton simulateForceUpdateBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,7 @@ public class NStackDebugActivity extends AppCompatActivity {
     {
         launchBtn = (Button) findViewById(R.id.launch_btn);
         simulateUpdateBtn = (ToggleButton) findViewById(R.id.simulate_version_update_tb);
+        simulateForceUpdateBtn = (ToggleButton) findViewById(R.id.simulate_version_force_update_tb);
     }
 
     private void setupUI()
@@ -40,17 +41,23 @@ public class NStackDebugActivity extends AppCompatActivity {
         launchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Logger.e(TAG, "Launching App");
                 startLauncherActivity(getApplicationContext());
                 finish();
             }
         });
-        Logger.e(TAG, "VersionControlDebug.simulateUpdate = " + VersionControlDebug.simulateUpdate);
         simulateUpdateBtn.setChecked(VersionControlDebug.simulateUpdate);
         simulateUpdateBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 VersionControlDebug.simulateUpdate = isChecked;
+            }
+        });
+
+        simulateForceUpdateBtn.setChecked(VersionControlDebug.simulateForceUpdate);
+        simulateForceUpdateBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                VersionControlDebug.simulateForceUpdate = isChecked;
             }
         });
     }

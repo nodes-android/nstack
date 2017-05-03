@@ -47,6 +47,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
+            <ToggleButton
+                android:id="@+id/simulate_version_force_update_tb"
+                android:textOn="Simulate version force update ON"
+                android:textOff="Simulate version force update OFF"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         </LinearLayout>
     </ScrollView>
 

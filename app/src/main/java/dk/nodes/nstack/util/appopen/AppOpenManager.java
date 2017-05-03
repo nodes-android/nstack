@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import dk.nodes.nstack.NStack;
@@ -52,6 +54,10 @@ public class AppOpenManager {
     private TranslationManager translationManager;
     private TranslationOptions translationOptions;
 
+    private enum VersionControlType {
+        UPDATE, FORCE_UPDATE, CHANGELOG, NOTHING
+    }
+
     public AppOpenManager(Context context, BackendManager backendManager, TranslationManager translationManager, CacheManager cacheManager, TranslationOptions translationOptions) {
         this.context = context;
         this.backendManager = backendManager;
@@ -85,8 +91,8 @@ public class AppOpenManager {
     }
 
     public void checkVersionControl(final Activity activity,
-                                    @Nullable VersionControlExListener versionControlListener) {
-        this.versionControlExListener = versionControlListener;
+                                    @Nullable VersionControlExListener versionControlExListener) {
+        this.versionControlExListener = versionControlExListener;
         handleVersionControlEx(activity);
     }
 
@@ -279,43 +285,6 @@ public class AppOpenManager {
         }
     }
 
-    /*              This is used for always retuned on update, aka testing
-    @Deprecated
-    private void handleVersionControl(Activity activity) {
-        AlertDialog.Builder builder;
-        if (activity instanceof AppCompatActivity) {
-            if (((AppCompatActivity) activity).getSupportActionBar() != null) {
-                builder = new AlertDialog.Builder(
-                        ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
-                        R.style.znstack_DialogStyle
-                );
-            } else {
-                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
-            }
-        } else {
-            builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
-        }
-
-        builder.setMessage("Message")
-                .setTitle("Title")
-                .setPositiveButton("positiveButton", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                })
-                .setNegativeButton("negativeButton", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                })
-                .setCancelable(true);
-
-        if (versionControlListener != null) {
-            versionControlListener.onUpdate(builder.create());
-        } else {
-            builder.create().show();
-        }
-    }
-    */
-
     private void simulateVersionUpdate(Activity activity)
     {
         AlertDialog.Builder builder;
@@ -344,18 +313,41 @@ public class AppOpenManager {
                 })
                 .setCancelable(true);
 
-        if(versionControlListener == null && versionControlExListener == null)
-        {
-            builder.create().show();
+        runVersionControlListener(builder, VersionControlType.UPDATE);
+    }
+
+
+    private void simulateVersionForceUpdate(Activity activity)
+    {
+        AlertDialog.Builder builder;
+        if (activity instanceof AppCompatActivity) {
+            if (((AppCompatActivity) activity).getSupportActionBar() != null) {
+                builder = new AlertDialog.Builder(
+                        ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                        R.style.znstack_DialogStyle
+                );
+            } else {
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+            }
+        } else {
+            builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
         }
-        else if(versionControlListener != null)
-        {
-            versionControlListener.onUpdate(builder.create());
-        }
-        else if(versionControlExListener != null)
-        {
-            versionControlExListener.onUpdate(builder);
-        }
+
+        builder.setMessage("This is a locally simulated version force update meant for testing app behavior")
+                .setTitle("Simulated force update")
+                .setCancelable(false)
+                .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        try {
+                            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com"));
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            NStack.getStack().getApplicationContext().startActivity(i);
+                        } catch (Exception e) {
+                            Logger.e(e);
+                        }
+                    }
+                });
+        runVersionControlListener(builder, VersionControlType.FORCE_UPDATE);
     }
 
     @Deprecated
@@ -367,6 +359,12 @@ public class AppOpenManager {
             return;
         }
 
+        if(VersionControlDebug.simulateForceUpdate)
+        {
+            simulateVersionForceUpdate(activity);
+            return;
+        }
+
         if (appOpen == null) {
             Logger.e("HandleVersionControl", "App open object is null, parsing failed or response timed out.");
             return;
@@ -414,12 +412,7 @@ public class AppOpenManager {
                         }
                     })
                     .setCancelable(false);
-
-            if (versionControlListener != null) {
-                versionControlListener.onForcedUpdate(builder.create());
-            } else {
-                builder.create().show();
-            }
+            runVersionControlListener(builder, VersionControlType.FORCE_UPDATE);
         }
         // Normal update
         else if (appOpen.isUpdateAvailable())
@@ -459,11 +452,7 @@ public class AppOpenManager {
                     })
                     .setCancelable(true);
 
-            if (versionControlListener != null) {
-                versionControlListener.onUpdate(builder.create());
-            } else {
-                builder.create().show();
-            }
+            runVersionControlListener(builder, VersionControlType.UPDATE);
         }
         // Updated, show change log
         else if (appOpen.isChangelogAvailable()) {
@@ -490,13 +479,9 @@ public class AppOpenManager {
                     })
                     .setCancelable(true);
 
-            if (versionControlListener != null) {
-                versionControlListener.onChangelog(builder.create());
-            } else {
-                builder.create().show();
-            }
+            runVersionControlListener(builder, VersionControlType.CHANGELOG);
         } else if (versionControlListener != null) {
-            versionControlListener.onNothing();
+            runVersionControlListener(null, VersionControlType.NOTHING);
         }
     }
 
@@ -506,6 +491,11 @@ public class AppOpenManager {
             simulateVersionUpdate(activity);
             return;
         }
+        if(VersionControlDebug.simulateForceUpdate)
+        {
+            simulateVersionForceUpdate(activity);
+            return;
+        }
 
         if (appOpen == null) {
             Logger.e("HandleVersionControl", "App open object is null, parsing failed or response timed out.");
@@ -555,11 +545,7 @@ public class AppOpenManager {
                     })
                     .setCancelable(false);
 
-            if (versionControlExListener != null) {
-                versionControlExListener.onForcedUpdate(builder);
-            } else {
-                builder.create().show();
-            }
+            runVersionControlListener(builder, VersionControlType.FORCE_UPDATE);
         }
         // Normal update
         else if (appOpen.isUpdateAvailable())
@@ -599,11 +585,7 @@ public class AppOpenManager {
                     })
                     .setCancelable(true);
 
-            if (versionControlExListener != null) {
-                versionControlExListener.onUpdate(builder);
-            } else {
-                builder.create().show();
-            }
+            runVersionControlListener(builder, VersionControlType.UPDATE);
         }
         // Updated, show change log
         else if (appOpen.isChangelogAvailable()) {
@@ -630,13 +612,88 @@ public class AppOpenManager {
                     })
                     .setCancelable(true);
 
-            if (versionControlExListener != null) {
-                versionControlExListener.onChangelog(builder);
-            } else {
-                builder.create().show();
-            }
+            runVersionControlListener(builder, VersionControlType.CHANGELOG);
         } else if (versionControlExListener != null) {
-            versionControlExListener.onNothing();
+            runVersionControlListener(null, VersionControlType.NOTHING);
         }
     }
+
+
+    private void runVersionControlListener(final Object dialogOrBuilder, final VersionControlType type)
+    {
+        if(versionControlListener == null && versionControlExListener == null)
+        {
+            runVersionUpdateOnMainThread(null, dialogOrBuilder, type);
+        }
+        if(versionControlExListener != null) {
+            runVersionUpdateOnMainThread(versionControlExListener, dialogOrBuilder, type);
+        }
+        if(versionControlListener != null) {
+            runVersionUpdateOnMainThread(versionControlListener, dialogOrBuilder, type);
+        }
+    }
+
+    private void runVersionUpdateOnMainThread(@Nullable final Object listener, final Object dialogOrBuilder, final VersionControlType type)
+    {
+        Handler mainHandler = new Handler(context.getMainLooper());
+        Runnable myRunnable = new Runnable() {
+            @Override
+            public void run()
+            {
+                if(listener == null) {
+                    if (dialogOrBuilder instanceof AlertDialog.Builder) {
+                        ((AlertDialog.Builder) dialogOrBuilder).show();
+                    }
+                    if (dialogOrBuilder instanceof AlertDialog) {
+                        ((AlertDialog) dialogOrBuilder).show();
+                    }
+                }
+                else
+                {
+                    if(listener instanceof VersionControlListener)
+                    {
+                        switch(type)
+                        {
+                            case UPDATE:
+                                ((VersionControlListener) listener).onUpdate((AlertDialog) dialogOrBuilder);
+                                break;
+                            case FORCE_UPDATE:
+                                ((VersionControlListener) listener).onForcedUpdate((AlertDialog) dialogOrBuilder);
+                                break;
+                            case CHANGELOG:
+                                ((VersionControlListener) listener).onChangelog((AlertDialog) dialogOrBuilder);
+                                break;
+
+                            case NOTHING:
+                                ((VersionControlListener) listener).onNothing();
+                                break;
+                        }
+
+                    }
+                    if(listener instanceof VersionControlExListener)
+                    {
+                        switch(type)
+                        {
+                            case UPDATE:
+                                ((VersionControlExListener) listener).onUpdate((AlertDialog.Builder) dialogOrBuilder);
+                                break;
+                            case FORCE_UPDATE:
+                                ((VersionControlExListener) listener).onForcedUpdate((AlertDialog.Builder) dialogOrBuilder);
+                                break;
+                            case CHANGELOG:
+                                ((VersionControlExListener) listener).onChangelog((AlertDialog.Builder) dialogOrBuilder);
+                                break;
+
+                            case NOTHING:
+                                ((VersionControlExListener) listener).onNothing();
+                                break;
+                        }
+
+                    }
+                }
+            }
+        };
+        mainHandler.post(myRunnable);
+    }
+
 }

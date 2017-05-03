@@ -6,4 +6,5 @@ package dk.nodes.nstack.util.appopen.versioncontrol;
 
 public class VersionControlDebug {
     public static boolean simulateUpdate = false;
+    public static boolean simulateForceUpdate = false;
 }
