@@ -22,10 +22,12 @@ public class NStackInitProvider extends ContentProvider {
         try {
             ApplicationInfo ai = getContext().getPackageManager().getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
             Bundle bundle = ai.metaData;
-            String appId = bundle.getString("dk.nodes.nstack.appId");
-            String apiKey = bundle.getString("dk.nodes.nstack.apiKey");
-            //Log.e(TAG, "Read appId = " + appId + " apiKey = " + apiKey);
-            NStack.init(getContext(), appId, apiKey);
+            if(bundle.containsKey("dk.nodes.nstack.appId") && bundle.containsKey("dk.nodes.nstack.apiKey")) {
+                String appId = bundle.getString("dk.nodes.nstack.appId");
+                String apiKey = bundle.getString("dk.nodes.nstack.apiKey");
+                //Log.e(TAG, "Read appId = " + appId + " apiKey = " + apiKey);
+                NStack.init(getContext(), appId, apiKey);
+            }
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, "Failed to load meta-data, NameNotFound: " + e.getMessage());
         } catch (NullPointerException e) {
