@@ -13,7 +13,6 @@ def _archivesBaseName = 'nstack'
 def _name = 'NStack Library'
 def _description = 'nstack.io library for translations, update management and more.'
 
-
 afterEvaluate { project ->
     uploadArchives {
         repositories {
