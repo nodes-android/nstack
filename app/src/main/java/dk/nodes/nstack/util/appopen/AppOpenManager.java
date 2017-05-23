@@ -655,13 +655,13 @@ public class AppOpenManager {
                         switch(type)
                         {
                             case UPDATE:
-                                ((VersionControlListener) listener).onUpdate((AlertDialog) dialogOrBuilder);
+                                ((VersionControlListener) listener).onUpdate(((AlertDialog.Builder) dialogOrBuilder).create());
                                 break;
                             case FORCE_UPDATE:
-                                ((VersionControlListener) listener).onForcedUpdate((AlertDialog) dialogOrBuilder);
+                                ((VersionControlListener) listener).onForcedUpdate(((AlertDialog.Builder) dialogOrBuilder).create());
                                 break;
                             case CHANGELOG:
-                                ((VersionControlListener) listener).onChangelog((AlertDialog) dialogOrBuilder);
+                                ((VersionControlListener) listener).onChangelog(((AlertDialog.Builder) dialogOrBuilder).create());
                                 break;
 
                             case NOTHING:
