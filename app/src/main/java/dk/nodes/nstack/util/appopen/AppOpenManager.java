@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -13,12 +14,15 @@ import android.support.v7.app.AppCompatActivity;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import dk.nodes.nstack.NStack;
 import dk.nodes.nstack.R;
 import dk.nodes.nstack.util.appopen.message.MessageListener;
 import dk.nodes.nstack.util.appopen.ratereminder.RateReminderListener;
+import dk.nodes.nstack.util.appopen.versioncontrol.VersionControlDebug;
+import dk.nodes.nstack.util.appopen.versioncontrol.VersionControlExListener;
 import dk.nodes.nstack.util.appopen.versioncontrol.VersionControlListener;
 import dk.nodes.nstack.util.backend.BackendManager;
 import dk.nodes.nstack.util.cache.CacheManager;
@@ -40,6 +44,7 @@ public class AppOpenManager {
     private MessageListener messageListener;
 
     private VersionControlListener versionControlListener;
+    private VersionControlExListener versionControlExListener;
     private AppOpen appOpen;
     private AppOpenSettings settings;
 
@@ -48,6 +53,10 @@ public class AppOpenManager {
     private CacheManager cacheManager;
     private TranslationManager translationManager;
     private TranslationOptions translationOptions;
+
+    private enum VersionControlType {
+        UPDATE, FORCE_UPDATE, CHANGELOG, NOTHING
+    }
 
     public AppOpenManager(Context context, BackendManager backendManager, TranslationManager translationManager, CacheManager cacheManager, TranslationOptions translationOptions) {
         this.context = context;
@@ -79,6 +88,12 @@ public class AppOpenManager {
                                     @Nullable VersionControlListener versionControlListener) {
         this.versionControlListener = versionControlListener;
         handleVersionControl(activity);
+    }
+
+    public void checkVersionControl(final Activity activity,
+                                    @Nullable VersionControlExListener versionControlExListener) {
+        this.versionControlExListener = versionControlExListener;
+        handleVersionControlEx(activity);
     }
 
     public void checkRateReminder(final Activity activity, @Nullable RateReminderListener rateReminderListener) {
@@ -270,7 +285,218 @@ public class AppOpenManager {
         }
     }
 
-    private void handleVersionControl(Activity activity) {
+    private void simulateVersionUpdate(Activity activity)
+    {
+        AlertDialog.Builder builder;
+        if (activity instanceof AppCompatActivity) {
+            if (((AppCompatActivity) activity).getSupportActionBar() != null) {
+                builder = new AlertDialog.Builder(
+                        ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                        R.style.znstack_DialogStyle
+                );
+            } else {
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+            }
+        } else {
+            builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+        }
+
+        builder.setMessage("This is a locally simulated version update meant for testing app behavior")
+                .setTitle("Simulated update")
+                .setPositiveButton("positiveButton", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                })
+                .setNegativeButton("negativeButton", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                })
+                .setCancelable(true);
+
+        runVersionControlListener(builder, VersionControlType.UPDATE);
+    }
+
+
+    private void simulateVersionForceUpdate(Activity activity)
+    {
+        AlertDialog.Builder builder;
+        if (activity instanceof AppCompatActivity) {
+            if (((AppCompatActivity) activity).getSupportActionBar() != null) {
+                builder = new AlertDialog.Builder(
+                        ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                        R.style.znstack_DialogStyle
+                );
+            } else {
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+            }
+        } else {
+            builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+        }
+
+        builder.setMessage("This is a locally simulated version force update meant for testing app behavior")
+                .setTitle("Simulated force update")
+                .setCancelable(false)
+                .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        try {
+                            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com"));
+                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            NStack.getStack().getApplicationContext().startActivity(i);
+                        } catch (Exception e) {
+                            Logger.e(e);
+                        }
+                    }
+                });
+        runVersionControlListener(builder, VersionControlType.FORCE_UPDATE);
+    }
+
+    @Deprecated
+    private void handleVersionControl(Activity activity)
+    {
+        if(VersionControlDebug.simulateUpdate)
+        {
+            simulateVersionUpdate(activity);
+            return;
+        }
+
+        if(VersionControlDebug.simulateForceUpdate)
+        {
+            simulateVersionForceUpdate(activity);
+            return;
+        }
+
+        if (appOpen == null) {
+            Logger.e("HandleVersionControl", "App open object is null, parsing failed or response timed out.");
+            return;
+        }
+
+        // Smallish naming hack
+        if (appOpen.update != null) {
+            if (appOpen.update.getPositiveBtn() != null) {
+                if (appOpen.update.getPositiveBtn().contains("AppStore")) {
+                    appOpen.update.setPositiveBtn(appOpen.update.getPositiveBtn().replace("AppStore", "Play Store"));
+                }
+            }
+        }
+
+
+        // Forced update
+        if (appOpen.isUpdateAvailable() && appOpen.isForcedUpdate()) {
+
+            AlertDialog.Builder builder;
+            if (activity instanceof AppCompatActivity) {
+                if (((AppCompatActivity) activity).getSupportActionBar() != null) {
+                    builder = new AlertDialog.Builder(
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                            R.style.znstack_DialogStyle
+                    );
+                } else {
+                    builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+                }
+            } else {
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+            }
+
+            builder
+                    .setTitle(appOpen.update.getTitle())
+                    .setMessage(appOpen.update.getMessage())
+                    .setPositiveButton(appOpen.update.getPositiveBtn(), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            try {
+                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.getStoreLink()));
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                NStack.getStack().getApplicationContext().startActivity(i);
+                            } catch (Exception e) {
+                                Logger.e(e);
+                            }
+                        }
+                    })
+                    .setCancelable(false);
+            runVersionControlListener(builder, VersionControlType.FORCE_UPDATE);
+        }
+        // Normal update
+        else if (appOpen.isUpdateAvailable())
+
+        {
+            AlertDialog.Builder builder;
+            if (activity instanceof AppCompatActivity) {
+                if (((AppCompatActivity) activity).getSupportActionBar() != null) {
+                    builder = new AlertDialog.Builder(
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                            R.style.znstack_DialogStyle
+                    );
+                } else {
+                    builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+                }
+            } else {
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+            }
+
+            builder.setMessage(appOpen.update.getMessage())
+                    .setTitle(appOpen.update.getTitle())
+                    .setPositiveButton(appOpen.update.getPositiveBtn(), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            try {
+                                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.getStoreLink()));
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                NStack.getStack().getApplicationContext().startActivity(i);
+
+                            } catch (Exception e) {
+                                Logger.e(e);
+                            }
+                        }
+                    })
+                    .setNegativeButton(appOpen.update.getNegativeBtn(), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    })
+                    .setCancelable(true);
+
+            runVersionControlListener(builder, VersionControlType.UPDATE);
+        }
+        // Updated, show change log
+        else if (appOpen.isChangelogAvailable()) {
+            AlertDialog.Builder builder;
+            if (activity instanceof AppCompatActivity) {
+                if (((AppCompatActivity) activity).getSupportActionBar() != null) {
+                    builder = new AlertDialog.Builder(
+                            ((AppCompatActivity) activity).getSupportActionBar().getThemedContext(),
+                            R.style.znstack_DialogStyle
+                    );
+                } else {
+                    builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+                }
+            } else {
+                builder = new AlertDialog.Builder(activity, R.style.znstack_DialogStyle);
+            }
+
+            builder.setTitle(appOpen.update.getTitle())
+                    .setMessage(appOpen.update.getMessage())
+                    .setPositiveButton(appOpen.update.getNegativeBtn(), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    })
+                    .setCancelable(true);
+
+            runVersionControlListener(builder, VersionControlType.CHANGELOG);
+        } else if (versionControlListener != null) {
+            runVersionControlListener(null, VersionControlType.NOTHING);
+        }
+    }
+
+    private void handleVersionControlEx(Activity activity) {
+        if(VersionControlDebug.simulateUpdate)
+        {
+            simulateVersionUpdate(activity);
+            return;
+        }
+        if(VersionControlDebug.simulateForceUpdate)
+        {
+            simulateVersionForceUpdate(activity);
+            return;
+        }
+
         if (appOpen == null) {
             Logger.e("HandleVersionControl", "App open object is null, parsing failed or response timed out.");
             return;
@@ -319,11 +545,7 @@ public class AppOpenManager {
                     })
                     .setCancelable(false);
 
-            if (versionControlListener != null) {
-                versionControlListener.onForcedUpdate(builder.create());
-            } else {
-                builder.create().show();
-            }
+            runVersionControlListener(builder, VersionControlType.FORCE_UPDATE);
         }
         // Normal update
         else if (appOpen.isUpdateAvailable())
@@ -362,11 +584,7 @@ public class AppOpenManager {
                     })
                     .setCancelable(true);
 
-            if (versionControlListener != null) {
-                versionControlListener.onUpdate(builder.create());
-            } else {
-                builder.create().show();
-            }
+            runVersionControlListener(builder, VersionControlType.UPDATE);
         }
         // Updated, show change log
         else if (appOpen.isChangelogAvailable()) {
@@ -393,13 +611,88 @@ public class AppOpenManager {
                     })
                     .setCancelable(true);
 
-            if (versionControlListener != null) {
-                versionControlListener.onChangelog(builder.create());
-            } else {
-                builder.create().show();
-            }
-        } else if (versionControlListener != null) {
-            versionControlListener.onNothing();
+            runVersionControlListener(builder, VersionControlType.CHANGELOG);
+        } else if (versionControlExListener != null) {
+            runVersionControlListener(null, VersionControlType.NOTHING);
         }
     }
+
+
+    private void runVersionControlListener(final Object dialogOrBuilder, final VersionControlType type)
+    {
+        if(versionControlListener == null && versionControlExListener == null)
+        {
+            runVersionUpdateOnMainThread(null, dialogOrBuilder, type);
+        }
+        if(versionControlExListener != null) {
+            runVersionUpdateOnMainThread(versionControlExListener, dialogOrBuilder, type);
+        }
+        if(versionControlListener != null) {
+            runVersionUpdateOnMainThread(versionControlListener, dialogOrBuilder, type);
+        }
+    }
+
+    private void runVersionUpdateOnMainThread(@Nullable final Object listener, final Object dialogOrBuilder, final VersionControlType type)
+    {
+        Handler mainHandler = new Handler(context.getMainLooper());
+        Runnable myRunnable = new Runnable() {
+            @Override
+            public void run()
+            {
+                if(listener == null) {
+                    if (dialogOrBuilder instanceof AlertDialog.Builder) {
+                        ((AlertDialog.Builder) dialogOrBuilder).show();
+                    }
+                    if (dialogOrBuilder instanceof AlertDialog) {
+                        ((AlertDialog) dialogOrBuilder).show();
+                    }
+                }
+                else
+                {
+                    if(listener instanceof VersionControlListener)
+                    {
+                        switch(type)
+                        {
+                            case UPDATE:
+                                ((VersionControlListener) listener).onUpdate(((AlertDialog.Builder) dialogOrBuilder).create());
+                                break;
+                            case FORCE_UPDATE:
+                                ((VersionControlListener) listener).onForcedUpdate(((AlertDialog.Builder) dialogOrBuilder).create());
+                                break;
+                            case CHANGELOG:
+                                ((VersionControlListener) listener).onChangelog(((AlertDialog.Builder) dialogOrBuilder).create());
+                                break;
+
+                            case NOTHING:
+                                ((VersionControlListener) listener).onNothing();
+                                break;
+                        }
+
+                    }
+                    if(listener instanceof VersionControlExListener)
+                    {
+                        switch(type)
+                        {
+                            case UPDATE:
+                                ((VersionControlExListener) listener).onUpdate((AlertDialog.Builder) dialogOrBuilder);
+                                break;
+                            case FORCE_UPDATE:
+                                ((VersionControlExListener) listener).onForcedUpdate((AlertDialog.Builder) dialogOrBuilder);
+                                break;
+                            case CHANGELOG:
+                                ((VersionControlExListener) listener).onChangelog((AlertDialog.Builder) dialogOrBuilder);
+                                break;
+
+                            case NOTHING:
+                                ((VersionControlExListener) listener).onNothing();
+                                break;
+                        }
+
+                    }
+                }
+            }
+        };
+        mainHandler.post(myRunnable);
+    }
+
 }

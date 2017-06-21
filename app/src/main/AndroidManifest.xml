@@ -1,4 +1,10 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="dk.nodes.nstack">
-
-
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="dk.nodes.nstack"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <provider
+            android:authorities="${applicationId}.NStackInitProvider"
+            android:name=".NStackInitProvider"
+            android:exported="false" />
+    </application>
 </manifest>

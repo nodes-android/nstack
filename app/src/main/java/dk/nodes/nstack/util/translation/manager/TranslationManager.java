@@ -41,10 +41,11 @@ public class TranslationManager {
         for (Field f : fields) {
             Translate annotation = f.getAnnotation(Translate.class);
             if (annotation != null) {
-                String translation = findValue(annotation.value());
-                f.setAccessible(true);
-                String viewClass = f.getType().getSimpleName();
+
                 try {
+                    String translation = findValue(annotation.value());
+                    f.setAccessible(true);
+                    String viewClass = f.getType().getSimpleName();
                     if (viewClass.contentEquals("Toolbar")) {
                         f.getType().getMethod("setTitle", CharSequence.class).invoke(f.get(view), translation);
                     } else if (viewClass.contentEquals("EditText") ||

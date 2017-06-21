@@ -56,7 +56,8 @@ public final class NStack {
      * @param restApiKey    Get this from the NStack.io site in keys (Rest API key)
      */
     public static void init(@NonNull Context context, @NonNull String applicationId, @NonNull String restApiKey) {
-        instance = new NStack(context, applicationId, restApiKey);
+        if(instance == null)
+            instance = new NStack(context, applicationId, restApiKey);
     }
 
     public static NStack getStack() {
