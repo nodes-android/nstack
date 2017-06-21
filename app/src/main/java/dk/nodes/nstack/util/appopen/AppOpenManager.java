@@ -351,7 +351,6 @@ public class AppOpenManager {
                                 Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(appOpen.getStoreLink()));
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 NStack.getStack().getApplicationContext().startActivity(i);
-
                             } catch (Exception e) {
                                 Logger.e(e);
                             }
