@@ -10,7 +10,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import dk.nodes.nstack.util.cache.CacheManager;
 import dk.nodes.nstack.util.log.Logger;
@@ -37,11 +40,10 @@ public class TranslationManager {
     }
 
     public void translate(@NonNull Object view) {
-        Field[] fields = view.getClass().getDeclaredFields();
+        List<Field> fields = getFieldsFromClassAndSuper(view);
         for (Field f : fields) {
             Translate annotation = f.getAnnotation(Translate.class);
             if (annotation != null) {
-
                 try {
                     String translation = findValue(annotation.value());
                     f.setAccessible(true);
@@ -62,6 +64,14 @@ public class TranslationManager {
                 }
             }
         }
+    }
+
+    private List<Field> getFieldsFromClassAndSuper(@NonNull Object view) {
+        List<Field> list = new LinkedList<>();
+        list.addAll(Arrays.asList(view.getClass().getDeclaredFields()));
+        if(view.getClass().getSuperclass() != null)
+            list.addAll(Arrays.asList(view.getClass().getSuperclass().getDeclaredFields()));
+        return list;
     }
 
     private String findValue(String key) throws IllegalArgumentException {
