@@ -43,7 +43,6 @@ repositories {
     jcenter()
 }
 
-
 apply plugin: 'maven'
 
 task installArchives(type: Upload) {
@@ -56,5 +55,16 @@ task installArchives(type: Upload) {
             pom.version = '0.78-LOCAL'
             repository url: repositories.mavenLocal().url
         }
+    }
+}
+
+// For testing purposes
+task installLocally(type: Upload) {
+    description "Installs the artifacts to the local Maven repository."
+    repositories.mavenInstaller {
+        configuration = configurations.default
+        pom.groupId = 'dk.nodes.nstack'
+        pom.artifactId = 'nstack'
+        pom.version = '0.73-LOCAL'
     }
 }
