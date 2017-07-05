@@ -65,6 +65,6 @@ task installLocally(type: Upload) {
         configuration = configurations.default
         pom.groupId = 'dk.nodes.nstack'
         pom.artifactId = 'nstack'
-        pom.version = '0.73-LOCAL'
+        pom.version = '0.80-LOCAL'
     }
 }
