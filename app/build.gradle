@@ -5,12 +5,12 @@ targetCompatibility = JavaVersion.VERSION_1_7
 sourceCompatibility = JavaVersion.VERSION_1_7
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -30,11 +30,11 @@ android {
 }
 
 dependencies {
+    def ok_http_library_version = "3.9.0"
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    //compile 'com.android.support:design:25.1.0'
-    compile 'com.squareup.okhttp3:okhttp:3.2.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+    compile 'com.android.support:appcompat-v7:27.1.1'
+    compile "com.squareup.okhttp3:okhttp:$ok_http_library_version"
+    compile "com.squareup.okhttp3:logging-interceptor:$ok_http_library_version"
 }
 
 repositories {

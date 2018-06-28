@@ -4,9 +4,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.v4.content.IntentCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -29,15 +28,13 @@ public class NStackDebugActivity extends AppCompatActivity {
         setupUI();
     }
 
-    private void bindUI()
-    {
-        launchBtn = (Button) findViewById(R.id.launch_btn);
-        simulateUpdateBtn = (ToggleButton) findViewById(R.id.simulate_version_update_tb);
-        simulateForceUpdateBtn = (ToggleButton) findViewById(R.id.simulate_version_force_update_tb);
+    private void bindUI() {
+        launchBtn = findViewById(R.id.launch_btn);
+        simulateUpdateBtn = findViewById(R.id.simulate_version_update_tb);
+        simulateForceUpdateBtn = findViewById(R.id.simulate_version_force_update_tb);
     }
 
-    private void setupUI()
-    {
+    private void setupUI() {
         launchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +63,7 @@ public class NStackDebugActivity extends AppCompatActivity {
         PackageManager packageManager = context.getPackageManager();
         Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
         ComponentName componentName = intent.getComponent();
-        Intent mainIntent = IntentCompat.makeRestartActivityTask(componentName);
+        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
         context.startActivity(mainIntent);
     }
 }
